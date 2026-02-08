@@ -13,6 +13,7 @@ license = "MIT"
 
 [workspace.dependencies]
 rowan = "0.16.1"
+mical_parser.path = "./crates/parser"
 mical_syntax.path = "./crates/syntax"
 
 [package]

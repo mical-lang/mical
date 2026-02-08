@@ -19,6 +19,10 @@ name = "mical"
 version = "0.0.1"
 
 [[package]]
+name = "mical_parser"
+version = "0.0.1"
+
+[[package]]
 name = "mical_syntax"
 version = "0.0.1"
 dependencies = [

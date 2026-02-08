@@ -1,6 +1,7 @@
 [workspace]
 resolver = "3"
 members = [
+  "crates/*"
 ]
 
 [workspace.package]
@@ -11,6 +12,8 @@ repository = "https://github.com/ryota2357/mical"
 license = "MIT"
 
 [workspace.dependencies]
+rowan = "0.16.1"
+mical_syntax.path = "./crates/syntax"
 
 [package]
 name = "mical"

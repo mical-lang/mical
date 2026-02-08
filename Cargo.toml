@@ -1,0 +1,32 @@
+[workspace]
+resolver = "3"
+members = [
+]
+
+[workspace.package]
+version = "0.0.1"
+authors = ["ryota2357 <contact@ryota2357.com>"]
+edition = "2024"
+repository = "https://github.com/ryota2357/mical"
+license = "MIT"
+
+[workspace.dependencies]
+
+[package]
+name = "mical"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "TODO"
+
+[[bin]]
+name = "mical"
+path = "main.rs"
+
+[dependencies]
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1

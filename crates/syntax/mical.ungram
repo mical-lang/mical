@@ -1,0 +1,45 @@
+SourceFile =
+  '$shebang'?
+  items:Item*
+
+Item =
+  Entry
+| PrefixBlock
+| Directive
+
+Entry =
+  Key Value
+
+PrefixBlock =
+  Key '{'
+    items:Item*
+  '}'
+
+Directive =
+  '#'
+  name:'$word'
+  args:'$string'
+
+Key =
+  '$word'
+| '$integer'
+| '$true'
+| '$false'
+
+Value =
+  '$integer'
+| '$true'
+| '$false'
+| LineString
+| BlockString
+
+LineString = '@string'
+
+BlockString =
+  header:BlockStringHeader
+  lines:LineString*
+
+BlockStringHeader =
+  style:('|' | '>')
+  chomp:('+' | '-')?
+  indent:'$integer'?

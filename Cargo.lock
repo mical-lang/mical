@@ -25,6 +25,10 @@ name = "mical"
 version = "0.0.1"
 
 [[package]]
+name = "mical_lexer"
+version = "0.0.1"
+
+[[package]]
 name = "mical_parser"
 version = "0.0.1"
 

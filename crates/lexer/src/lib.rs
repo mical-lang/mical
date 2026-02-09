@@ -1,0 +1,140 @@
+use mical_syntax::token::{TokenKind::*, *};
+use std::iter;
+
+mod cursor;
+use cursor::Cursor;
+
+struct TokenStreamImpl<'src, I: Iterator<Item = Token>> {
+    source: &'src str,
+    iter: I,
+}
+
+impl<I: Iterator<Item = Token>> Iterator for TokenStreamImpl<'_, I> {
+    type Item = Token;
+    fn next(&mut self) -> Option<Self::Item> {
+        self.iter.next()
+    }
+}
+impl<'s, I: Iterator<Item = Token>> TokenStream<'s> for TokenStreamImpl<'s, I> {
+    fn source(&self) -> &'s str {
+        self.source
+    }
+}
+
+pub fn tokenize(source: &str) -> impl TokenStream<'_> {
+    let mut cursor = Cursor::new(source);
+    TokenStreamImpl { source, iter: iter::from_fn(move || advance_token(&mut cursor)) }
+}
+
+fn advance_token(cursor: &mut Cursor) -> Option<Token> {
+    let kind = match cursor.next()? {
+        't' => true_(cursor),
+        'f' => false_(cursor),
+        '\t' => Tab,
+        '\n' => Newline,
+        ' ' => Space,
+        '\\' => Backslash,
+        '}' => CloseBrace,
+        '>' => Greater,
+        '-' => Minus,
+        '{' => OpenBrace,
+        '|' => Pipe,
+        '+' => Plus,
+        '#' => Sharp,
+        c @ '0'..='9' => integer(cursor, c),
+        _ => word(cursor),
+    };
+    let token = cursor.bump(kind);
+    Some(token)
+}
+
+fn true_(cursor: &mut Cursor) -> TokenKind {
+    debug_assert!(cursor.prev() == 't');
+    if let Some('r') = cursor.peek() {
+        cursor.next();
+        if let Some('u') = cursor.peek() {
+            cursor.next();
+            if let Some('e') = cursor.peek() {
+                cursor.next();
+                return True;
+            }
+        }
+    }
+    word(cursor)
+}
+
+fn false_(cursor: &mut Cursor) -> TokenKind {
+    debug_assert!(cursor.prev() == 'f');
+    if let Some('a') = cursor.peek() {
+        cursor.next();
+        if let Some('l') = cursor.peek() {
+            cursor.next();
+            if let Some('s') = cursor.peek() {
+                cursor.next();
+                if let Some('e') = cursor.peek() {
+                    cursor.next();
+                    return False;
+                }
+            }
+        }
+    }
+    word(cursor)
+}
+
+fn integer(cursor: &mut Cursor, first_digit: char) -> TokenKind {
+    debug_assert!(first_digit.is_ascii_digit()); // 0..=9
+    fn eat_decimal_digits(cursor: &mut Cursor) -> bool {
+        let mut has_digits = false;
+        while let Some(c) = cursor.peek() {
+            match c {
+                '_' => (),
+                '0'..='9' => has_digits = true,
+                _ => break,
+            };
+            cursor.next();
+        }
+        has_digits
+    }
+    fn eat_hexadecimal_digits(cursor: &mut Cursor) -> bool {
+        let mut has_digits = false;
+        while let Some(c) = cursor.peek() {
+            match c {
+                '_' => (),
+                '0'..='9' | 'a'..='f' | 'A'..='F' => has_digits = true,
+                _ => break,
+            };
+            cursor.next();
+        }
+        has_digits
+    }
+    let mut base = NumBase::Decimal;
+    let has_digits = if first_digit == '0' {
+        match cursor.peek() {
+            Some('b') => {
+                base = NumBase::Binary;
+                cursor.next();
+                eat_decimal_digits(cursor)
+            }
+            Some('o') => {
+                base = NumBase::Octal;
+                cursor.next();
+                eat_decimal_digits(cursor)
+            }
+            Some('x') => {
+                base = NumBase::Hexadecimal;
+                cursor.next();
+                eat_hexadecimal_digits(cursor)
+            }
+            Some('0'..='9' | '_') => eat_decimal_digits(cursor),
+            _ => true, // single '0'
+        }
+    } else {
+        eat_decimal_digits(cursor)
+    };
+    Integer { base, is_empty: !has_digits }
+}
+
+fn word(cursor: &mut Cursor) -> TokenKind {
+    cursor.eat_while(|c| !matches!(c, '\t' | '\n' | ' ' | '\\'));
+    Word
+}

@@ -1,5 +1,5 @@
 mod macros;
-use mical_syntax::token::NumBase::*;
+use mical_syntax::token::Radix::*;
 
 #[test]
 fn true_() {
@@ -22,53 +22,53 @@ fn false_() {
 
 #[test]
 fn integer_binary() {
-    assert_token!("0b", [Integer { 2, base: Binary, is_empty: true }]);
-    assert_token!("0b_", [Integer { 3, base: Binary, is_empty: true }]);
-    assert_token!("0b0", [Integer { 3, base: Binary, is_empty: false }]);
-    assert_token!("0b1010", [Integer { 6, base: Binary, is_empty: false }]);
-    assert_token!("0b0101", [Integer { 6, base: Binary, is_empty: false }]);
-    assert_token!("0b123456789", [Integer { 11, base: Binary, is_empty: false }]);
-    assert_token!("0b10_10", [Integer { 7, base: Binary, is_empty: false }]);
-    assert_token!("0ba", [Integer { 2, base: Binary, is_empty: true }, Word(1)]);
-    assert_token!("0b1a", [Integer { 3, base: Binary, is_empty: false }, Word(1)]);
+    assert_token!("0b", [Numeral { 2, radix: Binary, is_empty: true }]);
+    assert_token!("0b_", [Numeral { 3, radix: Binary, is_empty: true }]);
+    assert_token!("0b0", [Numeral { 3, radix: Binary, is_empty: false }]);
+    assert_token!("0b1010", [Numeral { 6, radix: Binary, is_empty: false }]);
+    assert_token!("0b0101", [Numeral { 6, radix: Binary, is_empty: false }]);
+    assert_token!("0b123456789", [Numeral { 11, radix: Binary, is_empty: false }]);
+    assert_token!("0b10_10", [Numeral { 7, radix: Binary, is_empty: false }]);
+    assert_token!("0ba", [Numeral { 2, radix: Binary, is_empty: true }, Word(1)]);
+    assert_token!("0b1a", [Numeral { 3, radix: Binary, is_empty: false }, Word(1)]);
 }
 
 #[test]
 fn integer_octal() {
-    assert_token!("0o", [Integer { 2, base: Octal, is_empty: true }]);
-    assert_token!("0o_", [Integer { 3, base: Octal, is_empty: true }]);
-    assert_token!("0o0", [Integer { 3, base: Octal, is_empty: false }]);
-    assert_token!("0o1234567", [Integer { 9, base: Octal, is_empty: false }]);
-    assert_token!("0o123456789", [Integer { 11, base: Octal, is_empty: false }]);
-    assert_token!("0o12_34_56", [Integer { 10, base: Octal, is_empty: false }]);
-    assert_token!("0oa", [Integer { 2, base: Octal, is_empty: true }, Word(1)]);
-    assert_token!("0o8a", [Integer { 3, base: Octal, is_empty: false }, Word(1)]);
+    assert_token!("0o", [Numeral { 2, radix: Octal, is_empty: true }]);
+    assert_token!("0o_", [Numeral { 3, radix: Octal, is_empty: true }]);
+    assert_token!("0o0", [Numeral { 3, radix: Octal, is_empty: false }]);
+    assert_token!("0o1234567", [Numeral { 9, radix: Octal, is_empty: false }]);
+    assert_token!("0o123456789", [Numeral { 11, radix: Octal, is_empty: false }]);
+    assert_token!("0o12_34_56", [Numeral { 10, radix: Octal, is_empty: false }]);
+    assert_token!("0oa", [Numeral { 2, radix: Octal, is_empty: true }, Word(1)]);
+    assert_token!("0o8a", [Numeral { 3, radix: Octal, is_empty: false }, Word(1)]);
 }
 
 #[test]
 fn integer_hexadecimal() {
-    assert_token!("0x", [Integer { 2, base: Hexadecimal, is_empty: true }]);
-    assert_token!("0x_", [Integer { 3, base: Hexadecimal, is_empty: true }]);
-    assert_token!("0x0", [Integer { 3, base: Hexadecimal, is_empty: false }]);
-    assert_token!("0x1234567890ABCDEF", [Integer { 18, base: Hexadecimal, is_empty: false }]);
-    assert_token!("0x1234567890abcdef", [Integer { 18, base: Hexadecimal, is_empty: false }]);
-    assert_token!("0x12_34_56_ab_cd_EF", [Integer { 19, base: Hexadecimal, is_empty: false }]);
-    assert_token!("0xg", [Integer { 2, base: Hexadecimal, is_empty: true }, Word(1)]);
-    assert_token!("0xfg", [Integer { 3, base: Hexadecimal, is_empty: false }, Word(1)]);
+    assert_token!("0x", [Numeral { 2, radix: Hexadecimal, is_empty: true }]);
+    assert_token!("0x_", [Numeral { 3, radix: Hexadecimal, is_empty: true }]);
+    assert_token!("0x0", [Numeral { 3, radix: Hexadecimal, is_empty: false }]);
+    assert_token!("0x1234567890ABCDEF", [Numeral { 18, radix: Hexadecimal, is_empty: false }]);
+    assert_token!("0x1234567890abcdef", [Numeral { 18, radix: Hexadecimal, is_empty: false }]);
+    assert_token!("0x12_34_56_ab_cd_EF", [Numeral { 19, radix: Hexadecimal, is_empty: false }]);
+    assert_token!("0xg", [Numeral { 2, radix: Hexadecimal, is_empty: true }, Word(1)]);
+    assert_token!("0xfg", [Numeral { 3, radix: Hexadecimal, is_empty: false }, Word(1)]);
 }
 
 #[test]
 fn integer_decimal() {
-    assert_token!("0", [Integer { 1, base: Decimal, is_empty: false }]);
-    assert_token!("00", [Integer { 2, base: Decimal, is_empty: false }]);
+    assert_token!("0", [Numeral { 1, radix: Decimal, is_empty: false }]);
+    assert_token!("00", [Numeral { 2, radix: Decimal, is_empty: false }]);
     assert_token!("_", [Word(1)]);
     assert_token!("_0", [Word(2)]);
-    assert_token!("0123456789", [Integer { 10, base: Decimal, is_empty: false }]);
-    assert_token!("1234567890", [Integer { 10, base: Decimal, is_empty: false }]);
-    assert_token!("0123456789_", [Integer { 11, base: Decimal, is_empty: false }]);
-    assert_token!("01234_56789", [Integer { 11, base: Decimal, is_empty: false }]);
-    assert_token!("0a", [Integer { 1, base: Decimal, is_empty: false }, Word(1)]);
-    assert_token!("123a", [Integer { 3, base: Decimal, is_empty: false }, Word(1)]);
+    assert_token!("0123456789", [Numeral { 10, radix: Decimal, is_empty: false }]);
+    assert_token!("1234567890", [Numeral { 10, radix: Decimal, is_empty: false }]);
+    assert_token!("0123456789_", [Numeral { 11, radix: Decimal, is_empty: false }]);
+    assert_token!("01234_56789", [Numeral { 11, radix: Decimal, is_empty: false }]);
+    assert_token!("0a", [Numeral { 1, radix: Decimal, is_empty: false }, Word(1)]);
+    assert_token!("123a", [Numeral { 3, radix: Decimal, is_empty: false }, Word(1)]);
 }
 
 #[test]
@@ -102,9 +102,9 @@ fn backslash() {
     assert_token!(
         r"01\23",
         [
-            Integer { 2, base: Decimal, is_empty: false },
+            Numeral { 2, radix: Decimal, is_empty: false },
             Backslash(1),
-            Integer { 2, base: Decimal, is_empty: false },
+            Numeral { 2, radix: Decimal, is_empty: false },
         ]
     );
 }

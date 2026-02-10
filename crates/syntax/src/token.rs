@@ -16,7 +16,7 @@ pub trait TokenStream<'src>: Iterator<Item = Token> {
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub enum TokenKind {
     Word,
-    Integer { base: NumBase, is_empty: bool },
+    Numeral { radix: Radix, is_empty: bool },
     True,
     False,
 
@@ -35,7 +35,7 @@ pub enum TokenKind {
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-pub enum NumBase {
+pub enum Radix {
     Binary = 2,
     Octal = 8,
     Decimal = 10,

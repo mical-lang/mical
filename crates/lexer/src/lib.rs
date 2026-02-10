@@ -107,21 +107,21 @@ fn integer(cursor: &mut Cursor, first_digit: char) -> TokenKind {
         }
         has_digits
     }
-    let mut base = NumBase::Decimal;
+    let mut radix = Radix::Decimal;
     let has_digits = if first_digit == '0' {
         match cursor.peek() {
             Some('b') => {
-                base = NumBase::Binary;
+                radix = Radix::Binary;
                 cursor.next();
                 eat_decimal_digits(cursor)
             }
             Some('o') => {
-                base = NumBase::Octal;
+                radix = Radix::Octal;
                 cursor.next();
                 eat_decimal_digits(cursor)
             }
             Some('x') => {
-                base = NumBase::Hexadecimal;
+                radix = Radix::Hexadecimal;
                 cursor.next();
                 eat_hexadecimal_digits(cursor)
             }
@@ -131,7 +131,7 @@ fn integer(cursor: &mut Cursor, first_digit: char) -> TokenKind {
     } else {
         eat_decimal_digits(cursor)
     };
-    Integer { base, is_empty: !has_digits }
+    Numeral { radix, is_empty: !has_digits }
 }
 
 fn word(cursor: &mut Cursor) -> TokenKind {

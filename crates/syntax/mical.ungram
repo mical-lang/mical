@@ -18,20 +18,27 @@ PrefixBlock =
 Directive =
   '#'
   name:'$word'
-  args:'$string'
+  args:LineString
 
 Key =
   '$word'
-| '$integer'
+| '$numeral'
 | '$true'
 | '$false'
 
 Value =
-  '$integer'
-| '$true'
-| '$false'
+  Integer
+| Boolean
 | LineString
 | BlockString
+
+Integer =
+  sign:('+' | '-')?
+  '$numeral'
+
+Boolean =
+  '$true'
+| '$false'
 
 LineString = '@string'
 
@@ -42,4 +49,4 @@ BlockString =
 BlockStringHeader =
   style:('|' | '>')
   chomp:('+' | '-')?
-  indent:'$integer'?
+  indent:'$numeral'?

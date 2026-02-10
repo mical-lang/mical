@@ -19,7 +19,7 @@ mical_parser.path = "./crates/parser"
 mical_syntax.path = "./crates/syntax"
 
 [package]
-name = "mical"
+name = "mical-cli"
 version.workspace = true
 authors.workspace = true
 edition.workspace = true

@@ -279,7 +279,10 @@ impl AstNode for Key {
 impl Key {
     pub fn token(&self) -> Option<SyntaxToken> {
         self.syntax().children_with_tokens().filter_map(|it| it.into_token()).find(|it| {
-            matches!(it.kind(), SyntaxKind::WORD | SyntaxKind::NUMERAL | SyntaxKind::TRUE | SyntaxKind::FALSE)
+            matches!(
+                it.kind(),
+                SyntaxKind::WORD | SyntaxKind::NUMERAL | SyntaxKind::TRUE | SyntaxKind::FALSE | SyntaxKind::STRING
+            )
         })
     }
     pub fn kind(&self) -> Option<KeyKind> {
@@ -289,6 +292,7 @@ impl Key {
             SyntaxKind::NUMERAL => KeyKind::Numeral,
             SyntaxKind::TRUE => KeyKind::True,
             SyntaxKind::FALSE => KeyKind::False,
+            SyntaxKind::STRING => KeyKind::String,
             _ => return None,
         };
         Some(kind)
@@ -299,6 +303,7 @@ pub enum KeyKind {
     Numeral,
     True,
     False,
+    String,
 }
 impl fmt::Display for Key {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -315,6 +320,7 @@ impl fmt::Debug for Key {
 pub enum Value {
     Integer(Integer),
     Boolean(Boolean),
+    QuotedString(QuotedString),
     LineString(LineString),
     BlockString(BlockString),
 }
@@ -323,6 +329,7 @@ impl AstNode for Value {
     fn can_cast(kind: <Self::Language as rowan::Language>::Kind) -> bool {
         <Integer as AstNode>::can_cast(kind)
             || <Boolean as AstNode>::can_cast(kind)
+            || <QuotedString as AstNode>::can_cast(kind)
             || <LineString as AstNode>::can_cast(kind)
             || <BlockString as AstNode>::can_cast(kind)
     }
@@ -335,6 +342,10 @@ impl AstNode for Value {
         if <Boolean as AstNode>::can_cast(kind) {
             let casted = <Boolean as AstNode>::cast(node).expect("Invalid `can_cast` implementation");
             return Some(Self::Boolean(casted));
+        }
+        if <QuotedString as AstNode>::can_cast(kind) {
+            let casted = <QuotedString as AstNode>::cast(node).expect("Invalid `can_cast` implementation");
+            return Some(Self::QuotedString(casted));
         }
         if <LineString as AstNode>::can_cast(kind) {
             let casted = <LineString as AstNode>::cast(node).expect("Invalid `can_cast` implementation");
@@ -350,6 +361,7 @@ impl AstNode for Value {
         match self {
             Self::Integer(x) => x.syntax(),
             Self::Boolean(x) => x.syntax(),
+            Self::QuotedString(x) => x.syntax(),
             Self::LineString(x) => x.syntax(),
             Self::BlockString(x) => x.syntax(),
         }
@@ -365,6 +377,7 @@ impl fmt::Debug for Value {
         match self {
             Self::Integer(x) => fmt::Debug::fmt(x, f),
             Self::Boolean(x) => fmt::Debug::fmt(x, f),
+            Self::QuotedString(x) => fmt::Debug::fmt(x, f),
             Self::LineString(x) => fmt::Debug::fmt(x, f),
             Self::BlockString(x) => fmt::Debug::fmt(x, f),
         }
@@ -490,6 +503,40 @@ impl fmt::Display for Boolean {
 impl fmt::Debug for Boolean {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("Boolean").field("token", &support::DebugSyntaxToken(self.token())).finish()
+    }
+}
+
+#[derive(Clone)]
+pub struct QuotedString(SyntaxNode);
+impl AstNode for QuotedString {
+    type Language = MicalLanguage;
+    fn can_cast(kind: <Self::Language as rowan::Language>::Kind) -> bool {
+        kind == SyntaxKind::QUOTED_STRING
+    }
+    fn cast(node: rowan::SyntaxNode<Self::Language>) -> Option<Self> {
+        if Self::can_cast(node.kind()) {
+            Some(Self(node))
+        } else {
+            None
+        }
+    }
+    fn syntax(&self) -> &rowan::SyntaxNode<Self::Language> {
+        &self.0
+    }
+}
+impl QuotedString {
+    pub fn string(&self) -> Option<SyntaxToken> {
+        support::token(AstNode::syntax(self), SyntaxKind::STRING)
+    }
+}
+impl fmt::Display for QuotedString {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        fmt::Display::fmt(self.syntax(), f)
+    }
+}
+impl fmt::Debug for QuotedString {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("QuotedString").field("string", &support::DebugSyntaxToken(self.string())).finish()
     }
 }
 

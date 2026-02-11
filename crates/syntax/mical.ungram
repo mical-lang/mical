@@ -25,10 +25,12 @@ Key =
 | '$numeral'
 | '$true'
 | '$false'
+| '$string'
 
 Value =
   Integer
 | Boolean
+| QuotedString
 | LineString
 | BlockString
 
@@ -39,6 +41,9 @@ Integer =
 Boolean =
   '$true'
 | '$false'
+
+QuotedString =
+  '$string'
 
 // `@` is specialized by code-generator
 LineString = '@string'

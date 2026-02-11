@@ -18,6 +18,7 @@ pub enum SyntaxKind {
     SHARP,
     SHEBANG,
     SPACE,
+    STRING,
     TAB,
     TRUE,
     WORD,
@@ -32,11 +33,12 @@ pub enum SyntaxKind {
     KEY,
     LINE_STRING,
     PREFIX_BLOCK,
+    QUOTED_STRING,
     SOURCE_FILE,
 }
 
 impl SyntaxKind {
-    pub const COUNT: usize = 28usize;
+    pub const COUNT: usize = 30usize;
 }
 impl From<SyntaxKind> for ::rowan::SyntaxKind {
     fn from(kind: SyntaxKind) -> Self {
@@ -45,7 +47,7 @@ impl From<SyntaxKind> for ::rowan::SyntaxKind {
 }
 impl From<::rowan::SyntaxKind> for SyntaxKind {
     fn from(kind: ::rowan::SyntaxKind) -> Self {
-        assert!(kind.0 < (28usize as u16), "bad SyntaxKind: {:?}", kind);
+        assert!(kind.0 < (30usize as u16), "bad SyntaxKind: {:?}", kind);
         unsafe { ::core::mem::transmute(kind.0 as u8) }
     }
 }
@@ -88,6 +90,9 @@ macro_rules! __token_kind_fast_accsess {
     };
     (false) => {
         $crate::SyntaxKind::FALSE
+    };
+    (string) => {
+        $crate::SyntaxKind::STRING
     };
     (+) => {
         $crate::SyntaxKind::PLUS

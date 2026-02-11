@@ -19,6 +19,7 @@ pub enum TokenKind {
     Numeral { radix: Radix, is_empty: bool },
     True,
     False,
+    String { is_terminated: bool, quote: Quote },
 
     Tab,     // 0x09
     Newline, // 0x0A
@@ -39,4 +40,10 @@ pub enum Radix {
     Octal = 8,
     Decimal = 10,
     Hexadecimal = 16,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+pub enum Quote {
+    Single,
+    Double,
 }

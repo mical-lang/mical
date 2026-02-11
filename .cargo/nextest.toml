@@ -1,2 +1,5 @@
 [profile.default]
 status-level = "all"
+
+[profile.ci]
+fail-fast = false

@@ -71,7 +71,7 @@ macro_rules! __token_kind_fast_accsess {
     ('}') => {
         $crate::SyntaxKind::CLOSE_BRACE
     };
-    ('#') => {
+    (#) => {
         $crate::SyntaxKind::SHARP
     };
     (word) => {
@@ -86,16 +86,16 @@ macro_rules! __token_kind_fast_accsess {
     (false) => {
         $crate::SyntaxKind::FALSE
     };
-    ('+') => {
+    (+) => {
         $crate::SyntaxKind::PLUS
     };
-    ('-') => {
+    (-) => {
         $crate::SyntaxKind::MINUS
     };
-    ('|') => {
+    (|) => {
         $crate::SyntaxKind::PIPE
     };
-    ('>') => {
+    (>) => {
         $crate::SyntaxKind::GT
     };
 }

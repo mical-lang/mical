@@ -3,7 +3,7 @@ use crate::project_root;
 
 use anyhow::Result;
 use convert_case::{Case, Casing};
-use proc_macro2::TokenStream;
+use proc_macro2::{Punct, Spacing, TokenStream};
 use quote::{format_ident, quote};
 use std::fs;
 use ungrammar::{Grammar, NodeData, Rule};
@@ -30,14 +30,14 @@ pub(crate) fn generate(sh: &Shell, check: bool) -> Result<()> {
     Ok(())
 }
 
-static PUNCT_NAME_MAP: phf::Map<char, &str> = phf::phf_map! {
-    '#' => "sharp",
-    '+' => "plus",
-    '-' => "minus",
-    '>' => "gt",
-    '{' => "open_brace",
-    '|' => "pipe",
-    '}' => "close_brace",
+static PUNCT_NAME_MAP: phf::Map<&str, &str> = phf::phf_map! {
+    "#" => "sharp",
+    "+" => "plus",
+    "-" => "minus",
+    ">" => "gt",
+    "{" => "open_brace",
+    "|" => "pipe",
+    "}" => "close_brace",
 };
 
 fn syntax_kind_rs(grammar: &Grammar) -> String {
@@ -78,7 +78,7 @@ fn syntax_kind_rs(grammar: &Grammar) -> String {
             if let Some(name) = name.strip_prefix('$') {
                 return Some(format_ident!("{}", name.to_case(Case::UpperSnake)));
             }
-            if let Some(name) = PUNCT_NAME_MAP.get(&name.chars().next().unwrap()) {
+            if let Some(name) = PUNCT_NAME_MAP.get(name) {
                 return Some(format_ident!("{}", name.to_case(Case::UpperSnake)));
             }
             panic!("Unknown token for SyntaxKind: {}", name);
@@ -104,10 +104,19 @@ fn syntax_kind_rs(grammar: &Grammar) -> String {
                 let name = format_ident!("{name}");
                 return Some(quote! { (#name) => { $crate::SyntaxKind::#variant } });
             }
-            let name_char = name.chars().next().unwrap();
-            if let Some(name) = PUNCT_NAME_MAP.get(&name_char) {
-                let variant = format_ident!("{}", name.to_case(Case::UpperSnake));
-                return Some(quote! { (#name_char) => { $crate::SyntaxKind::#variant } });
+            if let Some(punct_name) = PUNCT_NAME_MAP.get(name) {
+                let variant = format_ident!("{}", punct_name.to_case(Case::UpperSnake));
+                let punct = match name.as_str() {
+                    "{" | "}" => {
+                        let c = name.chars().next().unwrap();
+                        quote! { #c }
+                    }
+                    _ => {
+                        let ps = name.chars().map(|c| Punct::new(c, Spacing::Joint));
+                        quote! { #(#ps)* }
+                    }
+                };
+                return Some(quote! { (#punct) => { $crate::SyntaxKind::#variant } });
             }
             panic!("Unknown token for SyntaxKind: {}", name);
         });
@@ -303,8 +312,7 @@ fn convert_node_to_struct(node: &NodeData, grammar: &Grammar) -> TokenStream {
                         let name = &grammar[*token].name;
                         let syntax_kind = if let Some(name) = name.strip_prefix('$') {
                             name.to_case(Case::UpperSnake)
-                        } else if let Some(name) = PUNCT_NAME_MAP.get(&name.chars().next().unwrap())
-                        {
+                        } else if let Some(name) = PUNCT_NAME_MAP.get(name) {
                             name.to_case(Case::UpperSnake)
                         } else {
                             panic!("Unknown token for field {:?} in {}", field, name)
@@ -327,9 +335,7 @@ fn convert_node_to_struct(node: &NodeData, grammar: &Grammar) -> TokenStream {
                                     let tok_name = &grammar[*token].name;
                                     if let Some(name) = tok_name.strip_prefix('$') {
                                         name.to_case(Case::UpperSnake)
-                                    } else if let Some(name) =
-                                        PUNCT_NAME_MAP.get(&tok_name.chars().next().unwrap())
-                                    {
+                                    } else if let Some(name) = PUNCT_NAME_MAP.get(tok_name) {
                                         name.to_case(Case::UpperSnake)
                                     } else {
                                         panic!("Unknown token {:?} in {}", tok_name, name)
@@ -354,7 +360,7 @@ fn convert_node_to_struct(node: &NodeData, grammar: &Grammar) -> TokenStream {
                     let name = &grammar[*token].name;
                     if let Some(name) = name.strip_prefix('$') {
                         name.to_case(Case::Snake)
-                    } else if let Some(name) = PUNCT_NAME_MAP.get(&name.chars().next().unwrap()) {
+                    } else if let Some(name) = PUNCT_NAME_MAP.get(name) {
                         name.to_case(Case::Snake)
                     } else {
                         panic!("Unknown token for field {:?} in {}", field, name)
@@ -545,7 +551,7 @@ fn convert_token_alt_to_struct(node: &NodeData, grammar: &Grammar) -> TokenStrea
             let tok_name = &grammar[*token].name;
             let syntax_kind_name = if let Some(stripped) = tok_name.strip_prefix('$') {
                 stripped.to_case(Case::UpperSnake)
-            } else if let Some(punct_name) = PUNCT_NAME_MAP.get(&tok_name.chars().next().unwrap()) {
+            } else if let Some(punct_name) = PUNCT_NAME_MAP.get(tok_name) {
                 punct_name.to_case(Case::UpperSnake)
             } else {
                 panic!("Unknown token {tok_name:?} in {name}")

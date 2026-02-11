@@ -73,7 +73,6 @@ fn integer_decimal() {
 
 #[test]
 fn single_punctuation() {
-    assert_token!(r"\", [Backslash(1)]);
     assert_token!("{", [OpenBrace(1)]);
     assert_token!("}", [CloseBrace(1)]);
     assert_token!(">", [Greater(1)]);
@@ -88,23 +87,4 @@ fn simgle_whitespace() {
     assert_token!("\t", [Tab(1)]);
     assert_token!("\n", [Newline(1)]);
     assert_token!(" ", [Space(1)]);
-}
-
-#[test]
-fn backslash() {
-    assert_token!(r"\", [Backslash(1)]);
-    assert_token!(r"\\", [Backslash(1), Backslash(1)]);
-    assert_token!(r"\a", [Backslash(1), Word(1)]);
-    assert_token!(r"\n", [Backslash(1), Word(1)]);
-    assert_token!(r"\ ", [Backslash(1), Space(1)]);
-    assert_token!(r"a\b", [Word(1), Backslash(1), Word(1)]);
-    assert_token!(r"a\\b", [Word(1), Backslash(1), Backslash(1), Word(1)]);
-    assert_token!(
-        r"01\23",
-        [
-            Numeral { 2, radix: Decimal, is_empty: false },
-            Backslash(1),
-            Numeral { 2, radix: Decimal, is_empty: false },
-        ]
-    );
 }

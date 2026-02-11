@@ -33,7 +33,6 @@ fn advance_token(cursor: &mut Cursor) -> Option<Token> {
         '\t' => Tab,
         '\n' => Newline,
         ' ' => Space,
-        '\\' => Backslash,
         '}' => CloseBrace,
         '>' => Greater,
         '-' => Minus,
@@ -135,6 +134,6 @@ fn integer(cursor: &mut Cursor, first_digit: char) -> TokenKind {
 }
 
 fn word(cursor: &mut Cursor) -> TokenKind {
-    cursor.eat_while(|c| !matches!(c, '\t' | '\n' | ' ' | '\\'));
+    cursor.eat_while(|c| !matches!(c, '\t' | '\n' | ' '));
     Word
 }

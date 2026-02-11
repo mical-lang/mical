@@ -24,7 +24,6 @@ pub enum TokenKind {
     Newline, // 0x0A
     Space,   // 0x20
 
-    Backslash,  // \
     CloseBrace, // }
     Greater,    // >
     Minus,      // -

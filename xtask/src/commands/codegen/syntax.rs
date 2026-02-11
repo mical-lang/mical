@@ -134,6 +134,9 @@ fn syntax_kind_rs(grammar: &Grammar) -> String {
     let syntax_kind_impl = {
         let total_count = all_token_name.len() + all_nodes_name.len();
         quote! {
+            impl SyntaxKind {
+                pub const COUNT: usize = #total_count;
+            }
             impl From<SyntaxKind> for ::rowan::SyntaxKind {
                 fn from(kind: SyntaxKind) -> Self {
                     Self(kind as u16)

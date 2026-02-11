@@ -35,6 +35,9 @@ pub enum SyntaxKind {
     SOURCE_FILE,
 }
 
+impl SyntaxKind {
+    pub const COUNT: usize = 28usize;
+}
 impl From<SyntaxKind> for ::rowan::SyntaxKind {
     fn from(kind: SyntaxKind) -> Self {
         Self(kind as u16)

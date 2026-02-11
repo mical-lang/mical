@@ -22,7 +22,6 @@ impl<'src> Cursor<'src> {
         }
     }
 
-    /// Returns the last eaten symbol. (For debug assertions only.)
     pub(crate) fn prev(&self) -> char {
         #[cfg(debug_assertions)]
         {
@@ -34,7 +33,6 @@ impl<'src> Cursor<'src> {
         }
     }
 
-    /// Consumes the next symbol if it satisfies the predicate or until the end of the input.
     pub(crate) fn eat_while(&mut self, pred: impl Fn(char) -> bool) {
         while let Some(c) = self.peek() {
             if pred(c) {
@@ -45,7 +43,6 @@ impl<'src> Cursor<'src> {
         }
     }
 
-    /// Peeks the next symbol from the input stream without consuming it.
     pub(crate) fn peek(&self) -> Option<char> {
         // `.next()` optimizes better than `.nth(0)`
         self.chars.clone().next()

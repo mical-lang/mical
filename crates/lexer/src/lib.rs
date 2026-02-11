@@ -46,6 +46,8 @@ fn advance_token(cursor: &mut Cursor) -> Option<Token> {
         '|' => punct_or_word::<'|'>(cursor, Pipe),
         '+' => punct_or_word::<'+'>(cursor, Plus),
         '#' => Sharp,
+        '"' => string::<'"'>(cursor),
+        '\'' => string::<'\''>(cursor),
         c @ '0'..='9' => integer_or_word(cursor, c),
         _ => word(cursor),
     };
@@ -91,6 +93,45 @@ fn punct_or_word<const P: char>(cursor: &mut Cursor, kind: TokenKind) -> TokenKi
     match cursor.peek() {
         Some('\t' | '\n' | ' ') | None => kind,
         _ => word(cursor),
+    }
+}
+
+fn string<const Q: char>(cursor: &mut Cursor) -> TokenKind {
+    const { assert!(Q == '"' || Q == '\'') };
+    debug_assert!(cursor.prev() == Q);
+
+    let mut terminated = false;
+    while let Some(c) = cursor.peek() {
+        match c {
+            '\\' => {
+                cursor.next();
+                let peek = cursor.peek();
+                if peek == Some(Q) || peek == Some('\\') {
+                    cursor.next();
+                }
+            }
+            '\n' | '\r' => {
+                break;
+            }
+            q if q == Q => {
+                terminated = true;
+                cursor.next();
+                break;
+            }
+            _ => {
+                cursor.next();
+            }
+        }
+    }
+    String {
+        is_terminated: terminated,
+        quote: const {
+            match Q {
+                '"' => Quote::Double,
+                '\'' => Quote::Single,
+                _ => unreachable!(),
+            }
+        },
     }
 }
 

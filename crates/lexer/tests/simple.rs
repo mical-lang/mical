@@ -1,5 +1,5 @@
 mod macros;
-use mical_syntax::token::Radix::*;
+use mical_syntax::token::{Quote::*, Radix::*};
 
 #[test]
 fn true_() {
@@ -142,6 +142,8 @@ fn punctuation_first_word() {
     assert_token!("|x", [Word(2)]);
     assert_token!("+x", [Word(2)]);
     assert_token!("#x", [Sharp(1), Word(1)]);
+    assert_token!("'x", [String { 2, is_terminated: false, quote: Single }]);
+    assert_token!("\"x", [String { 2, is_terminated: false, quote: Double }]);
 }
 
 #[test]
@@ -153,6 +155,8 @@ fn punctuation_last_word() {
     assert_token!("x|", [Word(2)]);
     assert_token!("x+", [Word(2)]);
     assert_token!("x#", [Word(2)]);
+    assert_token!("x'", [Word(2)]);
+    assert_token!("x\"", [Word(2)]);
 }
 
 #[test]
@@ -164,4 +168,61 @@ fn punctuation_middle_word() {
     assert_token!("x|y", [Word(3)]);
     assert_token!("x+y", [Word(3)]);
     assert_token!("x#y", [Word(3)]);
+    assert_token!("x'y", [Word(3)]);
+    assert_token!("x\"y", [Word(3)]);
+}
+
+#[test]
+fn empty_string() {
+    assert_token!(r#"""#, [String { 1, is_terminated: false, quote: Double }]);
+    assert_token!(r#"'"#, [String { 1, is_terminated: false, quote: Single }]);
+    assert_token!(r#"''"#, [String { 2, is_terminated: true, quote: Single }]);
+    assert_token!(r#""""#, [String { 2, is_terminated: true, quote: Double }]);
+}
+
+#[test]
+fn string() {
+    assert_token!(r#""'""#, [String { 3, is_terminated: true, quote: Double }]);
+    assert_token!(r#""''""#, [String { 4, is_terminated: true, quote: Double }]);
+    assert_token!(r#"'""'"#, [String { 4, is_terminated: true, quote: Single }]);
+    assert_token!(r#"' '"#, [String { 3, is_terminated: true, quote: Single }]);
+    assert_token!(r#"" ""#, [String { 3, is_terminated: true, quote: Double }]);
+    assert_token!(r#"'foo'"#, [String { 5, is_terminated: true, quote: Single }]);
+    assert_token!(r#""bar""#, [String { 5, is_terminated: true, quote: Double }]);
+    assert_token!(r#"'a b'"#, [String { 5, is_terminated: true, quote: Single }]);
+    assert_token!(r#""c d""#, [String { 5, is_terminated: true, quote: Double }]);
+    assert_token!(
+        "'pi\nyo'",
+        [String { 3, is_terminated: false, quote: Single }, Newline(1), Word(3)]
+    );
+    assert_token!(
+        "\"pi\r\nyo\"",
+        [String { 3, is_terminated: false, quote: Double }, Newline(2), Word(3)]
+    );
+}
+
+#[test]
+fn escaped_string() {
+    assert_token!(r#"'\'"#, [String { 3, is_terminated: false, quote: Single }]);
+    assert_token!(r#"'\''"#, [String { 4, is_terminated: true, quote: Single }]);
+    assert_token!(r#""\""#, [String { 3, is_terminated: false, quote: Double }]);
+    assert_token!(r#""\"""#, [String { 4, is_terminated: true, quote: Double }]);
+    assert_token!(r#""hoge\"fuga""#, [String { 12, is_terminated: true, quote: Double }]);
+    assert_token!(r#"'bar\'baz'"#, [String { 10, is_terminated: true, quote: Single }]);
+    assert_token!(
+        "'\\\n'",
+        [
+            String { 2, is_terminated: false, quote: Single },
+            Newline(1),
+            String { 1, is_terminated: false, quote: Single },
+        ]
+    );
+    assert_token!(
+        "\"\\\r\n\"",
+        [
+            String { 2, is_terminated: false, quote: Double },
+            Newline(2),
+            String { 1, is_terminated: false, quote: Double },
+        ]
+    );
 }

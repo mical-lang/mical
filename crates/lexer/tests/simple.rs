@@ -90,10 +90,78 @@ fn single_punctuation() {
 }
 
 #[test]
+fn multiple_punctuation() {
+    assert_token!("{{", [Word(2)]);
+    assert_token!("{ {", [OpenBrace(1), Space(1), OpenBrace(1)]);
+    assert_token!("}}", [Word(2)]);
+    assert_token!("} }", [CloseBrace(1), Space(1), CloseBrace(1)]);
+    assert_token!(">>", [Word(2)]);
+    assert_token!("> >", [Greater(1), Space(1), Greater(1)]);
+    assert_token!("--", [Word(2)]);
+    assert_token!("- -", [Minus(1), Space(1), Minus(1)]);
+    assert_token!("||", [Word(2)]);
+    assert_token!("| |", [Pipe(1), Space(1), Pipe(1)]);
+    assert_token!("++", [Word(2)]);
+    assert_token!("+ +", [Plus(1), Space(1), Plus(1)]);
+    assert_token!("##", [Sharp(1), Sharp(1)]);
+    assert_token!("# #", [Sharp(1), Space(1), Sharp(1)]);
+}
+
+#[test]
 fn single_whitespace() {
     assert_token!("\t", [Tab(1)]);
     assert_token!("\n", [Newline(1)]);
     assert_token!(" ", [Space(1)]);
     assert_token!("\r", [Newline(1)]);
     assert_token!("\r\n", [Newline(2)]);
+}
+
+#[test]
+fn multiple_whitespace() {
+    assert_token!("\t\t", [Tab(1), Tab(1)]);
+    assert_token!("\n\n", [Newline(1), Newline(1)]);
+    assert_token!("  ", [Space(1), Space(1)]);
+    assert_token!("\r\r", [Newline(1), Newline(1)]);
+    assert_token!("\r\n\r\n", [Newline(2), Newline(2)]);
+}
+
+#[test]
+fn multibyte_word() {
+    assert_token!("こんにちは", [Word(15)]);
+    assert_token!("你好", [Word(6)]);
+    assert_token!("안녕하세요", [Word(15)]);
+    assert_token!("🐰👑", [Word(8)]);
+}
+
+#[test]
+fn punctuation_first_word() {
+    assert_token!("{x", [Word(2)]);
+    assert_token!("}x", [Word(2)]);
+    assert_token!(">x", [Word(2)]);
+    assert_token!("-x", [Word(2)]);
+    assert_token!("|x", [Word(2)]);
+    assert_token!("+x", [Word(2)]);
+    assert_token!("#x", [Sharp(1), Word(1)]);
+}
+
+#[test]
+fn punctuation_last_word() {
+    assert_token!("x{", [Word(2)]);
+    assert_token!("x}", [Word(2)]);
+    assert_token!("x>", [Word(2)]);
+    assert_token!("x-", [Word(2)]);
+    assert_token!("x|", [Word(2)]);
+    assert_token!("x+", [Word(2)]);
+    assert_token!("x#", [Word(2)]);
+}
+
+#[test]
+fn punctuation_middle_word() {
+    assert_token!("x{y", [Word(3)]);
+    assert_token!("x}y", [Word(3)]);
+    assert_token!("x>y", [Word(3)]);
+    assert_token!("x-y", [Word(3)]);
+    assert_token!("x|y", [Word(3)]);
+    assert_token!("x+y", [Word(3)]);
+    assert_token!("x#y", [Word(3)]);
 }

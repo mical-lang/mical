@@ -6,6 +6,8 @@ xflags::xflags! {
             optional kind: CodegenKind
             optional --check
         }
+        cmd xtest {
+        }
     }
 }
 
@@ -40,6 +42,7 @@ pub struct Xtask {
 #[derive(Debug)]
 pub enum XtaskCmd {
     Codegen(Codegen),
+    Xtest(Xtest),
 }
 
 #[derive(Debug)]
@@ -48,6 +51,9 @@ pub struct Codegen {
 
     pub check: bool,
 }
+
+#[derive(Debug)]
+pub struct Xtest;
 
 impl Xtask {
     #[allow(dead_code)]

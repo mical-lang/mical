@@ -32,6 +32,12 @@ fn advance_token(cursor: &mut Cursor) -> Option<Token> {
         'f' => false_(cursor),
         '\t' => Tab,
         '\n' => Newline,
+        '\r' => {
+            if let Some('\n') = cursor.peek() {
+                cursor.next();
+            }
+            Newline
+        }
         ' ' => Space,
         '}' => CloseBrace,
         '>' => Greater,

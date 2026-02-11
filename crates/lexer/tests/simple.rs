@@ -83,8 +83,10 @@ fn single_punctuation() {
 }
 
 #[test]
-fn simgle_whitespace() {
+fn single_whitespace() {
     assert_token!("\t", [Tab(1)]);
     assert_token!("\n", [Newline(1)]);
     assert_token!(" ", [Space(1)]);
+    assert_token!("\r", [Newline(1)]);
+    assert_token!("\r\n", [Newline(2)]);
 }

@@ -28,8 +28,8 @@ pub fn tokenize(source: &str) -> impl TokenStream<'_> {
 
 fn advance_token(cursor: &mut Cursor) -> Option<Token> {
     let kind = match cursor.next()? {
-        't' => true_(cursor),
-        'f' => false_(cursor),
+        't' => true_or_word(cursor),
+        'f' => false_or_word(cursor),
         '\t' => Tab,
         '\n' => Newline,
         '\r' => {
@@ -39,21 +39,21 @@ fn advance_token(cursor: &mut Cursor) -> Option<Token> {
             Newline
         }
         ' ' => Space,
-        '}' => CloseBrace,
-        '>' => Greater,
-        '-' => Minus,
-        '{' => OpenBrace,
-        '|' => Pipe,
-        '+' => Plus,
+        '}' => punct_or_word::<'}'>(cursor, CloseBrace),
+        '>' => punct_or_word::<'>'>(cursor, Greater),
+        '-' => punct_or_word::<'-'>(cursor, Minus),
+        '{' => punct_or_word::<'{'>(cursor, OpenBrace),
+        '|' => punct_or_word::<'|'>(cursor, Pipe),
+        '+' => punct_or_word::<'+'>(cursor, Plus),
         '#' => Sharp,
-        c @ '0'..='9' => integer(cursor, c),
+        c @ '0'..='9' => integer_or_word(cursor, c),
         _ => word(cursor),
     };
     let token = cursor.bump(kind);
     Some(token)
 }
 
-fn true_(cursor: &mut Cursor) -> TokenKind {
+fn true_or_word(cursor: &mut Cursor) -> TokenKind {
     debug_assert!(cursor.prev() == 't');
     if let Some('r') = cursor.peek() {
         cursor.next();
@@ -68,7 +68,7 @@ fn true_(cursor: &mut Cursor) -> TokenKind {
     word(cursor)
 }
 
-fn false_(cursor: &mut Cursor) -> TokenKind {
+fn false_or_word(cursor: &mut Cursor) -> TokenKind {
     debug_assert!(cursor.prev() == 'f');
     if let Some('a') = cursor.peek() {
         cursor.next();
@@ -86,7 +86,15 @@ fn false_(cursor: &mut Cursor) -> TokenKind {
     word(cursor)
 }
 
-fn integer(cursor: &mut Cursor, first_digit: char) -> TokenKind {
+fn punct_or_word<const P: char>(cursor: &mut Cursor, kind: TokenKind) -> TokenKind {
+    debug_assert!(cursor.prev() == P);
+    match cursor.peek() {
+        Some('\t' | '\n' | ' ') | None => kind,
+        _ => word(cursor),
+    }
+}
+
+fn integer_or_word(cursor: &mut Cursor, first_digit: char) -> TokenKind {
     debug_assert!(first_digit.is_ascii_digit()); // 0..=9
     fn eat_decimal_digits(cursor: &mut Cursor) -> bool {
         let mut has_digits = false;
@@ -136,7 +144,10 @@ fn integer(cursor: &mut Cursor, first_digit: char) -> TokenKind {
     } else {
         eat_decimal_digits(cursor)
     };
-    Numeral { radix, is_empty: !has_digits }
+    match cursor.peek() {
+        Some('\t' | '\n' | ' ') | None => Numeral { radix, is_empty: !has_digits },
+        _ => word(cursor),
+    }
 }
 
 fn word(cursor: &mut Cursor) -> TokenKind {

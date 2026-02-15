@@ -5,7 +5,7 @@ use anyhow::Result;
 use convert_case::{Case, Casing};
 use proc_macro2::{Punct, Spacing, TokenStream};
 use quote::{format_ident, quote};
-use std::fs;
+use std::{collections::HashMap, fs};
 use ungrammar::{Grammar, NodeData, Rule};
 use xshell::Shell;
 
@@ -32,9 +32,11 @@ pub(crate) fn generate(sh: &Shell, check: bool) -> Result<()> {
 
 static PUNCT_NAME_MAP: phf::Map<&str, &str> = phf::phf_map! {
     "#" => "sharp",
+    "'" => "single_quote",
     "+" => "plus",
     "-" => "minus",
     ">" => "gt",
+    "\"" => "double_quote",
     "{" => "open_brace",
     "|" => "pipe",
     "}" => "close_brace",
@@ -70,16 +72,13 @@ fn syntax_kind_rs(grammar: &Grammar) -> String {
     let all_token_name = {
         let iter1 =
             ["TAB", "NEWLINE", "SPACE", "BACKSLASH"].into_iter().map(|s| format_ident!("{s}"));
-        let iter2 = grammar.tokens().filter_map(|token| {
+        let iter2 = grammar.tokens().map(|token| {
             let name = &grammar[token].name;
-            if name.starts_with('@') {
-                return None;
-            }
             if let Some(name) = name.strip_prefix('$') {
-                return Some(format_ident!("{}", name.to_case(Case::UpperSnake)));
+                return format_ident!("{}", name.to_case(Case::UpperSnake));
             }
             if let Some(name) = PUNCT_NAME_MAP.get(name) {
-                return Some(format_ident!("{}", name.to_case(Case::UpperSnake)));
+                return format_ident!("{}", name.to_case(Case::UpperSnake));
             }
             panic!("Unknown token for SyntaxKind: {}", name);
         });
@@ -94,20 +93,17 @@ fn syntax_kind_rs(grammar: &Grammar) -> String {
                 let variant = format_ident!("{name}");
                 quote! { (#p) => { $crate::SyntaxKind::#variant } }
             });
-        let iter2 = grammar.tokens().filter_map(|token| {
+        let iter2 = grammar.tokens().map(|token| {
             let name = &grammar[token].name;
-            if name.starts_with('@') {
-                return None;
-            }
             if let Some(name) = name.strip_prefix('$') {
                 let variant = format_ident!("{}", name.to_case(Case::UpperSnake));
                 let name = format_ident!("{name}");
-                return Some(quote! { (#name) => { $crate::SyntaxKind::#variant } });
+                return quote! { (#name) => { $crate::SyntaxKind::#variant } };
             }
             if let Some(punct_name) = PUNCT_NAME_MAP.get(name) {
                 let variant = format_ident!("{}", punct_name.to_case(Case::UpperSnake));
                 let punct = match name.as_str() {
-                    "{" | "}" => {
+                    "{" | "}" | "\"" | "'" => {
                         let c = name.chars().next().unwrap();
                         quote! { #c }
                     }
@@ -116,7 +112,7 @@ fn syntax_kind_rs(grammar: &Grammar) -> String {
                         quote! { #(#ps)* }
                     }
                 };
-                return Some(quote! { (#punct) => { $crate::SyntaxKind::#variant } });
+                return quote! { (#punct) => { $crate::SyntaxKind::#variant } };
             }
             panic!("Unknown token for SyntaxKind: {}", name);
         });
@@ -202,13 +198,7 @@ fn ast_rs(grammar: &Grammar) -> String {
             let node = &grammar[node];
             match &node.rule {
                 Rule::Node(_) | Rule::Seq(_) => convert_node_to_struct(node, grammar),
-                Rule::Token(t) => {
-                    if grammar[*t].name.starts_with('@') {
-                        convert_special_token_node(node, grammar)
-                    } else {
-                        convert_node_to_struct(node, grammar)
-                    }
-                }
+                Rule::Token(_) => convert_node_to_struct(node, grammar),
                 Rule::Alt(alts) => {
                     let has_token = alts.iter().any(|r| matches!(r, Rule::Token(_)));
                     let has_node = alts.iter().any(|r| matches!(r, Rule::Node(_)));
@@ -239,14 +229,21 @@ fn convert_node_to_struct(node: &NodeData, grammar: &Grammar) -> TokenStream {
     struct TokenStreamBuildHelper {
         field_token_stream: Vec<TokenStream>,
         debug_token_stream: Vec<TokenStream>,
+        child_count: HashMap<String, usize>,
     }
     impl TokenStreamBuildHelper {
         fn push_child(&mut self, field_name_str: &str, field_ty: &str) {
             let field_name = format_ident!("{field_name_str}");
             let field_ty = format_ident!("{field_ty}");
-            self.field_token_stream.push(quote! {
-                pub fn #field_name(&self) -> Option<#field_ty> {
-                    support::child(AstNode::syntax(self))
+            self.child_count.entry(field_ty.to_string()).and_modify(|c| *c += 1).or_insert(0);
+            let count = self.child_count[&field_ty.to_string()];
+            self.field_token_stream.push(if count == 0 {
+                quote! {
+                    pub fn #field_name(&self) -> Option<#field_ty> { support::child(AstNode::syntax(self)) }
+                }
+            } else {
+                quote! {
+                    pub fn #field_name(&self) -> Option<#field_ty> { support::children(AstNode::syntax(self)).nth(#count) }
                 }
             });
             self.debug_token_stream.push(quote! {
@@ -495,48 +492,6 @@ fn convert_node_to_enum(node: &NodeData, grammar: &Grammar) -> TokenStream {
                 match self {
                     #(Self::#variant_names(x) => fmt::Debug::fmt(x, f)),*
                 }
-            }
-        }
-    }
-}
-
-fn convert_special_token_node(node: &NodeData, grammar: &Grammar) -> TokenStream {
-    assert!(matches!(node.rule, Rule::Token(_)));
-    let Rule::Token(token) = &node.rule else { unreachable!() };
-    let token_name = &grammar[*token].name;
-    assert!(token_name.starts_with('@'));
-    if token_name != "@string" {
-        panic!("unsupported special token {token_name:?} in {}", node.name);
-    }
-    let name = node.name.to_case(Case::Pascal);
-    let syntax_kind = format_ident!("{}", name.to_case(Case::UpperSnake));
-    let name_string = name.clone();
-    let name = format_ident!("{name}");
-    quote! {
-        #[derive(Clone)]
-        pub struct #name(SyntaxNode);
-        impl AstNode for #name {
-            type Language = MicalLanguage;
-            fn can_cast(kind: <Self::Language as rowan::Language>::Kind) -> bool {
-                kind == SyntaxKind::#syntax_kind
-            }
-            fn cast(node: rowan::SyntaxNode<Self::Language>) -> Option<Self> {
-                if Self::can_cast(node.kind()) {
-                    Some(Self(node))
-                } else {
-                    None
-                }
-            }
-            fn syntax(&self) -> &rowan::SyntaxNode<Self::Language> { &self.0 }
-        }
-        impl fmt::Display for #name {
-            fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                fmt::Display::fmt(self.syntax(), f)
-            }
-        }
-        impl fmt::Debug for #name {
-            fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                f.debug_struct(#name_string).finish()
             }
         }
     }

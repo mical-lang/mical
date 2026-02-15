@@ -43,10 +43,12 @@ Boolean =
 | '$false'
 
 QuotedString =
+  open_quote:('"' | '\'')
   '$string'
+  close_quote:('"' | '\'')
 
-// `@` is specialized by code-generator
-LineString = '@string'
+LineString =
+  '$string'
 
 BlockString =
   header:BlockStringHeader

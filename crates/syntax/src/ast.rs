@@ -402,6 +402,11 @@ impl AstNode for LineString {
         &self.0
     }
 }
+impl LineString {
+    pub fn string(&self) -> Option<SyntaxToken> {
+        support::token(AstNode::syntax(self), SyntaxKind::STRING)
+    }
+}
 impl fmt::Display for LineString {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         fmt::Display::fmt(self.syntax(), f)
@@ -409,7 +414,7 @@ impl fmt::Display for LineString {
 }
 impl fmt::Debug for LineString {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.debug_struct("LineString").finish()
+        f.debug_struct("LineString").field("string", &support::DebugSyntaxToken(self.string())).finish()
     }
 }
 
@@ -525,8 +530,20 @@ impl AstNode for QuotedString {
     }
 }
 impl QuotedString {
+    pub fn open_quote(&self) -> Option<SyntaxToken> {
+        self.syntax()
+            .children_with_tokens()
+            .filter_map(|it| it.into_token())
+            .find(|it| matches!(it.kind(), SyntaxKind::DOUBLE_QUOTE | SyntaxKind::SINGLE_QUOTE))
+    }
     pub fn string(&self) -> Option<SyntaxToken> {
         support::token(AstNode::syntax(self), SyntaxKind::STRING)
+    }
+    pub fn close_quote(&self) -> Option<SyntaxToken> {
+        self.syntax()
+            .children_with_tokens()
+            .filter_map(|it| it.into_token())
+            .find(|it| matches!(it.kind(), SyntaxKind::DOUBLE_QUOTE | SyntaxKind::SINGLE_QUOTE))
     }
 }
 impl fmt::Display for QuotedString {
@@ -536,7 +553,11 @@ impl fmt::Display for QuotedString {
 }
 impl fmt::Debug for QuotedString {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.debug_struct("QuotedString").field("string", &support::DebugSyntaxToken(self.string())).finish()
+        f.debug_struct("QuotedString")
+            .field("open_quote", &support::DebugSyntaxToken(self.open_quote()))
+            .field("string", &support::DebugSyntaxToken(self.string()))
+            .field("close_quote", &support::DebugSyntaxToken(self.close_quote()))
+            .finish()
     }
 }
 

@@ -7,6 +7,7 @@
 pub enum SyntaxKind {
     BACKSLASH,
     CLOSE_BRACE,
+    DOUBLE_QUOTE,
     FALSE,
     GT,
     MINUS,
@@ -17,6 +18,7 @@ pub enum SyntaxKind {
     PLUS,
     SHARP,
     SHEBANG,
+    SINGLE_QUOTE,
     SPACE,
     STRING,
     TAB,
@@ -38,7 +40,7 @@ pub enum SyntaxKind {
 }
 
 impl SyntaxKind {
-    pub const COUNT: usize = 30usize;
+    pub const COUNT: usize = 32usize;
 }
 impl From<SyntaxKind> for ::rowan::SyntaxKind {
     fn from(kind: SyntaxKind) -> Self {
@@ -47,7 +49,7 @@ impl From<SyntaxKind> for ::rowan::SyntaxKind {
 }
 impl From<::rowan::SyntaxKind> for SyntaxKind {
     fn from(kind: ::rowan::SyntaxKind) -> Self {
-        assert!(kind.0 < (30usize as u16), "bad SyntaxKind: {:?}", kind);
+        assert!(kind.0 < (32usize as u16), "bad SyntaxKind: {:?}", kind);
         unsafe { ::core::mem::transmute(kind.0 as u8) }
     }
 }
@@ -99,6 +101,12 @@ macro_rules! __token_kind_fast_accsess {
     };
     (-) => {
         $crate::SyntaxKind::MINUS
+    };
+    ('"') => {
+        $crate::SyntaxKind::DOUBLE_QUOTE
+    };
+    ('\'') => {
+        $crate::SyntaxKind::SINGLE_QUOTE
     };
     (|) => {
         $crate::SyntaxKind::PIPE

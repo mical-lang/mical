@@ -30,7 +30,10 @@ fn advance_token(cursor: &mut Cursor) -> Option<Token> {
     let kind = match cursor.next()? {
         't' => true_or_word(cursor),
         'f' => false_or_word(cursor),
-        '\t' => Tab,
+        '\t' => {
+            cursor.eat_while(|c| c == '\t');
+            Tab
+        }
         '\n' => Newline,
         '\r' => {
             if let Some('\n') = cursor.peek() {
@@ -38,7 +41,10 @@ fn advance_token(cursor: &mut Cursor) -> Option<Token> {
             }
             Newline
         }
-        ' ' => Space,
+        ' ' => {
+            cursor.eat_while(|c| c == ' ');
+            Space
+        }
         '}' => CloseBrace,
         '>' => Greater,
         '-' => Minus,

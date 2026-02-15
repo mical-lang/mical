@@ -118,9 +118,9 @@ fn single_whitespace() {
 
 #[test]
 fn multiple_whitespace() {
-    assert_token!("\t\t", [Tab(1), Tab(1)]);
+    assert_token!("\t\t", [Tab(2)]);
     assert_token!("\n\n", [Newline(1), Newline(1)]);
-    assert_token!("  ", [Space(1), Space(1)]);
+    assert_token!("  ", [Space(2)]);
     assert_token!("\r\r", [Newline(1), Newline(1)]);
     assert_token!("\r\n\r\n", [Newline(2), Newline(2)]);
 }

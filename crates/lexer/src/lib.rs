@@ -39,12 +39,12 @@ fn advance_token(cursor: &mut Cursor) -> Option<Token> {
             Newline
         }
         ' ' => Space,
-        '}' => punct_or_word::<'}'>(cursor, CloseBrace),
-        '>' => punct_or_word::<'>'>(cursor, Greater),
-        '-' => punct_or_word::<'-'>(cursor, Minus),
-        '{' => punct_or_word::<'{'>(cursor, OpenBrace),
-        '|' => punct_or_word::<'|'>(cursor, Pipe),
-        '+' => punct_or_word::<'+'>(cursor, Plus),
+        '}' => CloseBrace,
+        '>' => Greater,
+        '-' => Minus,
+        '{' => OpenBrace,
+        '|' => Pipe,
+        '+' => Plus,
         '#' => Sharp,
         '"' => string::<'"'>(cursor),
         '\'' => string::<'\''>(cursor),
@@ -86,14 +86,6 @@ fn false_or_word(cursor: &mut Cursor) -> TokenKind {
         }
     }
     word(cursor)
-}
-
-fn punct_or_word<const P: char>(cursor: &mut Cursor, kind: TokenKind) -> TokenKind {
-    debug_assert!(cursor.prev() == P);
-    match cursor.peek() {
-        Some('\t' | '\n' | ' ') | None => kind,
-        _ => word(cursor),
-    }
 }
 
 fn string<const Q: char>(cursor: &mut Cursor) -> TokenKind {

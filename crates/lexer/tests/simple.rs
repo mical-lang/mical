@@ -91,17 +91,17 @@ fn single_punctuation() {
 
 #[test]
 fn multiple_punctuation() {
-    assert_token!("{{", [Word(2)]);
+    assert_token!("{{", [OpenBrace(1), OpenBrace(1)]);
     assert_token!("{ {", [OpenBrace(1), Space(1), OpenBrace(1)]);
-    assert_token!("}}", [Word(2)]);
+    assert_token!("}}", [CloseBrace(1), CloseBrace(1)]);
     assert_token!("} }", [CloseBrace(1), Space(1), CloseBrace(1)]);
-    assert_token!(">>", [Word(2)]);
+    assert_token!(">>", [Greater(1), Greater(1)]);
     assert_token!("> >", [Greater(1), Space(1), Greater(1)]);
-    assert_token!("--", [Word(2)]);
+    assert_token!("--", [Minus(1), Minus(1)]);
     assert_token!("- -", [Minus(1), Space(1), Minus(1)]);
-    assert_token!("||", [Word(2)]);
+    assert_token!("||", [Pipe(1), Pipe(1)]);
     assert_token!("| |", [Pipe(1), Space(1), Pipe(1)]);
-    assert_token!("++", [Word(2)]);
+    assert_token!("++", [Plus(1), Plus(1)]);
     assert_token!("+ +", [Plus(1), Space(1), Plus(1)]);
     assert_token!("##", [Sharp(1), Sharp(1)]);
     assert_token!("# #", [Sharp(1), Space(1), Sharp(1)]);
@@ -135,12 +135,12 @@ fn multibyte_word() {
 
 #[test]
 fn punctuation_first_word() {
-    assert_token!("{x", [Word(2)]);
-    assert_token!("}x", [Word(2)]);
-    assert_token!(">x", [Word(2)]);
-    assert_token!("-x", [Word(2)]);
-    assert_token!("|x", [Word(2)]);
-    assert_token!("+x", [Word(2)]);
+    assert_token!("{x", [OpenBrace(1), Word(1)]);
+    assert_token!("}x", [CloseBrace(1), Word(1)]);
+    assert_token!(">x", [Greater(1), Word(1)]);
+    assert_token!("-x", [Minus(1), Word(1)]);
+    assert_token!("|x", [Pipe(1), Word(1)]);
+    assert_token!("+x", [Plus(1), Word(1)]);
     assert_token!("#x", [Sharp(1), Word(1)]);
     assert_token!("'x", [String { 2, is_terminated: false, quote: Single }]);
     assert_token!("\"x", [String { 2, is_terminated: false, quote: Double }]);

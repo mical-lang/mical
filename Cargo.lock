@@ -65,6 +65,10 @@ dependencies = [
 [[package]]
 name = "mical_parser"
 version = "0.0.1"
+dependencies = [
+ "mical_syntax",
+ "rowan",
+]
 
 [[package]]
 name = "mical_syntax"

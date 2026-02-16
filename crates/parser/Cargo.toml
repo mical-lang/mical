@@ -6,3 +6,5 @@ edition.workspace = true
 license.workspace = true
 
 [dependencies]
+rowan.workspace = true
+mical_syntax.workspace = true

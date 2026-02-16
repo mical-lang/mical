@@ -66,6 +66,9 @@ fn integer_hexadecimal() {
 #[test]
 fn integer_decimal() {
     assert_token!("0", [Numeral { 1, radix: Decimal, is_empty: false }]);
+    assert_token!("1", [Numeral { 1, radix: Decimal, is_empty: false }]);
+    assert_token!("2", [Numeral { 1, radix: Decimal, is_empty: false }]);
+    assert_token!("9", [Numeral { 1, radix: Decimal, is_empty: false }]);
     assert_token!("00", [Numeral { 2, radix: Decimal, is_empty: false }]);
     assert_token!("_", [Word(1)]);
     assert_token!("_0", [Word(2)]);

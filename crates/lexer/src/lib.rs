@@ -181,7 +181,8 @@ fn integer_or_word(cursor: &mut Cursor, first_digit: char) -> TokenKind {
             _ => true, // single '0'
         }
     } else {
-        eat_decimal_digits(cursor)
+        eat_decimal_digits(cursor);
+        true // first_digit itself is always a valid digit
     };
     match cursor.peek() {
         Some('\t' | '\n' | ' ') | None => Numeral { radix, is_empty: !has_digits },

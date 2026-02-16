@@ -21,11 +21,16 @@ Directive =
   args:LineString
 
 Key =
+  WordKey
+| QuotedKey
+
+WordKey =
   '$word'
-| '$numeral'
-| '$true'
-| '$false'
-| '$string'
+
+QuotedKey =
+  open_quote:('"' | '\'')
+  '$string'
+  close_quote:('"' | '\'')
 
 Value =
   Integer

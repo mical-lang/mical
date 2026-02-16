@@ -32,15 +32,16 @@ pub enum SyntaxKind {
     ENTRY,
     ERROR,
     INTEGER,
-    KEY,
     LINE_STRING,
     PREFIX_BLOCK,
+    QUOTED_KEY,
     QUOTED_STRING,
     SOURCE_FILE,
+    WORD_KEY,
 }
 
 impl SyntaxKind {
-    pub const COUNT: usize = 32usize;
+    pub const COUNT: usize = 33usize;
 }
 impl From<SyntaxKind> for ::rowan::SyntaxKind {
     fn from(kind: SyntaxKind) -> Self {
@@ -49,7 +50,7 @@ impl From<SyntaxKind> for ::rowan::SyntaxKind {
 }
 impl From<::rowan::SyntaxKind> for SyntaxKind {
     fn from(kind: ::rowan::SyntaxKind) -> Self {
-        assert!(kind.0 < (32usize as u16), "bad SyntaxKind: {:?}", kind);
+        assert!(kind.0 < (33usize as u16), "bad SyntaxKind: {:?}", kind);
         unsafe { ::core::mem::transmute(kind.0 as u8) }
     }
 }
@@ -84,14 +85,11 @@ macro_rules! __token_kind_fast_accsess {
     (word) => {
         $crate::SyntaxKind::WORD
     };
-    (numeral) => {
-        $crate::SyntaxKind::NUMERAL
+    ('"') => {
+        $crate::SyntaxKind::DOUBLE_QUOTE
     };
-    (true) => {
-        $crate::SyntaxKind::TRUE
-    };
-    (false) => {
-        $crate::SyntaxKind::FALSE
+    ('\'') => {
+        $crate::SyntaxKind::SINGLE_QUOTE
     };
     (string) => {
         $crate::SyntaxKind::STRING
@@ -102,11 +100,14 @@ macro_rules! __token_kind_fast_accsess {
     (-) => {
         $crate::SyntaxKind::MINUS
     };
-    ('"') => {
-        $crate::SyntaxKind::DOUBLE_QUOTE
+    (numeral) => {
+        $crate::SyntaxKind::NUMERAL
     };
-    ('\'') => {
-        $crate::SyntaxKind::SINGLE_QUOTE
+    (true) => {
+        $crate::SyntaxKind::TRUE
+    };
+    (false) => {
+        $crate::SyntaxKind::FALSE
     };
     (|) => {
         $crate::SyntaxKind::PIPE

@@ -259,51 +259,33 @@ impl fmt::Debug for Directive {
 }
 
 #[derive(Clone)]
-pub struct Key(SyntaxNode);
+pub enum Key {
+    Word(WordKey),
+    Quoted(QuotedKey),
+}
 impl AstNode for Key {
     type Language = MicalLanguage;
     fn can_cast(kind: <Self::Language as rowan::Language>::Kind) -> bool {
-        kind == SyntaxKind::KEY
+        <WordKey as AstNode>::can_cast(kind) || <QuotedKey as AstNode>::can_cast(kind)
     }
     fn cast(node: rowan::SyntaxNode<Self::Language>) -> Option<Self> {
-        if Self::can_cast(node.kind()) {
-            Some(Self(node))
-        } else {
-            None
+        let kind = node.kind();
+        if <WordKey as AstNode>::can_cast(kind) {
+            let casted = <WordKey as AstNode>::cast(node).expect("Invalid `can_cast` implementation");
+            return Some(Self::Word(casted));
         }
+        if <QuotedKey as AstNode>::can_cast(kind) {
+            let casted = <QuotedKey as AstNode>::cast(node).expect("Invalid `can_cast` implementation");
+            return Some(Self::Quoted(casted));
+        }
+        None
     }
     fn syntax(&self) -> &rowan::SyntaxNode<Self::Language> {
-        &self.0
+        match self {
+            Self::Word(x) => x.syntax(),
+            Self::Quoted(x) => x.syntax(),
+        }
     }
-}
-impl Key {
-    pub fn token(&self) -> Option<SyntaxToken> {
-        self.syntax().children_with_tokens().filter_map(|it| it.into_token()).find(|it| {
-            matches!(
-                it.kind(),
-                SyntaxKind::WORD | SyntaxKind::NUMERAL | SyntaxKind::TRUE | SyntaxKind::FALSE | SyntaxKind::STRING
-            )
-        })
-    }
-    pub fn kind(&self) -> Option<KeyKind> {
-        let token = self.token()?;
-        let kind = match token.kind() {
-            SyntaxKind::WORD => KeyKind::Word,
-            SyntaxKind::NUMERAL => KeyKind::Numeral,
-            SyntaxKind::TRUE => KeyKind::True,
-            SyntaxKind::FALSE => KeyKind::False,
-            SyntaxKind::STRING => KeyKind::String,
-            _ => return None,
-        };
-        Some(kind)
-    }
-}
-pub enum KeyKind {
-    Word,
-    Numeral,
-    True,
-    False,
-    String,
 }
 impl fmt::Display for Key {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -312,7 +294,10 @@ impl fmt::Display for Key {
 }
 impl fmt::Debug for Key {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.debug_struct("Key").field("token", &support::DebugSyntaxToken(self.token())).finish()
+        match self {
+            Self::Word(x) => fmt::Debug::fmt(x, f),
+            Self::Quoted(x) => fmt::Debug::fmt(x, f),
+        }
     }
 }
 
@@ -415,6 +400,90 @@ impl fmt::Display for LineString {
 impl fmt::Debug for LineString {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("LineString").field("string", &support::DebugSyntaxToken(self.string())).finish()
+    }
+}
+
+#[derive(Clone)]
+pub struct WordKey(SyntaxNode);
+impl AstNode for WordKey {
+    type Language = MicalLanguage;
+    fn can_cast(kind: <Self::Language as rowan::Language>::Kind) -> bool {
+        kind == SyntaxKind::WORD_KEY
+    }
+    fn cast(node: rowan::SyntaxNode<Self::Language>) -> Option<Self> {
+        if Self::can_cast(node.kind()) {
+            Some(Self(node))
+        } else {
+            None
+        }
+    }
+    fn syntax(&self) -> &rowan::SyntaxNode<Self::Language> {
+        &self.0
+    }
+}
+impl WordKey {
+    pub fn word(&self) -> Option<SyntaxToken> {
+        support::token(AstNode::syntax(self), SyntaxKind::WORD)
+    }
+}
+impl fmt::Display for WordKey {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        fmt::Display::fmt(self.syntax(), f)
+    }
+}
+impl fmt::Debug for WordKey {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("WordKey").field("word", &support::DebugSyntaxToken(self.word())).finish()
+    }
+}
+
+#[derive(Clone)]
+pub struct QuotedKey(SyntaxNode);
+impl AstNode for QuotedKey {
+    type Language = MicalLanguage;
+    fn can_cast(kind: <Self::Language as rowan::Language>::Kind) -> bool {
+        kind == SyntaxKind::QUOTED_KEY
+    }
+    fn cast(node: rowan::SyntaxNode<Self::Language>) -> Option<Self> {
+        if Self::can_cast(node.kind()) {
+            Some(Self(node))
+        } else {
+            None
+        }
+    }
+    fn syntax(&self) -> &rowan::SyntaxNode<Self::Language> {
+        &self.0
+    }
+}
+impl QuotedKey {
+    pub fn open_quote(&self) -> Option<SyntaxToken> {
+        self.syntax()
+            .children_with_tokens()
+            .filter_map(|it| it.into_token())
+            .find(|it| matches!(it.kind(), SyntaxKind::DOUBLE_QUOTE | SyntaxKind::SINGLE_QUOTE))
+    }
+    pub fn string(&self) -> Option<SyntaxToken> {
+        support::token(AstNode::syntax(self), SyntaxKind::STRING)
+    }
+    pub fn close_quote(&self) -> Option<SyntaxToken> {
+        self.syntax()
+            .children_with_tokens()
+            .filter_map(|it| it.into_token())
+            .find(|it| matches!(it.kind(), SyntaxKind::DOUBLE_QUOTE | SyntaxKind::SINGLE_QUOTE))
+    }
+}
+impl fmt::Display for QuotedKey {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        fmt::Display::fmt(self.syntax(), f)
+    }
+}
+impl fmt::Debug for QuotedKey {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("QuotedKey")
+            .field("open_quote", &support::DebugSyntaxToken(self.open_quote()))
+            .field("string", &support::DebugSyntaxToken(self.string()))
+            .field("close_quote", &support::DebugSyntaxToken(self.close_quote()))
+            .finish()
     }
 }
 

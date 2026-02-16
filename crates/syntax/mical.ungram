@@ -62,4 +62,3 @@ BlockString =
 BlockStringHeader =
   style:('|' | '>')
   chomp:('+' | '-')?
-  indent:'$numeral'?

@@ -701,9 +701,6 @@ impl BlockStringHeader {
             .filter_map(|it| it.into_token())
             .find(|it| matches!(it.kind(), SyntaxKind::PLUS | SyntaxKind::MINUS))
     }
-    pub fn indent(&self) -> Option<SyntaxToken> {
-        support::token(AstNode::syntax(self), SyntaxKind::NUMERAL)
-    }
 }
 impl fmt::Display for BlockStringHeader {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -715,7 +712,6 @@ impl fmt::Debug for BlockStringHeader {
         f.debug_struct("BlockStringHeader")
             .field("style", &support::DebugSyntaxToken(self.style()))
             .field("chomp", &support::DebugSyntaxToken(self.chomp()))
-            .field("indent", &support::DebugSyntaxToken(self.indent()))
             .finish()
     }
 }

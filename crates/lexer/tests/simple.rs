@@ -23,8 +23,10 @@ fn false_() {
 #[test]
 fn integer_binary() {
     assert_token!("0b", [Numeral { 2, radix: Binary, is_empty: true }]);
-    assert_token!("0b_", [Numeral { 3, radix: Binary, is_empty: true }]);
     assert_token!("0b0", [Numeral { 3, radix: Binary, is_empty: false }]);
+    assert_token!("0b1", [Numeral { 3, radix: Binary, is_empty: false }]);
+    assert_token!("0b9", [Numeral { 3, radix: Binary, is_empty: false }]);
+    assert_token!("0b_", [Numeral { 3, radix: Binary, is_empty: true }]);
     assert_token!("0b0_", [Numeral { 4, radix: Binary, is_empty: false }]);
     assert_token!("0b1010", [Numeral { 6, radix: Binary, is_empty: false }]);
     assert_token!("0b0101", [Numeral { 6, radix: Binary, is_empty: false }]);
@@ -38,8 +40,12 @@ fn integer_binary() {
 #[test]
 fn integer_octal() {
     assert_token!("0o", [Numeral { 2, radix: Octal, is_empty: true }]);
-    assert_token!("0o_", [Numeral { 3, radix: Octal, is_empty: true }]);
     assert_token!("0o0", [Numeral { 3, radix: Octal, is_empty: false }]);
+    assert_token!("0o1", [Numeral { 3, radix: Octal, is_empty: false }]);
+    assert_token!("0o2", [Numeral { 3, radix: Octal, is_empty: false }]);
+    assert_token!("0o7", [Numeral { 3, radix: Octal, is_empty: false }]);
+    assert_token!("0o9", [Numeral { 3, radix: Octal, is_empty: false }]);
+    assert_token!("0o_", [Numeral { 3, radix: Octal, is_empty: true }]);
     assert_token!("0o0_", [Numeral { 4, radix: Octal, is_empty: false }]);
     assert_token!("0o1234567", [Numeral { 9, radix: Octal, is_empty: false }]);
     assert_token!("0o123456789", [Numeral { 11, radix: Octal, is_empty: false }]);
@@ -52,8 +58,12 @@ fn integer_octal() {
 #[test]
 fn integer_hexadecimal() {
     assert_token!("0x", [Numeral { 2, radix: Hexadecimal, is_empty: true }]);
-    assert_token!("0x_", [Numeral { 3, radix: Hexadecimal, is_empty: true }]);
     assert_token!("0x0", [Numeral { 3, radix: Hexadecimal, is_empty: false }]);
+    assert_token!("0x1", [Numeral { 3, radix: Hexadecimal, is_empty: false }]);
+    assert_token!("0x2", [Numeral { 3, radix: Hexadecimal, is_empty: false }]);
+    assert_token!("0xf", [Numeral { 3, radix: Hexadecimal, is_empty: false }]);
+    assert_token!("0xF", [Numeral { 3, radix: Hexadecimal, is_empty: false }]);
+    assert_token!("0x_", [Numeral { 3, radix: Hexadecimal, is_empty: true }]);
     assert_token!("0x0_", [Numeral { 4, radix: Hexadecimal, is_empty: false }]);
     assert_token!("0x1234567890ABCDEF", [Numeral { 18, radix: Hexadecimal, is_empty: false }]);
     assert_token!("0x1234567890abcdef", [Numeral { 18, radix: Hexadecimal, is_empty: false }]);

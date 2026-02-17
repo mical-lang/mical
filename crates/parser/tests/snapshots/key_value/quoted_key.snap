@@ -35,21 +35,6 @@ SOURCE_FILE@0..30
   NEWLINE@29..30 "\n"
 ```
 
-## Syntax Error
-
-```
-[
-    SyntaxError {
-        message: "missing closing quote",
-        range: 8..8,
-    },
-    SyntaxError {
-        message: "missing closing quote",
-        range: 23..23,
-    },
-]
-```
-
 ## AST
 
 ```

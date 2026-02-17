@@ -48,7 +48,7 @@ fn quoted_key(p: &mut Parser, quote: SyntaxKind) {
 
     p.bump(T![string]);
 
-    if p.eat(quote) {
+    if !p.eat(quote) {
         p.error("missing closing quote");
     }
 

@@ -1,5 +1,5 @@
 ---
-source: crates/parser/tests/sample.rs
+source: crates/parser/tests/snapshots_block_string.rs
 ---
 # block_string/fold_style
 

@@ -32,8 +32,42 @@ pub(super) fn value(p: &mut Parser, indent_level: u32) {
                 line_string(p)
             }
         }
+        T![true] | T![false] if is_eol_or_trailing_space(p, 1) => {
+            boolean(p);
+        }
+        T![numeral] if is_eol_or_trailing_space(p, 1) => {
+            integer(p);
+        }
+        T![+] | T![-] if p.nth_at(1, T![numeral]) && is_eol_or_trailing_space(p, 2) => {
+            integer(p);
+        }
         _ => line_string(p),
     }
+}
+
+fn is_eol_or_trailing_space(p: &Parser, n: usize) -> bool {
+    p.nth_at(n, T!['\n'])
+        || p.nth_at_eof(n)
+        || (p.nth_at(n, T![' ']) && (p.nth_at(n + 1, T!['\n']) || p.nth_at_eof(n + 1)))
+}
+
+fn boolean(p: &mut Parser) {
+    assert!(p.at(T![true]) || p.at(T![false]));
+
+    let m = p.start();
+    p.bump_any(); // true or false
+    m.complete(p, BOOLEAN);
+}
+
+fn integer(p: &mut Parser) {
+    assert!(p.at(T![+]) || p.at(T![-]) || p.at(T![numeral]));
+
+    let m = p.start();
+    if p.at(T![+]) || p.at(T![-]) {
+        p.bump_any(); // sign
+    }
+    p.bump(T![numeral]);
+    m.complete(p, INTEGER);
 }
 
 pub(super) fn line_string(p: &mut Parser) {

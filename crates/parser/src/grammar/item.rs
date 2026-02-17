@@ -116,8 +116,11 @@ fn prefix_block(p: &mut Parser, m: Marker) {
             p.error("missing closing '}' for prefix block");
             break;
         }
-        if p.at(T!['}']) && (p.nth_at(1, T!['\n']) || p.at_eof()) {
+
+        if is_close_brace_line(p) {
+            p.eat(T![' ']);
             p.bump(T!['}']);
+            p.eat(T![' ']);
             p.eat(T!['\n']);
             break;
         }
@@ -125,6 +128,21 @@ fn prefix_block(p: &mut Parser, m: Marker) {
     }
 
     m.complete(p, PREFIX_BLOCK);
+}
+
+fn is_close_brace_line(p: &Parser) -> bool {
+    let mut n = 0;
+    if p.nth_at(n, T![' ']) {
+        n += 1;
+    }
+    if !p.nth_at(n, T!['}']) {
+        return false;
+    }
+    n += 1;
+    if p.nth_at(n, T!['\n']) || p.nth_at_eof(n) {
+        return true;
+    }
+    p.nth_at(n, T![' ']) && (p.nth_at(n + 1, T!['\n']) || p.nth_at_eof(n + 1))
 }
 
 fn entry(p: &mut Parser, m: Marker, indent_level: u32) {

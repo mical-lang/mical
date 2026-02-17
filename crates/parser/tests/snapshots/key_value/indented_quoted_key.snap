@@ -1,0 +1,85 @@
+---
+source: crates/parser/tests/snapshots_key_value.rs
+---
+# key_value/indented_quoted_key
+
+## Input
+
+```
+  "double" value
+  'single' value
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..34
+  SPACE@0..2 "  "
+  ENTRY@2..16
+    QUOTED_KEY@2..10
+      DOUBLE_QUOTE@2..3 "\""
+      STRING@3..9 "double"
+      DOUBLE_QUOTE@9..10 "\""
+    SPACE@10..11 " "
+    LINE_STRING@11..16
+      STRING@11..16 "value"
+  NEWLINE@16..17 "\n"
+  SPACE@17..19 "  "
+  ENTRY@19..33
+    QUOTED_KEY@19..27
+      SINGLE_QUOTE@19..20 "'"
+      STRING@20..26 "single"
+      SINGLE_QUOTE@26..27 "'"
+    SPACE@27..28 " "
+    LINE_STRING@28..33
+      STRING@28..33 "value"
+  NEWLINE@33..34 "\n"
+```
+
+## Syntax Error
+
+```
+[
+    SyntaxError {
+        message: "missing closing quote",
+        range: 10..10,
+    },
+    SyntaxError {
+        message: "missing closing quote",
+        range: 27..27,
+    },
+]
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: QuotedKey {
+                open_quote: DOUBLE_QUOTE@2..3 "\"",
+                string: STRING@3..9 "double",
+                close_quote: DOUBLE_QUOTE@2..3 "\"",
+            },
+            value: LineString {
+                string: STRING@11..16 "value",
+            },
+        },
+        Entry {
+            key: QuotedKey {
+                open_quote: SINGLE_QUOTE@19..20 "'",
+                string: STRING@20..26 "single",
+                close_quote: SINGLE_QUOTE@19..20 "'",
+            },
+            value: LineString {
+                string: STRING@28..33 "value",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

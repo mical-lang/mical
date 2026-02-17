@@ -1,0 +1,92 @@
+---
+source: crates/parser/tests/snapshots_key_value.rs
+---
+# key_value/word_key
+
+## Input
+
+```
+hello world
+42 value
+true value
+false value
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..44
+  ENTRY@0..11
+    WORD_KEY@0..5
+      WORD@0..5 "hello"
+    SPACE@5..6 " "
+    LINE_STRING@6..11
+      STRING@6..11 "world"
+  NEWLINE@11..12 "\n"
+  ENTRY@12..20
+    WORD_KEY@12..14
+      WORD@12..14 "42"
+    SPACE@14..15 " "
+    LINE_STRING@15..20
+      STRING@15..20 "value"
+  NEWLINE@20..21 "\n"
+  ENTRY@21..31
+    WORD_KEY@21..25
+      WORD@21..25 "true"
+    SPACE@25..26 " "
+    LINE_STRING@26..31
+      STRING@26..31 "value"
+  NEWLINE@31..32 "\n"
+  ENTRY@32..43
+    WORD_KEY@32..37
+      WORD@32..37 "false"
+    SPACE@37..38 " "
+    LINE_STRING@38..43
+      STRING@38..43 "value"
+  NEWLINE@43..44 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..5 "hello",
+            },
+            value: LineString {
+                string: STRING@6..11 "world",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@12..14 "42",
+            },
+            value: LineString {
+                string: STRING@15..20 "value",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@21..25 "true",
+            },
+            value: LineString {
+                string: STRING@26..31 "value",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@32..37 "false",
+            },
+            value: LineString {
+                string: STRING@38..43 "value",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

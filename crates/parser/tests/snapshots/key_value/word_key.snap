@@ -7,8 +7,10 @@ source: crates/parser/tests/snapshots_key_value.rs
 
 ```
 hello world
-42 value
-true value
+42  value
+-57 value
++13 value
+true  value
 false value
 
 ```
@@ -16,7 +18,7 @@ false value
 ## CST
 
 ```
-SOURCE_FILE@0..44
+SOURCE_FILE@0..66
   ENTRY@0..11
     WORD_KEY@0..5
       WORD@0..5 "hello"
@@ -24,27 +26,41 @@ SOURCE_FILE@0..44
     LINE_STRING@6..11
       STRING@6..11 "world"
   NEWLINE@11..12 "\n"
-  ENTRY@12..20
+  ENTRY@12..21
     WORD_KEY@12..14
       WORD@12..14 "42"
-    SPACE@14..15 " "
-    LINE_STRING@15..20
-      STRING@15..20 "value"
-  NEWLINE@20..21 "\n"
-  ENTRY@21..31
-    WORD_KEY@21..25
-      WORD@21..25 "true"
+    SPACE@14..16 "  "
+    LINE_STRING@16..21
+      STRING@16..21 "value"
+  NEWLINE@21..22 "\n"
+  ENTRY@22..31
+    WORD_KEY@22..25
+      WORD@22..25 "-57"
     SPACE@25..26 " "
     LINE_STRING@26..31
       STRING@26..31 "value"
   NEWLINE@31..32 "\n"
-  ENTRY@32..43
-    WORD_KEY@32..37
-      WORD@32..37 "false"
-    SPACE@37..38 " "
-    LINE_STRING@38..43
-      STRING@38..43 "value"
-  NEWLINE@43..44 "\n"
+  ENTRY@32..41
+    WORD_KEY@32..35
+      WORD@32..35 "+13"
+    SPACE@35..36 " "
+    LINE_STRING@36..41
+      STRING@36..41 "value"
+  NEWLINE@41..42 "\n"
+  ENTRY@42..53
+    WORD_KEY@42..46
+      WORD@42..46 "true"
+    SPACE@46..48 "  "
+    LINE_STRING@48..53
+      STRING@48..53 "value"
+  NEWLINE@53..54 "\n"
+  ENTRY@54..65
+    WORD_KEY@54..59
+      WORD@54..59 "false"
+    SPACE@59..60 " "
+    LINE_STRING@60..65
+      STRING@60..65 "value"
+  NEWLINE@65..66 "\n"
 ```
 
 ## AST
@@ -66,12 +82,12 @@ SourceFile {
                 word: WORD@12..14 "42",
             },
             value: LineString {
-                string: STRING@15..20 "value",
+                string: STRING@16..21 "value",
             },
         },
         Entry {
             key: WordKey {
-                word: WORD@21..25 "true",
+                word: WORD@22..25 "-57",
             },
             value: LineString {
                 string: STRING@26..31 "value",
@@ -79,10 +95,26 @@ SourceFile {
         },
         Entry {
             key: WordKey {
-                word: WORD@32..37 "false",
+                word: WORD@32..35 "+13",
             },
             value: LineString {
-                string: STRING@38..43 "value",
+                string: STRING@36..41 "value",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@42..46 "true",
+            },
+            value: LineString {
+                string: STRING@48..53 "value",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@54..59 "false",
+            },
+            value: LineString {
+                string: STRING@60..65 "value",
             },
         },
     ],

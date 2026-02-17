@@ -16,6 +16,12 @@ fn boolean_like() {
     utils::assert_snapshot!(GROUP, snapshot);
 }
 #[test]
+fn hash_value() {
+    let source = include_str!("./cases/key_value/hash_value.mical");
+    let snapshot = utils::make_snapshot("key_value/hash_value", source);
+    utils::assert_snapshot!(GROUP, snapshot);
+}
+#[test]
 fn indented_quoted_key() {
     let source = include_str!("./cases/key_value/indented_quoted_key.mical");
     let snapshot = utils::make_snapshot("key_value/indented_quoted_key", source);
@@ -52,9 +58,39 @@ fn missing_value() {
     utils::assert_snapshot!(GROUP, snapshot);
 }
 #[test]
+fn punct_key() {
+    let source = include_str!("./cases/key_value/punct_key.mical");
+    let snapshot = utils::make_snapshot("key_value/punct_key", source);
+    utils::assert_snapshot!(GROUP, snapshot);
+}
+#[test]
+fn quoted_in_line_string() {
+    let source = include_str!("./cases/key_value/quoted_in_line_string.mical");
+    let snapshot = utils::make_snapshot("key_value/quoted_in_line_string", source);
+    utils::assert_snapshot!(GROUP, snapshot);
+}
+#[test]
 fn quoted_key() {
     let source = include_str!("./cases/key_value/quoted_key.mical");
     let snapshot = utils::make_snapshot("key_value/quoted_key", source);
+    utils::assert_snapshot!(GROUP, snapshot);
+}
+#[test]
+fn quoted_key_empty() {
+    let source = include_str!("./cases/key_value/quoted_key_empty.mical");
+    let snapshot = utils::make_snapshot("key_value/quoted_key_empty", source);
+    utils::assert_snapshot!(GROUP, snapshot);
+}
+#[test]
+fn quoted_key_unclosed() {
+    let source = include_str!("./cases/key_value/quoted_key_unclosed.mical");
+    let snapshot = utils::make_snapshot("key_value/quoted_key_unclosed", source);
+    utils::assert_snapshot!(GROUP, snapshot);
+}
+#[test]
+fn quoted_key_with_space() {
+    let source = include_str!("./cases/key_value/quoted_key_with_space.mical");
+    let snapshot = utils::make_snapshot("key_value/quoted_key_with_space", source);
     utils::assert_snapshot!(GROUP, snapshot);
 }
 #[test]
@@ -64,9 +100,21 @@ fn quoted_string() {
     utils::assert_snapshot!(GROUP, snapshot);
 }
 #[test]
+fn quoted_value_trailing() {
+    let source = include_str!("./cases/key_value/quoted_value_trailing.mical");
+    let snapshot = utils::make_snapshot("key_value/quoted_value_trailing", source);
+    utils::assert_snapshot!(GROUP, snapshot);
+}
+#[test]
 fn trailing_space() {
     let source = include_str!("./cases/key_value/trailing_space.mical");
     let snapshot = utils::make_snapshot("key_value/trailing_space", source);
+    utils::assert_snapshot!(GROUP, snapshot);
+}
+#[test]
+fn wide_separator() {
+    let source = include_str!("./cases/key_value/wide_separator.mical");
+    let snapshot = utils::make_snapshot("key_value/wide_separator", source);
     utils::assert_snapshot!(GROUP, snapshot);
 }
 #[test]

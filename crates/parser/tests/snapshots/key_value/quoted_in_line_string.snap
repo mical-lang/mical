@@ -1,0 +1,92 @@
+---
+source: crates/parser/tests/snapshots_key_value.rs
+---
+# key_value/quoted_in_line_string
+
+## Input
+
+```
+a hello "world" end
+b start 'mid' end
+c value "foo"
+d value 'bar'
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..66
+  ENTRY@0..19
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    LINE_STRING@2..19
+      STRING@2..19 "hello \"world\" end"
+  NEWLINE@19..20 "\n"
+  ENTRY@20..37
+    WORD_KEY@20..21
+      WORD@20..21 "b"
+    SPACE@21..22 " "
+    LINE_STRING@22..37
+      STRING@22..37 "start 'mid' end"
+  NEWLINE@37..38 "\n"
+  ENTRY@38..51
+    WORD_KEY@38..39
+      WORD@38..39 "c"
+    SPACE@39..40 " "
+    LINE_STRING@40..51
+      STRING@40..51 "value \"foo\""
+  NEWLINE@51..52 "\n"
+  ENTRY@52..65
+    WORD_KEY@52..53
+      WORD@52..53 "d"
+    SPACE@53..54 " "
+    LINE_STRING@54..65
+      STRING@54..65 "value 'bar'"
+  NEWLINE@65..66 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: LineString {
+                string: STRING@2..19 "hello \"world\" end",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@20..21 "b",
+            },
+            value: LineString {
+                string: STRING@22..37 "start 'mid' end",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@38..39 "c",
+            },
+            value: LineString {
+                string: STRING@40..51 "value \"foo\"",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@52..53 "d",
+            },
+            value: LineString {
+                string: STRING@54..65 "value 'bar'",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

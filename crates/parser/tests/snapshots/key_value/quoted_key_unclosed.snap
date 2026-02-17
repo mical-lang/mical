@@ -1,0 +1,79 @@
+---
+source: crates/parser/tests/snapshots_key_value.rs
+---
+# key_value/quoted_key_unclosed
+
+## Input
+
+```
+"unterminated value
+'mixed" value
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..34
+  ENTRY@0..19
+    QUOTED_KEY@0..19
+      DOUBLE_QUOTE@0..1 "\""
+      STRING@1..19 "unterminated value"
+  NEWLINE@19..20 "\n"
+  ENTRY@20..33
+    QUOTED_KEY@20..33
+      SINGLE_QUOTE@20..21 "'"
+      STRING@21..33 "mixed\" value"
+  NEWLINE@33..34 "\n"
+```
+
+## Syntax Error
+
+```
+[
+    SyntaxError {
+        message: "missing closing quote",
+        range: 19..19,
+    },
+    SyntaxError {
+        message: "missing value for the key",
+        range: 19..19,
+    },
+    SyntaxError {
+        message: "missing closing quote",
+        range: 33..33,
+    },
+    SyntaxError {
+        message: "missing value for the key",
+        range: 33..33,
+    },
+]
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: QuotedKey {
+                open_quote: DOUBLE_QUOTE@0..1 "\"",
+                string: STRING@1..19 "unterminated value",
+                close_quote: DOUBLE_QUOTE@0..1 "\"",
+            },
+            value: none,
+        },
+        Entry {
+            key: QuotedKey {
+                open_quote: SINGLE_QUOTE@20..21 "'",
+                string: STRING@21..33 "mixed\" value",
+                close_quote: SINGLE_QUOTE@20..21 "'",
+            },
+            value: none,
+        },
+    ],
+}
+```
+
+vim:ft=markdown

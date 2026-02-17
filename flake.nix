@@ -47,6 +47,7 @@
           packages = with pkgs; [
             toolchain
             nil
+            mdbook
           ];
         };
 

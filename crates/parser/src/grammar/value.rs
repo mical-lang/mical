@@ -117,70 +117,86 @@ fn block_string(p: &mut Parser, indent_level: u32) {
     //   otherwise (between the two) →
     //     whitespace-only → empty line (allowed)
     //     with content    → error (insufficient indentation)
-    loop {
-        if p.at_eof() {
-            break;
-        }
-
-        // Completely empty line (no spaces at all).
-        if p.at(T!['\n']) {
-            block_string_empty_line(p);
-            continue;
-        }
-
-        if p.at(T![' ']) {
-            let line_indent = unsafe { p.current_len().unwrap_unchecked() };
-
-            if line_indent >= base_indent {
-                p.bump_upto(T![' '], base_indent);
-
-                // After stripping base_indent, check if the rest is still blank.
-                // e.g. a line of only spaces deeper than base_indent.
-                let is_blank = if p.at(T![' ']) {
-                    p.nth_at(1, T!['\n']) || p.nth_at_eof(1)
-                } else {
-                    p.at(T!['\n']) || p.at_eof()
-                };
-
-                if is_blank {
-                    p.eat(T![' ']);
-                    block_string_empty_line(p);
-                } else {
-                    block_string_content_line(p);
-                }
-                continue;
+    while let Some(current) = p.current() {
+        match current {
+            T!['\n'] => {
+                // Completely empty line (no spaces at all).
+                block_string_empty_line(p);
             }
+            T![' '] => {
+                let line_indent = unsafe { p.current_len().unwrap_unchecked() };
 
-            if line_indent <= indent_level {
+                if line_indent >= base_indent {
+                    p.bump_upto(T![' '], base_indent);
+
+                    // After stripping base_indent, check if the rest is still blank.
+                    // e.g. a line of only spaces deeper than base_indent.
+                    let is_blank = if p.at(T![' ']) {
+                        p.nth_at(1, T!['\n']) || p.nth_at_eof(1)
+                    } else {
+                        p.at(T!['\n']) || p.at_eof()
+                    };
+
+                    if is_blank {
+                        p.eat(T![' ']);
+                        block_string_empty_line(p);
+                    } else {
+                        block_string_content_line(p);
+                    }
+                } else if line_indent <= indent_level {
+                    break;
+                } else {
+                    // indent_level < line_indent < base_indent
+                    if p.nth_at(1, T!['\n']) || p.nth_at_eof(1) {
+                        // Whitespace-only lines in this range are allowed.
+                        p.bump(T![' ']);
+                        block_string_empty_line(p);
+                    } else {
+                        // Content in this range is an error.
+                        p.error("block string line has insufficient indentation");
+                        let m = p.start();
+                        p.bump(T![' ']);
+                        while !(p.at(T!['\n']) || p.at_eof()) {
+                            p.bump_any();
+                        }
+                        m.complete(p, ERROR);
+                    }
+                }
+            }
+            _ => {
+                // Non-space content at column 0.
                 break;
             }
-
-            // indent_level < line_indent < base_indent
-            // Whitespace-only lines in this range are allowed.
-            if p.nth_at(1, T!['\n']) || p.nth_at_eof(1) {
-                p.bump(T![' ']);
-                block_string_empty_line(p);
-                continue;
-            }
-
-            // Content in this range is an error.
-            p.error("block string line has insufficient indentation");
-            let m = p.start();
-            p.bump(T![' ']);
-            while !(p.at(T!['\n']) || p.at_eof()) {
-                p.bump_any();
-            }
-            m.complete(p, ERROR);
-            p.eat(T!['\n']);
-            continue;
         }
 
-        // Non-space content at column 0.
-        // Since base_indent > indent_level >= 0, column 0 ends the block.
-        break;
+        // Consume inter-line newline separator if the block continues.
+        // If it doesn't continue, leave the newline for the caller just like other value types.
+        if !p.at(T!['\n']) || !block_continues_after_newline(p, indent_level) {
+            break;
+        }
+        p.bump(T!['\n']);
     }
 
     m.complete(p, BLOCK_STRING);
+}
+
+fn block_continues_after_newline(p: &Parser, indent_level: u32) -> bool {
+    assert!(p.at(T!['\n']));
+
+    if p.nth_at_eof(1) {
+        return false;
+    }
+    if p.nth_at(1, T!['\n']) {
+        return true; // Empty line → block continues
+    }
+    if p.nth_at(1, T![' ']) {
+        let indent = unsafe { p.nth_len(1).unwrap_unchecked() };
+        // indent > indent_level covers both valid content and error lines;
+        // all are still processed within the block.
+        return indent > indent_level;
+    }
+    // Non-space at column 0 → block ends
+    false
 }
 
 fn block_string_empty_line(p: &mut Parser) {
@@ -188,16 +204,12 @@ fn block_string_empty_line(p: &mut Parser) {
 
     let m = p.start();
     m.complete(p, LINE_STRING);
-
-    p.eat(T!['\n']);
 }
 
 fn block_string_content_line(p: &mut Parser) {
     assert!(!(p.at(T!['\n']) || p.at_eof()));
 
     line_string(p);
-
-    p.eat(T!['\n']);
 }
 
 fn block_string_header(p: &mut Parser) {

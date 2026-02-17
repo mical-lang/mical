@@ -1,0 +1,8 @@
+a | 
+  literal
+b > 
+  fold
+c |+ 
+  keep
+d |- 
+  strip

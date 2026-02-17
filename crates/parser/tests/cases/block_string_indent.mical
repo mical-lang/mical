@@ -1,0 +1,17 @@
+a |
+  two space indent
+  second line
+b |
+    four space indent
+    second line
+c |
+	tab indent
+	second line
+d |
+  shallow
+    deep
+  back to shallow
+e |
+  first block
+f |
+    dedented body stops block

@@ -1,0 +1,14 @@
+#version 1
+name hello world # not comment
+count 42
+flag true
+negative -10
+section {
+  desc |
+    block line
+  inner {
+    key value
+  }
+}
+# a comment
+after_block done

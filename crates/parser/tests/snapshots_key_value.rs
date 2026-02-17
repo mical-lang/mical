@@ -10,9 +10,21 @@ fn boolean() {
     utils::assert_snapshot!(GROUP, snapshot);
 }
 #[test]
+fn boolean_at_eof() {
+    let source = include_str!("./cases/key_value/boolean_at_eof.mical");
+    let snapshot = utils::make_snapshot("key_value/boolean_at_eof", source);
+    utils::assert_snapshot!(GROUP, snapshot);
+}
+#[test]
 fn boolean_like() {
     let source = include_str!("./cases/key_value/boolean_like.mical");
     let snapshot = utils::make_snapshot("key_value/boolean_like", source);
+    utils::assert_snapshot!(GROUP, snapshot);
+}
+#[test]
+fn brace_in_key() {
+    let source = include_str!("./cases/key_value/brace_in_key.mical");
+    let snapshot = utils::make_snapshot("key_value/brace_in_key", source);
     utils::assert_snapshot!(GROUP, snapshot);
 }
 #[test]
@@ -37,6 +49,12 @@ fn indented_word_key() {
 fn integer() {
     let source = include_str!("./cases/key_value/integer.mical");
     let snapshot = utils::make_snapshot("key_value/integer", source);
+    utils::assert_snapshot!(GROUP, snapshot);
+}
+#[test]
+fn integer_at_eof() {
+    let source = include_str!("./cases/key_value/integer_at_eof.mical");
+    let snapshot = utils::make_snapshot("key_value/integer_at_eof", source);
     utils::assert_snapshot!(GROUP, snapshot);
 }
 #[test]
@@ -88,6 +106,12 @@ fn quoted_key_unclosed() {
     utils::assert_snapshot!(GROUP, snapshot);
 }
 #[test]
+fn quoted_key_unexpected() {
+    let source = include_str!("./cases/key_value/quoted_key_unexpected.mical");
+    let snapshot = utils::make_snapshot("key_value/quoted_key_unexpected", source);
+    utils::assert_snapshot!(GROUP, snapshot);
+}
+#[test]
 fn quoted_key_with_space() {
     let source = include_str!("./cases/key_value/quoted_key_with_space.mical");
     let snapshot = utils::make_snapshot("key_value/quoted_key_with_space", source);
@@ -100,9 +124,21 @@ fn quoted_string() {
     utils::assert_snapshot!(GROUP, snapshot);
 }
 #[test]
+fn quoted_value_at_eof() {
+    let source = include_str!("./cases/key_value/quoted_value_at_eof.mical");
+    let snapshot = utils::make_snapshot("key_value/quoted_value_at_eof", source);
+    utils::assert_snapshot!(GROUP, snapshot);
+}
+#[test]
 fn quoted_value_trailing() {
     let source = include_str!("./cases/key_value/quoted_value_trailing.mical");
     let snapshot = utils::make_snapshot("key_value/quoted_value_trailing", source);
+    utils::assert_snapshot!(GROUP, snapshot);
+}
+#[test]
+fn sign_integer_at_eof() {
+    let source = include_str!("./cases/key_value/sign_integer_at_eof.mical");
+    let snapshot = utils::make_snapshot("key_value/sign_integer_at_eof", source);
     utils::assert_snapshot!(GROUP, snapshot);
 }
 #[test]

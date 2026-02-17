@@ -1,0 +1,78 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# hash_edge
+
+## Input
+
+```
+#
+#noargs
+#directive with args
+  #indented_hash value
+# comment with space
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..75
+  COMMENT@0..1
+    SHARP@0..1 "#"
+  NEWLINE@1..2 "\n"
+  DIRECTIVE@2..9
+    SHARP@2..3 "#"
+    WORD@3..9 "noargs"
+    LINE_STRING@9..9
+      STRING@9..9 ""
+  NEWLINE@9..10 "\n"
+  DIRECTIVE@10..30
+    SHARP@10..11 "#"
+    WORD@11..20 "directive"
+    LINE_STRING@20..30
+      STRING@20..30 " with args"
+  NEWLINE@30..31 "\n"
+  SPACE@31..33 "  "
+  COMMENT@33..53
+    SHARP@33..34 "#"
+    WORD@34..47 "indented_hash"
+    SPACE@47..48 " "
+    WORD@48..53 "value"
+  NEWLINE@53..54 "\n"
+  COMMENT@54..74
+    SHARP@54..55 "#"
+    SPACE@55..56 " "
+    WORD@56..63 "comment"
+    SPACE@63..64 " "
+    WORD@64..68 "with"
+    SPACE@68..69 " "
+    WORD@69..74 "space"
+  NEWLINE@74..75 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Directive {
+            sharp: SHARP@2..3 "#",
+            name: WORD@3..9 "noargs",
+            args: LineString {
+                string: STRING@9..9 "",
+            },
+        },
+        Directive {
+            sharp: SHARP@10..11 "#",
+            name: WORD@11..20 "directive",
+            args: LineString {
+                string: STRING@20..30 " with args",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

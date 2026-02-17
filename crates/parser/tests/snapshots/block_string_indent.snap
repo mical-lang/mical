@@ -1,0 +1,260 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# block_string_indent
+
+## Input
+
+```
+a |
+  two space indent
+  second line
+b |
+    four space indent
+    second line
+c |
+	tab indent
+	second line
+d |
+  shallow
+    deep
+  back to shallow
+e |
+  first block
+f |
+    dedented body stops block
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..201
+  ENTRY@0..36
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    BLOCK_STRING@2..36
+      BLOCK_STRING_HEADER@2..4
+        PIPE@2..3 "|"
+        NEWLINE@3..4 "\n"
+      SPACE@4..6 "  "
+      LINE_STRING@6..22
+        STRING@6..22 "two space indent"
+      NEWLINE@22..23 "\n"
+      SPACE@23..25 "  "
+      LINE_STRING@25..36
+        STRING@25..36 "second line"
+  NEWLINE@36..37 "\n"
+  ENTRY@37..78
+    WORD_KEY@37..38
+      WORD@37..38 "b"
+    SPACE@38..39 " "
+    BLOCK_STRING@39..78
+      BLOCK_STRING_HEADER@39..41
+        PIPE@39..40 "|"
+        NEWLINE@40..41 "\n"
+      SPACE@41..45 "    "
+      LINE_STRING@45..62
+        STRING@45..62 "four space indent"
+      NEWLINE@62..63 "\n"
+      SPACE@63..67 "    "
+      LINE_STRING@67..78
+        STRING@67..78 "second line"
+  NEWLINE@78..79 "\n"
+  ENTRY@79..94
+    WORD_KEY@79..80
+      WORD@79..80 "c"
+    SPACE@80..81 " "
+    BLOCK_STRING@81..83
+      BLOCK_STRING_HEADER@81..83
+        PIPE@81..82 "|"
+        NEWLINE@82..83 "\n"
+    ERROR@83..94
+      TAB@83..84 "\t"
+      WORD@84..87 "tab"
+      SPACE@87..88 " "
+      WORD@88..94 "indent"
+  NEWLINE@94..95 "\n"
+  ERROR@95..107
+    TAB@95..96 "\t"
+    WORD@96..102 "second"
+    SPACE@102..103 " "
+    WORD@103..107 "line"
+  NEWLINE@107..108 "\n"
+  ENTRY@108..148
+    WORD_KEY@108..109
+      WORD@108..109 "d"
+    SPACE@109..110 " "
+    BLOCK_STRING@110..148
+      BLOCK_STRING_HEADER@110..112
+        PIPE@110..111 "|"
+        NEWLINE@111..112 "\n"
+      SPACE@112..114 "  "
+      LINE_STRING@114..121
+        STRING@114..121 "shallow"
+      NEWLINE@121..122 "\n"
+      SPACE@122..124 "  "
+      LINE_STRING@124..130
+        STRING@124..130 "  deep"
+      NEWLINE@130..131 "\n"
+      SPACE@131..133 "  "
+      LINE_STRING@133..148
+        STRING@133..148 "back to shallow"
+  NEWLINE@148..149 "\n"
+  ENTRY@149..166
+    WORD_KEY@149..150
+      WORD@149..150 "e"
+    SPACE@150..151 " "
+    BLOCK_STRING@151..166
+      BLOCK_STRING_HEADER@151..153
+        PIPE@151..152 "|"
+        NEWLINE@152..153 "\n"
+      SPACE@153..155 "  "
+      LINE_STRING@155..166
+        STRING@155..166 "first block"
+  NEWLINE@166..167 "\n"
+  ENTRY@167..200
+    WORD_KEY@167..168
+      WORD@167..168 "f"
+    SPACE@168..169 " "
+    BLOCK_STRING@169..200
+      BLOCK_STRING_HEADER@169..171
+        PIPE@169..170 "|"
+        NEWLINE@170..171 "\n"
+      SPACE@171..175 "    "
+      LINE_STRING@175..200
+        STRING@175..200 "dedented body stops b ..."
+  NEWLINE@200..201 "\n"
+```
+
+## Syntax Error
+
+```
+[
+    SyntaxError {
+        message: "unexpected token after value",
+        range: 83..83,
+    },
+    SyntaxError {
+        message: "tab indent is not allowed, skipping this line",
+        range: 95..95,
+    },
+]
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: BlockString {
+                header: BlockStringHeader {
+                    style: PIPE@2..3 "|",
+                    chomp: none,
+                },
+                lines: [
+                    LineString {
+                        string: STRING@6..22 "two space indent",
+                    },
+                    LineString {
+                        string: STRING@25..36 "second line",
+                    },
+                ],
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@37..38 "b",
+            },
+            value: BlockString {
+                header: BlockStringHeader {
+                    style: PIPE@39..40 "|",
+                    chomp: none,
+                },
+                lines: [
+                    LineString {
+                        string: STRING@45..62 "four space indent",
+                    },
+                    LineString {
+                        string: STRING@67..78 "second line",
+                    },
+                ],
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@79..80 "c",
+            },
+            value: BlockString {
+                header: BlockStringHeader {
+                    style: PIPE@81..82 "|",
+                    chomp: none,
+                },
+                lines: [],
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@108..109 "d",
+            },
+            value: BlockString {
+                header: BlockStringHeader {
+                    style: PIPE@110..111 "|",
+                    chomp: none,
+                },
+                lines: [
+                    LineString {
+                        string: STRING@114..121 "shallow",
+                    },
+                    LineString {
+                        string: STRING@124..130 "  deep",
+                    },
+                    LineString {
+                        string: STRING@133..148 "back to shallow",
+                    },
+                ],
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@149..150 "e",
+            },
+            value: BlockString {
+                header: BlockStringHeader {
+                    style: PIPE@151..152 "|",
+                    chomp: none,
+                },
+                lines: [
+                    LineString {
+                        string: STRING@155..166 "first block",
+                    },
+                ],
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@167..168 "f",
+            },
+            value: BlockString {
+                header: BlockStringHeader {
+                    style: PIPE@169..170 "|",
+                    chomp: none,
+                },
+                lines: [
+                    LineString {
+                        string: STRING@175..200 "dedented body stops b ...",
+                    },
+                ],
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

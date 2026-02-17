@@ -64,6 +64,12 @@ fn fold_style() {
     utils::assert_snapshot!(GROUP, snapshot);
 }
 #[test]
+fn header_trailing_space() {
+    let source = include_str!("./cases/block_string/header_trailing_space.mical");
+    let snapshot = utils::make_snapshot("block_string/header_trailing_space", source);
+    utils::assert_snapshot!(GROUP, snapshot);
+}
+#[test]
 fn insufficient_indent() {
     let source = include_str!("./cases/block_string/insufficient_indent.mical");
     let snapshot = utils::make_snapshot("block_string/insufficient_indent", source);
@@ -73,6 +79,12 @@ fn insufficient_indent() {
 fn nested_indent() {
     let source = include_str!("./cases/block_string/nested_indent.mical");
     let snapshot = utils::make_snapshot("block_string/nested_indent", source);
+    utils::assert_snapshot!(GROUP, snapshot);
+}
+#[test]
+fn newline() {
+    let source = include_str!("./cases/block_string/newline.mical");
+    let snapshot = utils::make_snapshot("block_string/newline", source);
     utils::assert_snapshot!(GROUP, snapshot);
 }
 #[test]

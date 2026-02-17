@@ -1,0 +1,5 @@
+#include path/to/file
+#version 1.0
+key1 value1
+# this is a comment
+key2 value2

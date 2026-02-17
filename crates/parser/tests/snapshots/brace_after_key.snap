@@ -1,0 +1,105 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# brace_after_key
+
+## Input
+
+```
+foo{
+}
+"key"{
+}
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..16
+  ENTRY@0..4
+    WORD_KEY@0..4
+      WORD@0..4 "foo{"
+  NEWLINE@4..5 "\n"
+  ENTRY@5..6
+    WORD_KEY@5..6
+      WORD@5..6 "}"
+  NEWLINE@6..7 "\n"
+  ENTRY@7..13
+    QUOTED_KEY@7..13
+      DOUBLE_QUOTE@7..8 "\""
+      STRING@8..11 "key"
+      DOUBLE_QUOTE@11..12 "\""
+      ERROR@12..13
+        OPEN_BRACE@12..13 "{"
+  NEWLINE@13..14 "\n"
+  ENTRY@14..15
+    WORD_KEY@14..15
+      WORD@14..15 "}"
+  NEWLINE@15..16 "\n"
+```
+
+## Syntax Error
+
+```
+[
+    SyntaxError {
+        message: "missing value for the key",
+        range: 4..4,
+    },
+    SyntaxError {
+        message: "missing value for the key",
+        range: 6..6,
+    },
+    SyntaxError {
+        message: "unexpected token after quoted key",
+        range: 12..12,
+    },
+    SyntaxError {
+        message: "missing value for the key",
+        range: 13..13,
+    },
+    SyntaxError {
+        message: "missing value for the key",
+        range: 15..15,
+    },
+]
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..4 "foo{",
+            },
+            value: none,
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@5..6 "}",
+            },
+            value: none,
+        },
+        Entry {
+            key: QuotedKey {
+                open_quote: DOUBLE_QUOTE@7..8 "\"",
+                string: STRING@8..11 "key",
+                close_quote: DOUBLE_QUOTE@7..8 "\"",
+            },
+            value: none,
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@14..15 "}",
+            },
+            value: none,
+        },
+    ],
+}
+```
+
+vim:ft=markdown

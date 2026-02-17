@@ -1,0 +1,100 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# directive
+
+## Input
+
+```
+#include path/to/file
+#version 1.0
+key1 value1
+# this is a comment
+key2 value2
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..79
+  DIRECTIVE@0..21
+    SHARP@0..1 "#"
+    WORD@1..8 "include"
+    LINE_STRING@8..21
+      STRING@8..21 " path/to/file"
+  NEWLINE@21..22 "\n"
+  DIRECTIVE@22..34
+    SHARP@22..23 "#"
+    WORD@23..30 "version"
+    LINE_STRING@30..34
+      STRING@30..34 " 1.0"
+  NEWLINE@34..35 "\n"
+  ENTRY@35..46
+    WORD_KEY@35..39
+      WORD@35..39 "key1"
+    SPACE@39..40 " "
+    LINE_STRING@40..46
+      STRING@40..46 "value1"
+  NEWLINE@46..47 "\n"
+  COMMENT@47..66
+    SHARP@47..48 "#"
+    SPACE@48..49 " "
+    WORD@49..53 "this"
+    SPACE@53..54 " "
+    WORD@54..56 "is"
+    SPACE@56..57 " "
+    WORD@57..58 "a"
+    SPACE@58..59 " "
+    WORD@59..66 "comment"
+  NEWLINE@66..67 "\n"
+  ENTRY@67..78
+    WORD_KEY@67..71
+      WORD@67..71 "key2"
+    SPACE@71..72 " "
+    LINE_STRING@72..78
+      STRING@72..78 "value2"
+  NEWLINE@78..79 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Directive {
+            sharp: SHARP@0..1 "#",
+            name: WORD@1..8 "include",
+            args: LineString {
+                string: STRING@8..21 " path/to/file",
+            },
+        },
+        Directive {
+            sharp: SHARP@22..23 "#",
+            name: WORD@23..30 "version",
+            args: LineString {
+                string: STRING@30..34 " 1.0",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@35..39 "key1",
+            },
+            value: LineString {
+                string: STRING@40..46 "value1",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@67..71 "key2",
+            },
+            value: LineString {
+                string: STRING@72..78 "value2",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

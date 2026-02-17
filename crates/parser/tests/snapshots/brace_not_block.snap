@@ -1,0 +1,103 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# brace_not_block
+
+## Input
+
+```
+a {not a block
+b { also not
+c {
+d }not_close value
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..51
+  ENTRY@0..14
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    LINE_STRING@2..14
+      STRING@2..14 "{not a block"
+  NEWLINE@14..15 "\n"
+  ENTRY@15..27
+    WORD_KEY@15..16
+      WORD@15..16 "b"
+    SPACE@16..17 " "
+    LINE_STRING@17..27
+      STRING@17..27 "{ also not"
+  NEWLINE@27..28 "\n"
+  PREFIX_BLOCK@28..51
+    WORD_KEY@28..29
+      WORD@28..29 "c"
+    SPACE@29..30 " "
+    OPEN_BRACE@30..31 "{"
+    NEWLINE@31..32 "\n"
+    ENTRY@32..50
+      WORD_KEY@32..33
+        WORD@32..33 "d"
+      SPACE@33..34 " "
+      LINE_STRING@34..50
+        STRING@34..50 "}not_close value"
+    NEWLINE@50..51 "\n"
+```
+
+## Syntax Error
+
+```
+[
+    SyntaxError {
+        message: "missing closing '}' for prefix block",
+        range: 51..51,
+    },
+]
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: LineString {
+                string: STRING@2..14 "{not a block",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@15..16 "b",
+            },
+            value: LineString {
+                string: STRING@17..27 "{ also not",
+            },
+        },
+        PrefixBlock {
+            key: WordKey {
+                word: WORD@28..29 "c",
+            },
+            open_brace: OPEN_BRACE@30..31 "{",
+            items: [
+                Entry {
+                    key: WordKey {
+                        word: WORD@32..33 "d",
+                    },
+                    value: LineString {
+                        string: STRING@34..50 "}not_close value",
+                    },
+                },
+            ],
+            close_brace: none,
+        },
+    ],
+}
+```
+
+vim:ft=markdown

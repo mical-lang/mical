@@ -1,0 +1,70 @@
+---
+source: crates/parser/tests/snapshots_prefix_block.rs
+---
+# prefix_block/missing_close_with_eof
+
+## Input
+
+```
+section {
+  key value
+```
+
+## CST
+
+```
+SOURCE_FILE@0..21
+  PREFIX_BLOCK@0..21
+    WORD_KEY@0..7
+      WORD@0..7 "section"
+    SPACE@7..8 " "
+    OPEN_BRACE@8..9 "{"
+    NEWLINE@9..10 "\n"
+    SPACE@10..12 "  "
+    ENTRY@12..21
+      WORD_KEY@12..15
+        WORD@12..15 "key"
+      SPACE@15..16 " "
+      LINE_STRING@16..21
+        STRING@16..21 "value"
+```
+
+## Syntax Error
+
+```
+[
+    SyntaxError {
+        message: "missing closing '}' for prefix block",
+        range: 21..21,
+    },
+]
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        PrefixBlock {
+            key: WordKey {
+                word: WORD@0..7 "section",
+            },
+            open_brace: OPEN_BRACE@8..9 "{",
+            items: [
+                Entry {
+                    key: WordKey {
+                        word: WORD@12..15 "key",
+                    },
+                    value: LineString {
+                        string: STRING@16..21 "value",
+                    },
+                },
+            ],
+            close_brace: none,
+        },
+    ],
+}
+```
+
+vim:ft=markdown

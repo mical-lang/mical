@@ -3,9 +3,51 @@
 
 mod utils;
 #[test]
+fn block_string_fallback() {
+    let source = include_str!("./cases/block_string_fallback.mical");
+    let snapshot = utils::make_snapshot("block_string_fallback", source);
+    utils::assert_snapshot!("", snapshot);
+}
+#[test]
+fn block_string_indent() {
+    let source = include_str!("./cases/block_string_indent.mical");
+    let snapshot = utils::make_snapshot("block_string_indent", source);
+    utils::assert_snapshot!("", snapshot);
+}
+#[test]
+fn brace_after_key() {
+    let source = include_str!("./cases/brace_after_key.mical");
+    let snapshot = utils::make_snapshot("brace_after_key", source);
+    utils::assert_snapshot!("", snapshot);
+}
+#[test]
+fn brace_not_block() {
+    let source = include_str!("./cases/brace_not_block.mical");
+    let snapshot = utils::make_snapshot("brace_not_block", source);
+    utils::assert_snapshot!("", snapshot);
+}
+#[test]
+fn directive() {
+    let source = include_str!("./cases/directive.mical");
+    let snapshot = utils::make_snapshot("directive", source);
+    utils::assert_snapshot!("", snapshot);
+}
+#[test]
 fn empty() {
     let source = include_str!("./cases/empty.mical");
     let snapshot = utils::make_snapshot("empty", source);
+    utils::assert_snapshot!("", snapshot);
+}
+#[test]
+fn hash_edge() {
+    let source = include_str!("./cases/hash_edge.mical");
+    let snapshot = utils::make_snapshot("hash_edge", source);
+    utils::assert_snapshot!("", snapshot);
+}
+#[test]
+fn mixed() {
+    let source = include_str!("./cases/mixed.mical");
+    let snapshot = utils::make_snapshot("mixed", source);
     utils::assert_snapshot!("", snapshot);
 }
 #[test]

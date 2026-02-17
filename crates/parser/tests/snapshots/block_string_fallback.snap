@@ -1,0 +1,108 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# block_string_fallback
+
+## Input
+
+```
+a |not block
+b >not fold
+c |+not block
+d |abc
+e > text after
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..61
+  ENTRY@0..12
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    LINE_STRING@2..12
+      STRING@2..12 "|not block"
+  NEWLINE@12..13 "\n"
+  ENTRY@13..24
+    WORD_KEY@13..14
+      WORD@13..14 "b"
+    SPACE@14..15 " "
+    LINE_STRING@15..24
+      STRING@15..24 ">not fold"
+  NEWLINE@24..25 "\n"
+  ENTRY@25..38
+    WORD_KEY@25..26
+      WORD@25..26 "c"
+    SPACE@26..27 " "
+    LINE_STRING@27..38
+      STRING@27..38 "|+not block"
+  NEWLINE@38..39 "\n"
+  ENTRY@39..45
+    WORD_KEY@39..40
+      WORD@39..40 "d"
+    SPACE@40..41 " "
+    LINE_STRING@41..45
+      STRING@41..45 "|abc"
+  NEWLINE@45..46 "\n"
+  ENTRY@46..60
+    WORD_KEY@46..47
+      WORD@46..47 "e"
+    SPACE@47..48 " "
+    LINE_STRING@48..60
+      STRING@48..60 "> text after"
+  NEWLINE@60..61 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: LineString {
+                string: STRING@2..12 "|not block",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@13..14 "b",
+            },
+            value: LineString {
+                string: STRING@15..24 ">not fold",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@25..26 "c",
+            },
+            value: LineString {
+                string: STRING@27..38 "|+not block",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@39..40 "d",
+            },
+            value: LineString {
+                string: STRING@41..45 "|abc",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@46..47 "e",
+            },
+            value: LineString {
+                string: STRING@48..60 "> text after",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

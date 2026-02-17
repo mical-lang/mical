@@ -1,0 +1,221 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# mixed
+
+## Input
+
+```
+#version 1
+name hello world # not comment
+count 42
+flag true
+negative -10
+section {
+  desc |
+    block line
+  inner {
+    key value
+  }
+}
+# a comment
+after_block done
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..167
+  DIRECTIVE@0..10
+    SHARP@0..1 "#"
+    WORD@1..8 "version"
+    LINE_STRING@8..10
+      STRING@8..10 " 1"
+  NEWLINE@10..11 "\n"
+  ENTRY@11..41
+    WORD_KEY@11..15
+      WORD@11..15 "name"
+    SPACE@15..16 " "
+    LINE_STRING@16..41
+      STRING@16..41 "hello world # not com ..."
+  NEWLINE@41..42 "\n"
+  ENTRY@42..50
+    WORD_KEY@42..47
+      WORD@42..47 "count"
+    SPACE@47..48 " "
+    INTEGER@48..50
+      NUMERAL@48..50 "42"
+  NEWLINE@50..51 "\n"
+  ENTRY@51..60
+    WORD_KEY@51..55
+      WORD@51..55 "flag"
+    SPACE@55..56 " "
+    BOOLEAN@56..60
+      TRUE@56..60 "true"
+  NEWLINE@60..61 "\n"
+  ENTRY@61..73
+    WORD_KEY@61..69
+      WORD@61..69 "negative"
+    SPACE@69..70 " "
+    INTEGER@70..73
+      MINUS@70..71 "-"
+      NUMERAL@71..73 "10"
+  NEWLINE@73..74 "\n"
+  PREFIX_BLOCK@74..138
+    WORD_KEY@74..81
+      WORD@74..81 "section"
+    SPACE@81..82 " "
+    OPEN_BRACE@82..83 "{"
+    NEWLINE@83..84 "\n"
+    SPACE@84..86 "  "
+    ENTRY@86..107
+      WORD_KEY@86..90
+        WORD@86..90 "desc"
+      SPACE@90..91 " "
+      BLOCK_STRING@91..107
+        BLOCK_STRING_HEADER@91..93
+          PIPE@91..92 "|"
+          NEWLINE@92..93 "\n"
+        SPACE@93..97 "    "
+        LINE_STRING@97..107
+          STRING@97..107 "block line"
+    NEWLINE@107..108 "\n"
+    SPACE@108..110 "  "
+    PREFIX_BLOCK@110..136
+      WORD_KEY@110..115
+        WORD@110..115 "inner"
+      SPACE@115..116 " "
+      OPEN_BRACE@116..117 "{"
+      NEWLINE@117..118 "\n"
+      SPACE@118..122 "    "
+      ENTRY@122..131
+        WORD_KEY@122..125
+          WORD@122..125 "key"
+        SPACE@125..126 " "
+        LINE_STRING@126..131
+          STRING@126..131 "value"
+      NEWLINE@131..132 "\n"
+      SPACE@132..134 "  "
+      CLOSE_BRACE@134..135 "}"
+      NEWLINE@135..136 "\n"
+    CLOSE_BRACE@136..137 "}"
+    NEWLINE@137..138 "\n"
+  COMMENT@138..149
+    SHARP@138..139 "#"
+    SPACE@139..140 " "
+    WORD@140..141 "a"
+    SPACE@141..142 " "
+    WORD@142..149 "comment"
+  NEWLINE@149..150 "\n"
+  ENTRY@150..166
+    WORD_KEY@150..161
+      WORD@150..161 "after_block"
+    SPACE@161..162 " "
+    LINE_STRING@162..166
+      STRING@162..166 "done"
+  NEWLINE@166..167 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Directive {
+            sharp: SHARP@0..1 "#",
+            name: WORD@1..8 "version",
+            args: LineString {
+                string: STRING@8..10 " 1",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@11..15 "name",
+            },
+            value: LineString {
+                string: STRING@16..41 "hello world # not com ...",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@42..47 "count",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@48..50 "42",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@51..55 "flag",
+            },
+            value: Boolean {
+                token: TRUE@56..60 "true",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@61..69 "negative",
+            },
+            value: Integer {
+                sign: MINUS@70..71 "-",
+                numeral: NUMERAL@71..73 "10",
+            },
+        },
+        PrefixBlock {
+            key: WordKey {
+                word: WORD@74..81 "section",
+            },
+            open_brace: OPEN_BRACE@82..83 "{",
+            items: [
+                Entry {
+                    key: WordKey {
+                        word: WORD@86..90 "desc",
+                    },
+                    value: BlockString {
+                        header: BlockStringHeader {
+                            style: PIPE@91..92 "|",
+                            chomp: none,
+                        },
+                        lines: [
+                            LineString {
+                                string: STRING@97..107 "block line",
+                            },
+                        ],
+                    },
+                },
+                PrefixBlock {
+                    key: WordKey {
+                        word: WORD@110..115 "inner",
+                    },
+                    open_brace: OPEN_BRACE@116..117 "{",
+                    items: [
+                        Entry {
+                            key: WordKey {
+                                word: WORD@122..125 "key",
+                            },
+                            value: LineString {
+                                string: STRING@126..131 "value",
+                            },
+                        },
+                    ],
+                    close_brace: CLOSE_BRACE@134..135 "}",
+                },
+            ],
+            close_brace: CLOSE_BRACE@136..137 "}",
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@150..161 "after_block",
+            },
+            value: LineString {
+                string: STRING@162..166 "done",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

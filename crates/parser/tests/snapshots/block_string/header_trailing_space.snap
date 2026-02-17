@@ -1,0 +1,154 @@
+---
+source: crates/parser/tests/snapshots_block_string.rs
+---
+# block_string/header_trailing_space
+
+## Input
+
+```
+a | 
+  literal
+b > 
+  fold
+c |+ 
+  keep
+d |- 
+  strip
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..54
+  ENTRY@0..14
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    BLOCK_STRING@2..14
+      BLOCK_STRING_HEADER@2..5
+        PIPE@2..3 "|"
+        SPACE@3..4 " "
+        NEWLINE@4..5 "\n"
+      SPACE@5..7 "  "
+      LINE_STRING@7..14
+        STRING@7..14 "literal"
+  NEWLINE@14..15 "\n"
+  ENTRY@15..26
+    WORD_KEY@15..16
+      WORD@15..16 "b"
+    SPACE@16..17 " "
+    BLOCK_STRING@17..26
+      BLOCK_STRING_HEADER@17..20
+        GT@17..18 ">"
+        SPACE@18..19 " "
+        NEWLINE@19..20 "\n"
+      SPACE@20..22 "  "
+      LINE_STRING@22..26
+        STRING@22..26 "fold"
+  NEWLINE@26..27 "\n"
+  ENTRY@27..39
+    WORD_KEY@27..28
+      WORD@27..28 "c"
+    SPACE@28..29 " "
+    BLOCK_STRING@29..39
+      BLOCK_STRING_HEADER@29..33
+        PIPE@29..30 "|"
+        PLUS@30..31 "+"
+        SPACE@31..32 " "
+        NEWLINE@32..33 "\n"
+      SPACE@33..35 "  "
+      LINE_STRING@35..39
+        STRING@35..39 "keep"
+  NEWLINE@39..40 "\n"
+  ENTRY@40..53
+    WORD_KEY@40..41
+      WORD@40..41 "d"
+    SPACE@41..42 " "
+    BLOCK_STRING@42..53
+      BLOCK_STRING_HEADER@42..46
+        PIPE@42..43 "|"
+        MINUS@43..44 "-"
+        SPACE@44..45 " "
+        NEWLINE@45..46 "\n"
+      SPACE@46..48 "  "
+      LINE_STRING@48..53
+        STRING@48..53 "strip"
+  NEWLINE@53..54 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: BlockString {
+                header: BlockStringHeader {
+                    style: PIPE@2..3 "|",
+                    chomp: none,
+                },
+                lines: [
+                    LineString {
+                        string: STRING@7..14 "literal",
+                    },
+                ],
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@15..16 "b",
+            },
+            value: BlockString {
+                header: BlockStringHeader {
+                    style: GT@17..18 ">",
+                    chomp: none,
+                },
+                lines: [
+                    LineString {
+                        string: STRING@22..26 "fold",
+                    },
+                ],
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@27..28 "c",
+            },
+            value: BlockString {
+                header: BlockStringHeader {
+                    style: PIPE@29..30 "|",
+                    chomp: PLUS@30..31 "+",
+                },
+                lines: [
+                    LineString {
+                        string: STRING@35..39 "keep",
+                    },
+                ],
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@40..41 "d",
+            },
+            value: BlockString {
+                header: BlockStringHeader {
+                    style: PIPE@42..43 "|",
+                    chomp: MINUS@43..44 "-",
+                },
+                lines: [
+                    LineString {
+                        string: STRING@48..53 "strip",
+                    },
+                ],
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

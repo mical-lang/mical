@@ -13,64 +13,53 @@ use parser::Parser;
 
 pub fn parse<'s>(token_stream: impl TokenStream<'s>) -> (GreenNode, Vec<SyntaxError>) {
     let source = token_stream.source();
-    let mut events = {
+    let events = {
         let mut parser = Parser::new(token_stream);
         grammar::source_file(&mut parser);
         parser.finish()
     };
     let mut builder = NodeBuilder::new(source);
-    let mut forward_parents = Vec::new();
-    for i in 0..events.len() {
-        match events.take(i) {
-            Event::StartNode { kind, forward_parent } => {
-                if forward_parent.is_none() {
-                    builder.start_node(kind);
-                    continue;
-                }
-                forward_parents.push(kind);
-                let mut idx = i;
-                let mut fp = forward_parent;
-                while let Some(fpi) = fp {
-                    idx += fpi.get() as usize;
-                    fp = match events.take(idx) {
-                        Event::StartNode { kind, forward_parent } => {
-                            forward_parents.push(kind);
-                            forward_parent
-                        }
-                        _ => unreachable!(),
-                    };
-                }
-                for kind in forward_parents.drain(..).rev() {
-                    builder.start_node(kind);
-                }
-            }
+    // let mut forward_parents = Vec::new();
+    // for i in 0..events.len() {
+    //     match events.take(i) {
+    //         Event::StartNode { kind, forward_parent } => {
+    //             if forward_parent.is_none() {
+    //                 builder.start_node(kind);
+    //                 continue;
+    //             }
+    //             forward_parents.push(kind);
+    //             let mut idx = i;
+    //             let mut fp = forward_parent;
+    //             while let Some(fpi) = fp {
+    //                 idx += fpi.get() as usize;
+    //                 fp = match events.take(idx) {
+    //                     Event::StartNode { kind, forward_parent } => {
+    //                         forward_parents.push(kind);
+    //                         forward_parent
+    //                     }
+    //                     _ => unreachable!(),
+    //                 };
+    //             }
+    //             for kind in forward_parents.drain(..).rev() {
+    //                 builder.start_node(kind);
+    //             }
+    //         }
+    //         Event::FinishNode => builder.finish_node(),
+    //         Event::Token { kind, len } => builder.token(kind, len),
+    //         Event::Error { message } => builder.error(message),
+    //     }
+    // }
+    // let mut builder = GreenNodeBuilder::new();
+    // let mut errors = Vec::new();
+    // let mut offset = 0;
+    for event in events {
+        match event {
+            Event::StartNode { kind } => builder.start_node(kind),
             Event::FinishNode => builder.finish_node(),
             Event::Token { kind, len } => builder.token(kind, len),
             Event::Error { message } => builder.error(message),
         }
     }
-    // let mut builder = GreenNodeBuilder::new();
-    // let mut errors = Vec::new();
-    // let mut offset = 0;
-    // for event in events {
-    //     match event {
-    //         Event::StartNode { kind } => {
-    //             builder.start_node(kind.into());
-    //         }
-    //         Event::FinishNode => {
-    //             builder.finish_node();
-    //         }
-    //         Event::Token { kind, len } => {
-    //             let text = &source[(offset as usize)..(offset + len) as usize];
-    //             builder.token(kind.into(), text);
-    //             offset += len;
-    //         }
-    //         Event::Error { message } => {
-    //             let range = TextRange::empty(offset.into());
-    //             errors.push(SyntaxError::new(message, range));
-    //         }
-    //     }
-    // }
     builder.finish()
 }
 

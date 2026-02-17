@@ -18,7 +18,7 @@ pub(super) const KEY_FIRST: TokenSet = TokenSet::new([
 /// `T![' ']`, `T!['\n']`, `T!['\t']`, or EOF
 pub(super) const KEY_LAST: TokenSet = TokenSet::new([T![' '], T!['\n'], T!['\t']]);
 
-pub(super) fn key(p: &mut Parser) -> CompletedMarker {
+pub(super) fn key(p: &mut Parser) {
     assert!(p.at_ts(KEY_FIRST));
 
     match unsafe { p.current().unwrap_unchecked() } {
@@ -27,7 +27,7 @@ pub(super) fn key(p: &mut Parser) -> CompletedMarker {
     }
 }
 
-fn word_key(p: &mut Parser) -> CompletedMarker {
+fn word_key(p: &mut Parser) {
     let m = p.start();
 
     let mut count = 0;
@@ -36,10 +36,10 @@ fn word_key(p: &mut Parser) -> CompletedMarker {
     }
     p.bump_remap(T![word], count);
 
-    m.complete(p, WORD_KEY)
+    m.complete(p, WORD_KEY);
 }
 
-fn quoted_key(p: &mut Parser, quote: SyntaxKind) -> CompletedMarker {
+fn quoted_key(p: &mut Parser, quote: SyntaxKind) {
     assert!((p.at(T!['"']) || p.at(T!['\''])) && p.at(quote));
 
     let m = p.start();
@@ -61,5 +61,5 @@ fn quoted_key(p: &mut Parser, quote: SyntaxKind) -> CompletedMarker {
         m.complete(p, ERROR);
     }
 
-    m.complete(p, QUOTED_KEY)
+    m.complete(p, QUOTED_KEY);
 }

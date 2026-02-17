@@ -186,12 +186,12 @@ pub(crate) struct Marker {
 }
 
 impl Marker {
-    pub(crate) fn complete(self, p: &mut Parser, kind: SyntaxKind) -> CompletedMarker {
+    pub(crate) fn complete(self, p: &mut Parser, kind: SyntaxKind) {
         let pos = self.pos;
         mem::forget(self);
-        p.events.replace_tombstone(pos as usize, Event::StartNode { kind, forward_parent: None });
+        p.events.replace_tombstone(pos as usize, Event::StartNode { kind });
         p.events.push(Event::FinishNode);
-        CompletedMarker { pos }
+        // CompletedMarker { pos }
     }
 }
 
@@ -203,15 +203,15 @@ impl Drop for Marker {
     }
 }
 
-pub(crate) struct CompletedMarker {
-    pos: u32,
-}
-
-impl CompletedMarker {
-    pub(crate) fn precede(self, p: &mut Parser) -> Marker {
-        let new_pos = p.start();
-        let idx = self.pos as usize;
-        p.events.set_forward_parent(idx, new_pos.pos - self.pos);
-        new_pos
-    }
-}
+// pub(crate) struct CompletedMarker {
+//     pos: u32,
+// }
+//
+// impl CompletedMarker {
+//     pub(crate) fn precede(self, p: &mut Parser) -> Marker {
+//         let new_pos = p.start();
+//         let idx = self.pos as usize;
+//         p.events.set_forward_parent(idx, new_pos.pos - self.pos);
+//         new_pos
+//     }
+// }

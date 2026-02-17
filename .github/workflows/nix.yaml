@@ -1,0 +1,38 @@
+name: Nix
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Set up Nix
+        uses: ./.github/actions/setup-nix
+
+      - name: Build
+        run: nix build
+
+  style:
+    name: Style
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Set up Nix
+        uses: ./.github/actions/setup-nix
+
+      - name: Format
+        run: |
+          nix fmt
+          git status --porcelain
+          test -z "$(git status --porcelain)" || (echo '❌ Format changed files, please commit them.' && exit 1)

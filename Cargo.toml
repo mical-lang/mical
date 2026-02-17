@@ -13,6 +13,8 @@ repository = "https://github.com/ryota2357/mical"
 license = "MIT"
 
 [workspace.dependencies]
+insta = "1.46.3"
+pretty_assertions = "1.4.1"
 rowan = "0.16.1"
 mical_lexer.path = "./crates/lexer"
 mical_parser.path = "./crates/parser"

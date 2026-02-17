@@ -10,5 +10,5 @@ rowan.workspace = true
 mical_syntax.workspace = true
 
 [dev-dependencies]
-insta = "1.46.3"
+insta.workspace = true
 mical_lexer.workspace = true

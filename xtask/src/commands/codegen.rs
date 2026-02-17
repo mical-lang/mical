@@ -1,3 +1,4 @@
+mod parser;
 mod syntax;
 
 use crate::{Level, flags, message, project_root};
@@ -13,9 +14,11 @@ impl flags::Codegen {
         match kind {
             flags::CodegenKind::All => {
                 syntax::generate(sh, check)?;
+                parser::generate(sh, check)?;
                 Ok(())
             }
             flags::CodegenKind::Syntax => syntax::generate(sh, check),
+            flags::CodegenKind::Parser => parser::generate(sh, check),
         }
     }
 }

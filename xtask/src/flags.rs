@@ -16,6 +16,7 @@ pub enum CodegenKind {
     #[default]
     All,
     Syntax,
+    Parser,
 }
 
 impl std::str::FromStr for CodegenKind {
@@ -25,6 +26,7 @@ impl std::str::FromStr for CodegenKind {
         match s {
             "all" => Ok(CodegenKind::All),
             "syntax" => Ok(CodegenKind::Syntax),
+            "parser" => Ok(CodegenKind::Parser),
             unknown => Err(format!("Unknown codegen kind: {}", unknown)),
         }
     }

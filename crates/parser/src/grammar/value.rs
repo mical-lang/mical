@@ -26,29 +26,23 @@ pub(super) fn value(p: &mut Parser, indent_level: u32) {
             if p.nth_at(shift, T![+]) || p.nth_at(shift, T![-]) {
                 shift += 1;
             }
-            if p.nth_at(shift, T!['\n']) {
+            if is_rest_of_line_blank(p, shift) {
                 block_string(p, indent_level);
             } else {
                 line_string(p)
             }
         }
-        T![true] | T![false] if is_eol_or_trailing_space(p, 1) => {
+        T![true] | T![false] if is_rest_of_line_blank(p, 1) => {
             boolean(p);
         }
-        T![numeral] if is_eol_or_trailing_space(p, 1) => {
+        T![numeral] if is_rest_of_line_blank(p, 1) => {
             integer(p);
         }
-        T![+] | T![-] if p.nth_at(1, T![numeral]) && is_eol_or_trailing_space(p, 2) => {
+        T![+] | T![-] if p.nth_at(1, T![numeral]) && is_rest_of_line_blank(p, 2) => {
             integer(p);
         }
         _ => line_string(p),
     }
-}
-
-fn is_eol_or_trailing_space(p: &Parser, n: usize) -> bool {
-    p.nth_at(n, T!['\n'])
-        || p.nth_at_eof(n)
-        || (p.nth_at(n, T![' ']) && (p.nth_at(n + 1, T!['\n']) || p.nth_at_eof(n + 1)))
 }
 
 fn boolean(p: &mut Parser) {
@@ -259,7 +253,8 @@ fn block_string_header(p: &mut Parser) {
         p.bump(T![-]);
     }
 
-    p.bump(T!['\n']);
+    p.eat(T![' ']);
+    p.eat(T!['\n']);
 
     m.complete(p, BLOCK_STRING_HEADER);
 }

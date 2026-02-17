@@ -98,7 +98,7 @@ fn entry_or_prefix_block(p: &mut Parser, indent_level: u32) {
         m.complete(p, ERROR);
     }
 
-    if p.at(T!['{']) && p.nth_at(1, T!['\n']) {
+    if p.at(T!['{']) && is_rest_of_line_blank(p, 1) {
         prefix_block(p, m);
     } else {
         entry(p, m, indent_level);
@@ -106,12 +106,15 @@ fn entry_or_prefix_block(p: &mut Parser, indent_level: u32) {
 }
 
 fn prefix_block(p: &mut Parser, m: Marker) {
-    assert!(p.at(T!['{']) && p.nth_at(1, T!['\n']));
+    assert!(p.at(T!['{']) && is_rest_of_line_blank(p, 1));
 
     p.bump(T!['{']);
+    p.eat(T![' ']);
     p.bump(T!['\n']);
 
     loop {
+        while p.eat(T!['\n']) {}
+
         if p.at_eof() {
             p.error("missing closing '}' for prefix block");
             break;
@@ -124,6 +127,7 @@ fn prefix_block(p: &mut Parser, m: Marker) {
             p.eat(T!['\n']);
             break;
         }
+
         item(p);
     }
 
@@ -139,10 +143,7 @@ fn is_close_brace_line(p: &Parser) -> bool {
         return false;
     }
     n += 1;
-    if p.nth_at(n, T!['\n']) || p.nth_at_eof(n) {
-        return true;
-    }
-    p.nth_at(n, T![' ']) && (p.nth_at(n + 1, T!['\n']) || p.nth_at_eof(n + 1))
+    is_rest_of_line_blank(p, n)
 }
 
 fn entry(p: &mut Parser, m: Marker, indent_level: u32) {

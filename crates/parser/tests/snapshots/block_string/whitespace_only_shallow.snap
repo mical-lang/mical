@@ -1,0 +1,65 @@
+---
+source: crates/parser/tests/sample.rs
+---
+# block_string/whitespace_only_shallow
+
+## Input
+
+```
+foo |
+ 
+  a
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..12
+  ENTRY@0..11
+    WORD_KEY@0..3
+      WORD@0..3 "foo"
+    SPACE@3..4 " "
+    BLOCK_STRING@4..11
+      BLOCK_STRING_HEADER@4..6
+        PIPE@4..5 "|"
+        NEWLINE@5..6 "\n"
+      SPACE@6..7 " "
+      LINE_STRING@7..7
+      NEWLINE@7..8 "\n"
+      SPACE@8..10 "  "
+      LINE_STRING@10..11
+        STRING@10..11 "a"
+  NEWLINE@11..12 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..3 "foo",
+            },
+            value: BlockString {
+                header: BlockStringHeader {
+                    style: PIPE@4..5 "|",
+                    chomp: none,
+                },
+                lines: [
+                    LineString {
+                        string: none,
+                    },
+                    LineString {
+                        string: STRING@10..11 "a",
+                    },
+                ],
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

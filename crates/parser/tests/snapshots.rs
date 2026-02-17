@@ -2,3 +2,15 @@
 #![cfg_attr(rustfmt, rustfmt::skip)]
 
 mod utils;
+#[test]
+fn empty() {
+    let source = include_str!("./cases/empty.mical");
+    let snapshot = utils::make_snapshot("empty", source);
+    utils::assert_snapshot!("", snapshot);
+}
+#[test]
+fn newline() {
+    let source = include_str!("./cases/newline.mical");
+    let snapshot = utils::make_snapshot("newline", source);
+    utils::assert_snapshot!("", snapshot);
+}

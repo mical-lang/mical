@@ -38,8 +38,9 @@ SOURCE_FILE@0..36
     WORD_KEY@14..15
       WORD@14..15 "c"
     SPACE@15..16 " "
-    LINE_STRING@16..22
-      STRING@16..22 "hello "
+    LINE_STRING@16..21
+      STRING@16..21 "hello"
+    SPACE@21..22 " "
   NEWLINE@22..23 "\n"
   ENTRY@23..29
     WORD_KEY@23..24
@@ -89,7 +90,7 @@ SourceFile {
                 word: WORD@14..15 "c",
             },
             value: LineString {
-                string: STRING@16..22 "hello ",
+                string: STRING@16..21 "hello",
             },
         },
         Entry {

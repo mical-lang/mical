@@ -71,6 +71,10 @@ pub(super) fn line_string(p: &mut Parser) {
     while !(p.nth_at(count, T!['\n']) || p.nth_at_eof(count)) {
         count += 1;
     }
+    // Trim trailing space
+    if count > 0 && p.nth_at(count - 1, T![' ']) {
+        count -= 1;
+    }
     p.bump_remap(T![string], count);
 
     m.complete(p, LINE_STRING);

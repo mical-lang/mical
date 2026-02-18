@@ -7,3 +7,8 @@ repository.workspace = true
 license.workspace = true
 
 [dependencies]
+smallvec.workspace = true
+mical_syntax.workspace = true
+
+[dev-dependencies]
+proptest = { workspace = true, features = ["attr-macro"] }

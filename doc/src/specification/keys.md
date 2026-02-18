@@ -84,3 +84,40 @@ c    true
 ```
 
 Tab characters between the key and the value produce the error: "tab separating is not allowed".
+
+## Duplicate Keys
+
+Multiple entries may share the same key. Each occurrence is a distinct entry and all are preserved in the evaluated output.
+
+```mical
+tag  web
+tag  server
+tag  production
+```
+
+```json
+{
+  "tag": ["web", "server", "production"]
+}
+```
+
+This produces three entries, all with the key `tag`. No entry is overwritten or merged.
+
+The same rule applies to keys formed by [prefix concatenation](./prefix_blocks.md#prefix-concatenation):
+
+```mical
+item. {
+  tag important
+}
+item. {
+  tag urgent
+}
+```
+
+```json
+{
+  "item.tag": ["important", "urgent"]
+}
+```
+
+Both entries with key `item.tag` are preserved.

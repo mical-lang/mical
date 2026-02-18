@@ -1,4 +1,7 @@
 [book]
-title = "mical"
+title = "MICAL Documentation"
 authors = ["ryota2357"]
 language = "en"
+
+[output.html]
+mathjax-support = true

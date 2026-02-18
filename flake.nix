@@ -1,5 +1,5 @@
 {
-  description = "";
+  description = "A minimal, line-oriented configuration language designed for flat structures and readability.";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixpkgs-unstable";

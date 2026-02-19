@@ -1,0 +1,37 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# quoted_strings
+
+## Input
+
+```mical
+a "hello world"
+b 'single'
+c ""
+d ''
+e "hello\nworld"
+f "path\\to\\file"
+g "col1\tcol2"
+h "can\'t"
+i 'say \"hi\"'
+
+```
+
+## Json
+
+```json
+{
+  "a": "hello world",
+  "b": "single",
+  "c": "",
+  "d": "",
+  "e": "hello\nworld",
+  "f": "path\\to\\file",
+  "g": "col1\tcol2",
+  "h": "can't",
+  "i": "say \"hi\""
+}
+```
+
+vim:ft=markdown

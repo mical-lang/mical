@@ -1,0 +1,27 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# duplicate_keys
+
+## Input
+
+```mical
+tag web
+tag server
+tag production
+
+```
+
+## Json
+
+```json
+{
+  "tag": [
+    "web",
+    "server",
+    "production"
+  ]
+}
+```
+
+vim:ft=markdown

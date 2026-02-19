@@ -1,0 +1,24 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# block_string_empty_body
+
+## Input
+
+```mical
+key |
+
+a b
+
+```
+
+## Json
+
+```json
+{
+  "a": "b",
+  "key": ""
+}
+```
+
+vim:ft=markdown

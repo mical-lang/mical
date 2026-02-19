@@ -1,0 +1,25 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# prefix_block
+
+## Input
+
+```mical
+server {
+  .host localhost
+  .port 8080
+}
+
+```
+
+## Json
+
+```json
+{
+  "server.host": "localhost",
+  "server.port": 8080
+}
+```
+
+vim:ft=markdown

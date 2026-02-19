@@ -1,0 +1,26 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# block_string_clip_trailing
+
+## Input
+
+```mical
+key |
+  hello
+  world
+
+a 1
+
+```
+
+## Json
+
+```json
+{
+  "a": 1,
+  "key": "hello\nworld\n"
+}
+```
+
+vim:ft=markdown

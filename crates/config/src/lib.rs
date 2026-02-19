@@ -1,8 +1,14 @@
-// use mical_syntax::ast;
+use mical_syntax::ast;
 use smallvec::{SmallVec, ToSmallVec};
 
 mod text_arena;
 use text_arena::{TextArena, TextId};
+
+mod error;
+pub use error::ConfigError;
+
+mod eval;
+pub mod json;
 
 pub struct Config {
     arena: TextArena,
@@ -23,7 +29,7 @@ pub enum Value<'s> {
 }
 
 #[derive(Copy, Clone, PartialEq, Eq)]
-enum ValueRaw {
+pub(crate) enum ValueRaw {
     Bool(bool),
     Integer(TextId),
     String(TextId),
@@ -40,8 +46,13 @@ impl ValueRaw {
 }
 
 impl Config {
-    // pub fn from_source_file(source_file: ast::SourceFile) -> Result<Self, ...> {
-    // }
+    pub fn from_source_file(source_file: ast::SourceFile) -> (Self, Vec<ConfigError>) {
+        let ctx = eval::eval(&source_file);
+        let eval::EvalContext { arena, entries, errors, .. } = ctx;
+
+        let (sorted_indices, group_order) = Self::build_indices(&arena, &entries);
+        (Config { arena, entries, sorted_indices, group_order }, errors)
+    }
 
     pub fn from_kv_entries<'a>(items: impl IntoIterator<Item = (&'a str, Value<'a>)>) -> Self {
         let mut arena = TextArena::new();
@@ -55,6 +66,14 @@ impl Config {
             };
             entries.push((key_id, raw));
         }
+        let (sorted_indices, group_order) = Self::build_indices(&arena, &entries);
+        Config { arena, entries, sorted_indices, group_order }
+    }
+
+    fn build_indices(
+        arena: &TextArena,
+        entries: &[(TextId, ValueRaw)],
+    ) -> (Vec<u32>, Vec<(u32, u32)>) {
         let sorted_indices = {
             let mut indices = (0..entries.len() as u32).collect::<Vec<_>>();
             indices.sort_unstable_by(|&a, &b| {
@@ -80,10 +99,10 @@ impl Config {
                 }
                 groups.push((group_start as u32, (i - group_start) as u32, min_idx));
             }
-            groups.sort_unstable_by_key(|&(_, _, first)| first); // sort by first_entry_idx → first occurrence order
+            groups.sort_unstable_by_key(|&(_, _, first)| first);
             groups.into_iter().map(|(s, c, _)| (s, c)).collect()
         };
-        Config { arena, entries, sorted_indices, group_order }
+        (sorted_indices, group_order)
     }
 
     /// Return values that exactly match `key` in insertion order (grouped by first occurrence).

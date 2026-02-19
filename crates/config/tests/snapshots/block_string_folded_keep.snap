@@ -1,0 +1,26 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# block_string_folded_keep
+
+## Input
+
+```mical
+text >+
+  first
+  second
+
+a b
+
+```
+
+## Json
+
+```json
+{
+  "a": "b",
+  "text": "first second\n\n"
+}
+```
+
+vim:ft=markdown

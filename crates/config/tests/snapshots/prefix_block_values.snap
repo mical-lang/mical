@@ -1,0 +1,37 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# prefix_block_values
+
+## Input
+
+```mical
+block {
+  str hello world
+  num 42
+  flag true
+  neg -1
+  quoted "value"
+}
+empty {
+}
+http_ {
+  port 80
+}
+
+```
+
+## Json
+
+```json
+{
+  "blockflag": true,
+  "blockneg": -1,
+  "blocknum": 42,
+  "blockquoted": "value",
+  "blockstr": "hello world",
+  "http_port": 80
+}
+```
+
+vim:ft=markdown

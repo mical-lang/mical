@@ -1,0 +1,4 @@
+"my key" value
+'single key' value
+"" empty-key-value
+"key\"name" value

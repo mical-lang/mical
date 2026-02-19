@@ -1,0 +1,28 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# invalid_escape
+
+## Input
+
+```mical
+a "bad\x"
+b value
+
+```
+
+## Error
+
+```
+invalid escape sequence '\x' at 6..8
+```
+
+## Json
+
+```json
+{
+  "b": "value"
+}
+```
+
+vim:ft=markdown

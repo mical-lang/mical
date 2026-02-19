@@ -7,8 +7,12 @@ repository.workspace = true
 license.workspace = true
 
 [dependencies]
+serde_json = { workspace = true, features = ["raw_value"] }
 smallvec.workspace = true
 mical_syntax.workspace = true
 
 [dev-dependencies]
+insta.workspace = true
 proptest = { workspace = true, features = ["attr-macro"] }
+mical_lexer.workspace = true
+mical_parser.workspace = true

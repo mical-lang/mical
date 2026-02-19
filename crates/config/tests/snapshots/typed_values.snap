@@ -1,0 +1,31 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# typed_values
+
+## Input
+
+```mical
+a true
+b false
+x 42
+y -10
+z +7
+hex 0xFF
+
+```
+
+## Json
+
+```json
+{
+  "a": true,
+  "b": false,
+  "hex": 255,
+  "x": 42,
+  "y": -10,
+  "z": 7
+}
+```
+
+vim:ft=markdown

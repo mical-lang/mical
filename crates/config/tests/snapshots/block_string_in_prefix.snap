@@ -1,0 +1,26 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# block_string_in_prefix
+
+## Input
+
+```mical
+section {
+  desc |
+    block line
+  other value
+}
+
+```
+
+## Json
+
+```json
+{
+  "sectiondesc": "block line\n",
+  "sectionother": "value"
+}
+```
+
+vim:ft=markdown

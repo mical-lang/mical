@@ -249,8 +249,12 @@ version = "0.0.1"
 name = "mical_config"
 version = "0.0.1"
 dependencies = [
+ "insta",
+ "mical_lexer",
+ "mical_parser",
  "mical_syntax",
  "proptest",
+ "serde_json",
  "smallvec",
 ]
 

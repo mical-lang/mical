@@ -1,0 +1,26 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# block_string_keep_multi_trailing
+
+## Input
+
+```mical
+key |+
+  x
+
+
+a b
+
+```
+
+## Json
+
+```json
+{
+  "a": "b",
+  "key": "x\n\n\n"
+}
+```
+
+vim:ft=markdown

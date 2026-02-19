@@ -1,0 +1,22 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# shebang
+
+## Input
+
+```mical
+#!/usr/bin/env mical
+key value
+
+```
+
+## Json
+
+```json
+{
+  "key": "value"
+}
+```
+
+vim:ft=markdown

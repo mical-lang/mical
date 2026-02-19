@@ -1,0 +1,26 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# block_string_folded
+
+## Input
+
+```mical
+text >
+  This is a long
+  sentence split
+  over lines.
+
+  New paragraph.
+
+```
+
+## Json
+
+```json
+{
+  "text": "This is a long sentence split over lines.\nNew paragraph.\n"
+}
+```
+
+vim:ft=markdown

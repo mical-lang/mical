@@ -38,7 +38,7 @@
       {
         packages.default = rustPlatform.buildRustPackage {
           pname = "mical";
-          version = "0.0.1";
+          version = (builtins.fromTOML (builtins.readFile ./Cargo.toml)).workspace.package.version;
           src = ./.;
           cargoLock.lockFile = ./Cargo.lock;
         };

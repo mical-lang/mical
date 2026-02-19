@@ -1,4 +1,4 @@
-use mical_syntax::SyntaxKind;
+use mical_cli_syntax::SyntaxKind;
 
 #[derive(Clone, Copy)]
 pub(crate) struct TokenSet(u64);

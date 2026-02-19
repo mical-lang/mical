@@ -1,5 +1,5 @@
 use crate::{parser::*, token_set::TokenSet};
-use mical_syntax::{SyntaxKind, SyntaxKind::*, T};
+use mical_cli_syntax::{SyntaxKind, SyntaxKind::*, T};
 
 mod item;
 mod key;

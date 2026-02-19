@@ -1,5 +1,5 @@
 mod macros;
-use mical_syntax::token::{Quote::*, Radix::*};
+use mical_cli_syntax::token::{Quote::*, Radix::*};
 
 #[test]
 fn true_() {

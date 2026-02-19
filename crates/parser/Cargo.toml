@@ -1,14 +1,15 @@
 [package]
-name = "mical_parser"
+name = "mical-cli-parser"
 version.workspace = true
 authors.workspace = true
 edition.workspace = true
 license.workspace = true
+description = "Internal parser for mical-cli"
 
 [dependencies]
 rowan.workspace = true
-mical_syntax.workspace = true
+mical-cli-syntax.workspace = true
 
 [dev-dependencies]
 insta.workspace = true
-mical_lexer.workspace = true
+mical-cli-lexer.workspace = true

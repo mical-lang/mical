@@ -3,7 +3,7 @@ use std::path::PathBuf;
 use std::process::ExitCode;
 
 use clap::{Args, Parser, Subcommand};
-use mical_syntax::ast::{AstNode as _, SourceFile};
+use mical_cli_syntax::ast::{AstNode as _, SourceFile};
 
 #[derive(Parser)]
 #[command(name = "mical", version, about = "Mical configuration language tool")]
@@ -109,8 +109,8 @@ fn cmd_eval(args: EvalArgs) -> ExitCode {
         }
     };
 
-    let (green, syntax_errors) = mical_parser::parse(mical_lexer::tokenize(&source));
-    let syntax_node = mical_syntax::SyntaxNode::new_root(green);
+    let (green, syntax_errors) = mical_cli_parser::parse(mical_cli_lexer::tokenize(&source));
+    let syntax_node = mical_cli_syntax::SyntaxNode::new_root(green);
     let source_file = match SourceFile::cast(syntax_node) {
         Some(sf) => sf,
         None => {
@@ -123,7 +123,7 @@ fn cmd_eval(args: EvalArgs) -> ExitCode {
         eprintln!("syntax error: {err}");
     }
 
-    let (config, config_errors) = mical_config::Config::from_source_file(source_file);
+    let (config, config_errors) = mical_cli_config::Config::from_source_file(source_file);
     for err in &config_errors {
         eprintln!("config error: {err}");
     }
@@ -203,8 +203,8 @@ fn cmd_dev(args: DevArgs) -> ExitCode {
         }
     };
 
-    let (green, syntax_errors) = mical_parser::parse(mical_lexer::tokenize(&source));
-    let syntax_node = mical_syntax::SyntaxNode::new_root(green);
+    let (green, syntax_errors) = mical_cli_parser::parse(mical_cli_lexer::tokenize(&source));
+    let syntax_node = mical_cli_syntax::SyntaxNode::new_root(green);
 
     // Default: print both if neither flag is given
     let print_both = !args.cst && !args.ast;
@@ -236,13 +236,13 @@ fn cmd_dev(args: DevArgs) -> ExitCode {
     ExitCode::SUCCESS
 }
 
-fn print_cst(node: &mical_syntax::SyntaxNode, indent: usize) {
+fn print_cst(node: &mical_cli_syntax::SyntaxNode, indent: usize) {
     let padding = "  ".repeat(indent);
     println!("{padding}{:?}@{:?}", node.kind(), node.text_range());
     for child in node.children_with_tokens() {
         match child {
-            mical_syntax::SyntaxElement::Node(n) => print_cst(&n, indent + 1),
-            mical_syntax::SyntaxElement::Token(t) => {
+            mical_cli_syntax::SyntaxElement::Node(n) => print_cst(&n, indent + 1),
+            mical_cli_syntax::SyntaxElement::Token(t) => {
                 let padding = "  ".repeat(indent + 1);
                 println!("{padding}{:?}@{:?} {:?}", t.kind(), t.text_range(), t.text());
             }

@@ -1,5 +1,5 @@
 use core::fmt;
-use mical_syntax::TextRange;
+use mical_cli_syntax::TextRange;
 
 /// Error encountered during AST-to-Config evaluation.
 #[derive(Clone, Debug, PartialEq, Eq)]

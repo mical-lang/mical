@@ -1,5 +1,5 @@
 use core::str::Chars;
-use mical_syntax::token::{Token, TokenKind};
+use mical_cli_syntax::token::{Token, TokenKind};
 
 #[derive(Debug)]
 pub(crate) struct Cursor<'src> {

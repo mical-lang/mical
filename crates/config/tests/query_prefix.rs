@@ -1,4 +1,4 @@
-use mical_config::{Config, Value};
+use mical_cli_config::{Config, Value};
 use proptest::{prelude::*, property_test};
 
 fn qp<'a>(config: &'a Config, prefix: &str) -> Vec<(&'a str, Value<'a>)> {

@@ -1,9 +1,10 @@
 [package]
-name = "mical_syntax"
+name = "mical-cli-syntax"
 version.workspace = true
 authors.workspace = true
 edition.workspace = true
 license.workspace = true
+description = "Internal syntax definitions for mical-cli"
 
 [dependencies]
 rowan.workspace = true

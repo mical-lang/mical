@@ -1,5 +1,5 @@
-use mical_syntax::ast::{self, AstNode, BooleanKind};
-use mical_syntax::{SyntaxKind, TextRange, TextSize};
+use mical_cli_syntax::ast::{self, AstNode, BooleanKind};
+use mical_cli_syntax::{SyntaxKind, TextRange, TextSize};
 
 use crate::ValueRaw;
 use crate::error::ConfigError;

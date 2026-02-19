@@ -20,14 +20,14 @@ macro_rules! assert_token {
 
     // Check step: actual assertion
     (@check $src:literal [$( $kind:ident { $len:literal $(, $($field_name:ident: $field_expr:expr),* $(,)? )?} ),* $(,)?]) => {
-        let tokens = ::mical_lexer::tokenize($src).collect::<Vec<_>>();
+        let tokens = ::mical_cli_lexer::tokenize($src).collect::<Vec<_>>();
         let mut i = 0;
         #[allow(unused_assignments)]
         {$(
             let token = &tokens[i];
-            ::pretty_assertions::assert_eq!(token, &::mical_syntax::token::Token {
+            ::pretty_assertions::assert_eq!(token, &::mical_cli_syntax::token::Token {
                 len: $len,
-                kind: ::mical_syntax::token::TokenKind::$kind $({ $($field_name: $field_expr),* })?
+                kind: ::mical_cli_syntax::token::TokenKind::$kind $({ $($field_name: $field_expr),* })?
             });
             i += 1;
         )*}

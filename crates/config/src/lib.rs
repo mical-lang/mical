@@ -1,4 +1,4 @@
-use mical_syntax::ast;
+use mical_cli_syntax::ast;
 use smallvec::{SmallVec, ToSmallVec};
 
 mod text_arena;

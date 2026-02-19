@@ -1,12 +1,12 @@
-use mical_config::Config;
-use mical_syntax::{
+use mical_cli_config::Config;
+use mical_cli_syntax::{
     SyntaxNode,
     ast::{AstNode, SourceFile},
 };
 use std::fmt::Write;
 
 pub fn make_snapshot(name: &str, source: &str) -> String {
-    let (green, parser_errors) = mical_parser::parse(mical_lexer::tokenize(source));
+    let (green, parser_errors) = mical_cli_parser::parse(mical_cli_lexer::tokenize(source));
     assert!(parser_errors.is_empty(), "unexpected parser errors: {:?}", parser_errors);
     let syntax = SyntaxNode::new_root(green);
     let source_file = SourceFile::cast(syntax).unwrap();

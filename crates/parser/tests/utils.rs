@@ -1,11 +1,11 @@
-use mical_syntax::{
+use mical_cli_syntax::{
     SyntaxNode,
     ast::{AstNode, SourceFile},
 };
 use std::fmt::Write;
 
 pub fn make_snapshot(name: &str, source: &str) -> String {
-    let (green, err) = mical_parser::parse(mical_lexer::tokenize(source));
+    let (green, err) = mical_cli_parser::parse(mical_cli_lexer::tokenize(source));
     let syntax_node = SyntaxNode::new_root(green);
     let ast = SourceFile::cast(syntax_node.clone()).unwrap();
 

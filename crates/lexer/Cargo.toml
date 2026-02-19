@@ -1,12 +1,13 @@
 [package]
-name = "mical_lexer"
+name = "mical-cli-lexer"
 version.workspace = true
 authors.workspace = true
 edition.workspace = true
 license.workspace = true
+description = "Internal lexer for mical-cli"
 
 [dependencies]
-mical_syntax.workspace = true
+mical-cli-syntax.workspace = true
 
 [dev-dependencies]
 pretty_assertions.workspace = true

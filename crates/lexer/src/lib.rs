@@ -1,4 +1,4 @@
-use mical_syntax::token::{TokenKind::*, *};
+use mical_cli_syntax::token::{TokenKind::*, *};
 use std::iter;
 
 mod cursor;

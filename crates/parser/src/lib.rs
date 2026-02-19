@@ -1,6 +1,6 @@
 use std::borrow::Cow;
 
-use mical_syntax::{GreenNode, SyntaxError, SyntaxKind, token::TokenStream};
+use mical_cli_syntax::{GreenNode, SyntaxError, SyntaxKind, token::TokenStream};
 use rowan::{GreenNodeBuilder, TextRange};
 
 mod event;

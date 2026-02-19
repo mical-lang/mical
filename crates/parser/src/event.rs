@@ -1,4 +1,4 @@
-use mical_syntax::SyntaxKind;
+use mical_cli_syntax::SyntaxKind;
 use std::borrow::Cow;
 
 pub(crate) enum Event {

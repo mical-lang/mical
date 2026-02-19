@@ -348,46 +348,46 @@ name = "mical-cli"
 version = "0.0.1-dev"
 dependencies = [
  "clap",
- "mical_config",
- "mical_lexer",
- "mical_parser",
- "mical_syntax",
+ "mical-cli-config",
+ "mical-cli-lexer",
+ "mical-cli-parser",
+ "mical-cli-syntax",
  "serde_json",
 ]
 
 [[package]]
-name = "mical_config"
+name = "mical-cli-config"
 version = "0.0.1-dev"
 dependencies = [
  "insta",
- "mical_lexer",
- "mical_parser",
- "mical_syntax",
+ "mical-cli-lexer",
+ "mical-cli-parser",
+ "mical-cli-syntax",
  "proptest",
  "serde_json",
  "smallvec",
 ]
 
 [[package]]
-name = "mical_lexer"
+name = "mical-cli-lexer"
 version = "0.0.1-dev"
 dependencies = [
- "mical_syntax",
+ "mical-cli-syntax",
  "pretty_assertions",
 ]
 
 [[package]]
-name = "mical_parser"
+name = "mical-cli-parser"
 version = "0.0.1-dev"
 dependencies = [
  "insta",
- "mical_lexer",
- "mical_syntax",
+ "mical-cli-lexer",
+ "mical-cli-syntax",
  "rowan",
 ]
 
 [[package]]
-name = "mical_syntax"
+name = "mical-cli-syntax"
 version = "0.0.1-dev"
 dependencies = [
  "rowan",

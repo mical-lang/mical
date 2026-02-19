@@ -2,7 +2,7 @@ use crate::{
     event::{Event, EventContainer},
     token_set::TokenSet,
 };
-use mical_syntax::{
+use mical_cli_syntax::{
     SyntaxKind, T,
     token::{Quote, TokenKind, TokenStream},
 };

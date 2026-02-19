@@ -243,11 +243,11 @@ checksum = "f8ca58f447f06ed17d5fc4043ce1b10dd205e060fb3ce5b979b8ed8e59ff3f79"
 
 [[package]]
 name = "mical-cli"
-version = "0.0.1"
+version = "0.0.1-dev"
 
 [[package]]
 name = "mical_config"
-version = "0.0.1"
+version = "0.0.1-dev"
 dependencies = [
  "insta",
  "mical_lexer",
@@ -260,7 +260,7 @@ dependencies = [
 
 [[package]]
 name = "mical_lexer"
-version = "0.0.1"
+version = "0.0.1-dev"
 dependencies = [
  "mical_syntax",
  "pretty_assertions",
@@ -268,7 +268,7 @@ dependencies = [
 
 [[package]]
 name = "mical_parser"
-version = "0.0.1"
+version = "0.0.1-dev"
 dependencies = [
  "insta",
  "mical_lexer",
@@ -278,7 +278,7 @@ dependencies = [
 
 [[package]]
 name = "mical_syntax"
-version = "0.0.1"
+version = "0.0.1-dev"
 dependencies = [
  "rowan",
 ]
@@ -914,7 +914,7 @@ checksum = "32ac00cd3f8ec9c1d33fb3e7958a82df6989c42d747bd326c822b1d625283547"
 
 [[package]]
 name = "xtask"
-version = "0.0.1"
+version = "0.0.1-dev"
 dependencies = [
  "anyhow",
  "colored",

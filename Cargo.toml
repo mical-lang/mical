@@ -9,7 +9,7 @@ members = [
 version = "0.0.1-dev"
 authors = ["ryota2357 <contact@ryota2357.com>"]
 edition = "2024"
-repository = "https://github.com/ryota2357/mical"
+repository = "https://github.com/mical-lang/mical"
 license = "MIT"
 
 [workspace.dependencies]
@@ -29,6 +29,7 @@ name = "mical-cli"
 version.workspace = true
 authors.workspace = true
 edition.workspace = true
+repository.workspace = true
 license.workspace = true
 description = "CLI for the MICAL configuration language"
 readme = "README.md"

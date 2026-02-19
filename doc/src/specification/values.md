@@ -37,7 +37,20 @@ d ''
 }
 ```
 
-Within a quoted string, the backslash `\` serves as an escape character: `\\` produces a literal backslash and `\"` (or `\'` for single-quoted strings) produces a literal quote. Newlines cannot appear inside a quoted string; reaching a newline before the closing quote produces the error: "missing closing quote".
+Within a quoted string, the backslash `\` serves as an escape character. The following escape sequences are recognized:
+
+| Sequence | Result              |
+|----------|---------------------|
+| `\\`     | Literal backslash   |
+| `\"`     | Double quote        |
+| `\'`     | Single quote        |
+| `\n`     | Newline (LF)        |
+| `\r`     | Carriage return (CR)|
+| `\t`     | Tab                 |
+
+All six sequences are recognized regardless of the quoting style (single or double). Any other character following a backslash is an error.
+
+Newlines cannot appear inside a quoted string; reaching a newline before the closing quote produces the error: "missing closing quote".
 
 A quoted string must be the entire value on the line. If any non-whitespace content appears after the closing quote, the error "unexpected token after value" is produced:
 

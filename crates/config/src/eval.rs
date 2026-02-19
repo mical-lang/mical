@@ -142,7 +142,7 @@ impl Eval for ast::Value {
                 Some(ValueRaw::Bool(val))
             }
             ast::Value::Integer(i) => {
-                let text = eval_integer(i, &mut ctx.errors)?;
+                let text = i.eval(ctx)?;
                 let id = ctx.arena.alloc(&text);
                 Some(ValueRaw::Integer(id))
             }
@@ -167,7 +167,7 @@ impl Eval for ast::Value {
                 Some(ValueRaw::String(id))
             }
             ast::Value::BlockString(bs) => {
-                let text = eval_block_string(bs);
+                let text = bs.eval(ctx);
                 let id = ctx.arena.alloc(&text);
                 Some(ValueRaw::String(id))
             }
@@ -175,40 +175,48 @@ impl Eval for ast::Value {
     }
 }
 
-fn eval_integer(integer: &ast::Integer, errors: &mut Vec<ConfigError>) -> Option<String> {
-    let mut text = String::new();
-    if let Some(sign) = integer.sign() {
-        text.push_str(sign.text());
-    }
-    match integer.numeral() {
-        Some(n) => text.push_str(n.text()),
-        None => {
-            errors.push(ConfigError::MissingSyntax { range: integer.syntax().text_range() });
-            return None;
+impl Eval for ast::Integer {
+    type Output = Option<String>;
+
+    fn eval(&self, ctx: &mut EvalContext) -> Self::Output {
+        let mut text = String::new();
+        if let Some(sign) = self.sign() {
+            text.push_str(sign.text());
         }
+        match self.numeral() {
+            Some(n) => text.push_str(n.text()),
+            None => {
+                ctx.errors.push(ConfigError::MissingSyntax { range: self.syntax().text_range() });
+                return None;
+            }
+        }
+        Some(text)
     }
-    Some(text)
 }
 
-fn eval_block_string(block: &ast::BlockString) -> String {
-    let (is_folded, chomp) = match block.header() {
-        Some(h) => {
-            let is_folded = h.style().is_some_and(|s| s.kind() == SyntaxKind::GT);
-            let chomp = h.chomp().map(|c| c.kind());
-            (is_folded, chomp)
+impl Eval for ast::BlockString {
+    type Output = String;
+
+    fn eval(&self, _ctx: &mut EvalContext) -> Self::Output {
+        let (is_folded, chomp) = match self.header() {
+            Some(h) => {
+                let is_folded = h.style().is_some_and(|s| s.kind() == SyntaxKind::GT);
+                let chomp = h.chomp().map(|c| c.kind());
+                (is_folded, chomp)
+            }
+            None => (false, None),
+        };
+
+        let lines: Vec<Option<String>> =
+            self.lines().map(|line| line.string().map(|t| t.text().to_string())).collect();
+
+        if lines.is_empty() {
+            return String::new();
         }
-        None => (false, None),
-    };
 
-    let lines: Vec<Option<String>> =
-        block.lines().map(|line| line.string().map(|t| t.text().to_string())).collect();
-
-    if lines.is_empty() {
-        return String::new();
+        let raw = if is_folded { fold_lines(&lines) } else { literal_lines(&lines) };
+        apply_chomp(&raw, chomp)
     }
-
-    let raw = if is_folded { fold_lines(&lines) } else { literal_lines(&lines) };
-    apply_chomp(&raw, chomp)
 }
 
 /// Literal style (`|`): newlines between lines are preserved as-is.

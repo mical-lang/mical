@@ -101,8 +101,9 @@ fn prefix_of_key_does_not_match() {
 
 #[test]
 fn many_duplicates_preserve_insertion_order() {
-    let entries: Vec<(&str, Value)> =
-        (0..100).map(|i| ("key", Value::Integer(if i % 2 == 0 { "even" } else { "odd" }))).collect();
+    let entries: Vec<(&str, Value)> = (0..100)
+        .map(|i| ("key", Value::Integer(if i % 2 == 0 { "even" } else { "odd" })))
+        .collect();
     let config = Config::from_kv_entries(entries);
     let result = q(&config, "key");
     assert_eq!(result.len(), 100);

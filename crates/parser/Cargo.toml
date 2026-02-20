@@ -3,6 +3,7 @@ name = "mical-cli-parser"
 version.workspace = true
 authors.workspace = true
 edition.workspace = true
+repository.workspace = true
 license.workspace = true
 description = "Internal parser for mical-cli"
 

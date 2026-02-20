@@ -3,6 +3,7 @@ name = "mical-cli-lexer"
 version.workspace = true
 authors.workspace = true
 edition.workspace = true
+repository.workspace = true
 license.workspace = true
 description = "Internal lexer for mical-cli"
 

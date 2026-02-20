@@ -1,0 +1,33 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# brace-not-block
+
+## Input
+
+```mical
+a {not a block
+b { also not
+c {
+d }not_close value
+
+```
+
+## Parser Error
+
+```
+51..51: missing closing '}' for prefix block
+
+```
+
+## JSON
+
+```json
+{
+  "a": "{not a block",
+  "b": "{ also not",
+  "cd": "}not_close value"
+}
+```
+
+vim:ft=markdown

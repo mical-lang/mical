@@ -1,0 +1,31 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# block-string-header-trailing-space
+
+## Input
+
+```mical
+a | 
+  literal
+b > 
+  fold
+c |+ 
+  keep
+d |- 
+  strip
+
+```
+
+## JSON
+
+```json
+{
+  "a": "literal\n",
+  "b": "fold\n",
+  "c": "keep\n",
+  "d": "strip"
+}
+```
+
+vim:ft=markdown

@@ -1,0 +1,30 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# block-string-insufficient-indent
+
+## Input
+
+```mical
+foo |
+  bar
+ baz
+
+```
+
+## Parser Error
+
+```
+12..12: block string line has insufficient indentation
+
+```
+
+## JSON
+
+```json
+{
+  "foo": "bar\n"
+}
+```
+
+vim:ft=markdown

@@ -1,0 +1,75 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# block-string-folded-strip
+
+## Input
+
+```
+text >-
+  This is a long
+  sentence split
+  over lines.
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..56
+  ENTRY@0..55
+    WORD_KEY@0..4
+      WORD@0..4 "text"
+    SPACE@4..5 " "
+    BLOCK_STRING@5..55
+      BLOCK_STRING_HEADER@5..8
+        GT@5..6 ">"
+        MINUS@6..7 "-"
+        NEWLINE@7..8 "\n"
+      SPACE@8..10 "  "
+      LINE_STRING@10..24
+        STRING@10..24 "This is a long"
+      NEWLINE@24..25 "\n"
+      SPACE@25..27 "  "
+      LINE_STRING@27..41
+        STRING@27..41 "sentence split"
+      NEWLINE@41..42 "\n"
+      SPACE@42..44 "  "
+      LINE_STRING@44..55
+        STRING@44..55 "over lines."
+  NEWLINE@55..56 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..4 "text",
+            },
+            value: BlockString {
+                header: BlockStringHeader {
+                    style: GT@5..6 ">",
+                    chomp: MINUS@6..7 "-",
+                },
+                lines: [
+                    LineString {
+                        string: STRING@10..24 "This is a long",
+                    },
+                    LineString {
+                        string: STRING@27..41 "sentence split",
+                    },
+                    LineString {
+                        string: STRING@44..55 "over lines.",
+                    },
+                ],
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

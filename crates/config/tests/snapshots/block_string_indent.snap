@@ -1,0 +1,51 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# block-string-indent
+
+## Input
+
+```mical
+a |
+  two space indent
+  second line
+b |
+    four space indent
+    second line
+c |
+	tab indent
+	second line
+d |
+  shallow
+    deep
+  back to shallow
+e |
+  first block
+f |
+    dedented body stops block
+
+```
+
+## Parser Error
+
+```
+83..83: unexpected token after value
+
+95..95: tab indent is not allowed, skipping this line
+
+```
+
+## JSON
+
+```json
+{
+  "a": "two space indent\nsecond line\n",
+  "b": "four space indent\nsecond line\n",
+  "c": "",
+  "d": "shallow\n  deep\nback to shallow\n",
+  "e": "first block\n",
+  "f": "dedented body stops block\n"
+}
+```
+
+vim:ft=markdown

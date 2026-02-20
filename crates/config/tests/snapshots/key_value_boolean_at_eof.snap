@@ -1,0 +1,20 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# key-value-boolean-at-eof
+
+## Input
+
+```mical
+b false
+```
+
+## JSON
+
+```json
+{
+  "b": false
+}
+```
+
+vim:ft=markdown

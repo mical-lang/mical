@@ -1,0 +1,27 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# prefix-block-deeply-nested
+
+## Input
+
+```mical
+a. {
+  b. {
+    c. {
+      key value
+    }
+  }
+}
+
+```
+
+## JSON
+
+```json
+{
+  "a.b.c.key": "value"
+}
+```
+
+vim:ft=markdown

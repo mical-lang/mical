@@ -1,0 +1,86 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# block-string-trailing-empty-lines
+
+## Input
+
+```
+a |
+  hello
+
+
+b value
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..22
+  ENTRY@0..13
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    BLOCK_STRING@2..13
+      BLOCK_STRING_HEADER@2..4
+        PIPE@2..3 "|"
+        NEWLINE@3..4 "\n"
+      SPACE@4..6 "  "
+      LINE_STRING@6..11
+        STRING@6..11 "hello"
+      NEWLINE@11..12 "\n"
+      LINE_STRING@12..12
+      NEWLINE@12..13 "\n"
+      LINE_STRING@13..13
+  NEWLINE@13..14 "\n"
+  ENTRY@14..21
+    WORD_KEY@14..15
+      WORD@14..15 "b"
+    SPACE@15..16 " "
+    LINE_STRING@16..21
+      STRING@16..21 "value"
+  NEWLINE@21..22 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: BlockString {
+                header: BlockStringHeader {
+                    style: PIPE@2..3 "|",
+                    chomp: none,
+                },
+                lines: [
+                    LineString {
+                        string: STRING@6..11 "hello",
+                    },
+                    LineString {
+                        string: none,
+                    },
+                    LineString {
+                        string: none,
+                    },
+                ],
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@14..15 "b",
+            },
+            value: LineString {
+                string: STRING@16..21 "value",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

@@ -17,6 +17,7 @@ pub enum CodegenKind {
     All,
     Syntax,
     Parser,
+    Config,
 }
 
 impl std::str::FromStr for CodegenKind {
@@ -27,6 +28,7 @@ impl std::str::FromStr for CodegenKind {
             "all" => Ok(CodegenKind::All),
             "syntax" => Ok(CodegenKind::Syntax),
             "parser" => Ok(CodegenKind::Parser),
+            "config" => Ok(CodegenKind::Config),
             unknown => Err(format!("Unknown codegen kind: {}", unknown)),
         }
     }

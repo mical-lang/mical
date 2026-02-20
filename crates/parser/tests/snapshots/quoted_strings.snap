@@ -1,0 +1,208 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# quoted-strings
+
+## Input
+
+```
+a "hello world"
+b 'single'
+c ""
+d ''
+e "hello\nworld"
+f "path\\to\\file"
+g "col1\tcol2"
+h "can\'t"
+i 'say \"hi\"'
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..114
+  ENTRY@0..15
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    QUOTED_STRING@2..15
+      DOUBLE_QUOTE@2..3 "\""
+      STRING@3..14 "hello world"
+      DOUBLE_QUOTE@14..15 "\""
+  NEWLINE@15..16 "\n"
+  ENTRY@16..26
+    WORD_KEY@16..17
+      WORD@16..17 "b"
+    SPACE@17..18 " "
+    QUOTED_STRING@18..26
+      SINGLE_QUOTE@18..19 "'"
+      STRING@19..25 "single"
+      SINGLE_QUOTE@25..26 "'"
+  NEWLINE@26..27 "\n"
+  ENTRY@27..31
+    WORD_KEY@27..28
+      WORD@27..28 "c"
+    SPACE@28..29 " "
+    QUOTED_STRING@29..31
+      DOUBLE_QUOTE@29..30 "\""
+      STRING@30..30 ""
+      DOUBLE_QUOTE@30..31 "\""
+  NEWLINE@31..32 "\n"
+  ENTRY@32..36
+    WORD_KEY@32..33
+      WORD@32..33 "d"
+    SPACE@33..34 " "
+    QUOTED_STRING@34..36
+      SINGLE_QUOTE@34..35 "'"
+      STRING@35..35 ""
+      SINGLE_QUOTE@35..36 "'"
+  NEWLINE@36..37 "\n"
+  ENTRY@37..53
+    WORD_KEY@37..38
+      WORD@37..38 "e"
+    SPACE@38..39 " "
+    QUOTED_STRING@39..53
+      DOUBLE_QUOTE@39..40 "\""
+      STRING@40..52 "hello\\nworld"
+      DOUBLE_QUOTE@52..53 "\""
+  NEWLINE@53..54 "\n"
+  ENTRY@54..72
+    WORD_KEY@54..55
+      WORD@54..55 "f"
+    SPACE@55..56 " "
+    QUOTED_STRING@56..72
+      DOUBLE_QUOTE@56..57 "\""
+      STRING@57..71 "path\\\\to\\\\file"
+      DOUBLE_QUOTE@71..72 "\""
+  NEWLINE@72..73 "\n"
+  ENTRY@73..87
+    WORD_KEY@73..74
+      WORD@73..74 "g"
+    SPACE@74..75 " "
+    QUOTED_STRING@75..87
+      DOUBLE_QUOTE@75..76 "\""
+      STRING@76..86 "col1\\tcol2"
+      DOUBLE_QUOTE@86..87 "\""
+  NEWLINE@87..88 "\n"
+  ENTRY@88..98
+    WORD_KEY@88..89
+      WORD@88..89 "h"
+    SPACE@89..90 " "
+    QUOTED_STRING@90..98
+      DOUBLE_QUOTE@90..91 "\""
+      STRING@91..97 "can\\'t"
+      DOUBLE_QUOTE@97..98 "\""
+  NEWLINE@98..99 "\n"
+  ENTRY@99..113
+    WORD_KEY@99..100
+      WORD@99..100 "i"
+    SPACE@100..101 " "
+    QUOTED_STRING@101..113
+      SINGLE_QUOTE@101..102 "'"
+      STRING@102..112 "say \\\"hi\\\""
+      SINGLE_QUOTE@112..113 "'"
+  NEWLINE@113..114 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: QuotedString {
+                open_quote: DOUBLE_QUOTE@2..3 "\"",
+                string: STRING@3..14 "hello world",
+                close_quote: DOUBLE_QUOTE@2..3 "\"",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@16..17 "b",
+            },
+            value: QuotedString {
+                open_quote: SINGLE_QUOTE@18..19 "'",
+                string: STRING@19..25 "single",
+                close_quote: SINGLE_QUOTE@18..19 "'",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@27..28 "c",
+            },
+            value: QuotedString {
+                open_quote: DOUBLE_QUOTE@29..30 "\"",
+                string: STRING@30..30 "",
+                close_quote: DOUBLE_QUOTE@29..30 "\"",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@32..33 "d",
+            },
+            value: QuotedString {
+                open_quote: SINGLE_QUOTE@34..35 "'",
+                string: STRING@35..35 "",
+                close_quote: SINGLE_QUOTE@34..35 "'",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@37..38 "e",
+            },
+            value: QuotedString {
+                open_quote: DOUBLE_QUOTE@39..40 "\"",
+                string: STRING@40..52 "hello\\nworld",
+                close_quote: DOUBLE_QUOTE@39..40 "\"",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@54..55 "f",
+            },
+            value: QuotedString {
+                open_quote: DOUBLE_QUOTE@56..57 "\"",
+                string: STRING@57..71 "path\\\\to\\\\file",
+                close_quote: DOUBLE_QUOTE@56..57 "\"",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@73..74 "g",
+            },
+            value: QuotedString {
+                open_quote: DOUBLE_QUOTE@75..76 "\"",
+                string: STRING@76..86 "col1\\tcol2",
+                close_quote: DOUBLE_QUOTE@75..76 "\"",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@88..89 "h",
+            },
+            value: QuotedString {
+                open_quote: DOUBLE_QUOTE@90..91 "\"",
+                string: STRING@91..97 "can\\'t",
+                close_quote: DOUBLE_QUOTE@90..91 "\"",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@99..100 "i",
+            },
+            value: QuotedString {
+                open_quote: SINGLE_QUOTE@101..102 "'",
+                string: STRING@102..112 "say \\\"hi\\\"",
+                close_quote: SINGLE_QUOTE@101..102 "'",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

@@ -1,0 +1,20 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# key-value-quoted-value-at-eof
+
+## Input
+
+```mical
+a "foo"
+```
+
+## JSON
+
+```json
+{
+  "a": "foo"
+}
+```
+
+vim:ft=markdown

@@ -1,0 +1,34 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# key-value-quoted-key-unexpected
+
+## Input
+
+```mical
+"quoted"ppp aaa
+'quoted'xxx bbb
+
+```
+
+## Parser Error
+
+```
+8..8: unexpected token after quoted key
+
+24..24: unexpected token after quoted key
+
+```
+
+## JSON
+
+```json
+{
+  "quoted": [
+    "aaa",
+    "bbb"
+  ]
+}
+```
+
+vim:ft=markdown

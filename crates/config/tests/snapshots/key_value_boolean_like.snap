@@ -1,0 +1,27 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# key-value-boolean-like
+
+## Input
+
+```mical
+a trueish
+b falsehood
+c true value
+d false value
+
+```
+
+## JSON
+
+```json
+{
+  "a": "trueish",
+  "b": "falsehood",
+  "c": "true value",
+  "d": "false value"
+}
+```
+
+vim:ft=markdown

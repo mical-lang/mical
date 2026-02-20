@@ -1,0 +1,194 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# prefix-block-values
+
+## Input
+
+```
+block {
+  str hello world
+  num 42
+  flag true
+  neg -1
+  quoted "value"
+}
+empty {
+}
+http_ {
+  port 80
+}
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..105
+  PREFIX_BLOCK@0..75
+    WORD_KEY@0..5
+      WORD@0..5 "block"
+    SPACE@5..6 " "
+    OPEN_BRACE@6..7 "{"
+    NEWLINE@7..8 "\n"
+    SPACE@8..10 "  "
+    ENTRY@10..25
+      WORD_KEY@10..13
+        WORD@10..13 "str"
+      SPACE@13..14 " "
+      LINE_STRING@14..25
+        STRING@14..25 "hello world"
+    NEWLINE@25..26 "\n"
+    SPACE@26..28 "  "
+    ENTRY@28..34
+      WORD_KEY@28..31
+        WORD@28..31 "num"
+      SPACE@31..32 " "
+      INTEGER@32..34
+        NUMERAL@32..34 "42"
+    NEWLINE@34..35 "\n"
+    SPACE@35..37 "  "
+    ENTRY@37..46
+      WORD_KEY@37..41
+        WORD@37..41 "flag"
+      SPACE@41..42 " "
+      BOOLEAN@42..46
+        TRUE@42..46 "true"
+    NEWLINE@46..47 "\n"
+    SPACE@47..49 "  "
+    ENTRY@49..55
+      WORD_KEY@49..52
+        WORD@49..52 "neg"
+      SPACE@52..53 " "
+      INTEGER@53..55
+        MINUS@53..54 "-"
+        NUMERAL@54..55 "1"
+    NEWLINE@55..56 "\n"
+    SPACE@56..58 "  "
+    ENTRY@58..72
+      WORD_KEY@58..64
+        WORD@58..64 "quoted"
+      SPACE@64..65 " "
+      QUOTED_STRING@65..72
+        DOUBLE_QUOTE@65..66 "\""
+        STRING@66..71 "value"
+        DOUBLE_QUOTE@71..72 "\""
+    NEWLINE@72..73 "\n"
+    CLOSE_BRACE@73..74 "}"
+    NEWLINE@74..75 "\n"
+  PREFIX_BLOCK@75..85
+    WORD_KEY@75..80
+      WORD@75..80 "empty"
+    SPACE@80..81 " "
+    OPEN_BRACE@81..82 "{"
+    NEWLINE@82..83 "\n"
+    CLOSE_BRACE@83..84 "}"
+    NEWLINE@84..85 "\n"
+  PREFIX_BLOCK@85..105
+    WORD_KEY@85..90
+      WORD@85..90 "http_"
+    SPACE@90..91 " "
+    OPEN_BRACE@91..92 "{"
+    NEWLINE@92..93 "\n"
+    SPACE@93..95 "  "
+    ENTRY@95..102
+      WORD_KEY@95..99
+        WORD@95..99 "port"
+      SPACE@99..100 " "
+      INTEGER@100..102
+        NUMERAL@100..102 "80"
+    NEWLINE@102..103 "\n"
+    CLOSE_BRACE@103..104 "}"
+    NEWLINE@104..105 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        PrefixBlock {
+            key: WordKey {
+                word: WORD@0..5 "block",
+            },
+            open_brace: OPEN_BRACE@6..7 "{",
+            items: [
+                Entry {
+                    key: WordKey {
+                        word: WORD@10..13 "str",
+                    },
+                    value: LineString {
+                        string: STRING@14..25 "hello world",
+                    },
+                },
+                Entry {
+                    key: WordKey {
+                        word: WORD@28..31 "num",
+                    },
+                    value: Integer {
+                        sign: none,
+                        numeral: NUMERAL@32..34 "42",
+                    },
+                },
+                Entry {
+                    key: WordKey {
+                        word: WORD@37..41 "flag",
+                    },
+                    value: Boolean {
+                        token: TRUE@42..46 "true",
+                    },
+                },
+                Entry {
+                    key: WordKey {
+                        word: WORD@49..52 "neg",
+                    },
+                    value: Integer {
+                        sign: MINUS@53..54 "-",
+                        numeral: NUMERAL@54..55 "1",
+                    },
+                },
+                Entry {
+                    key: WordKey {
+                        word: WORD@58..64 "quoted",
+                    },
+                    value: QuotedString {
+                        open_quote: DOUBLE_QUOTE@65..66 "\"",
+                        string: STRING@66..71 "value",
+                        close_quote: DOUBLE_QUOTE@65..66 "\"",
+                    },
+                },
+            ],
+            close_brace: CLOSE_BRACE@73..74 "}",
+        },
+        PrefixBlock {
+            key: WordKey {
+                word: WORD@75..80 "empty",
+            },
+            open_brace: OPEN_BRACE@81..82 "{",
+            items: [],
+            close_brace: CLOSE_BRACE@83..84 "}",
+        },
+        PrefixBlock {
+            key: WordKey {
+                word: WORD@85..90 "http_",
+            },
+            open_brace: OPEN_BRACE@91..92 "{",
+            items: [
+                Entry {
+                    key: WordKey {
+                        word: WORD@95..99 "port",
+                    },
+                    value: Integer {
+                        sign: none,
+                        numeral: NUMERAL@100..102 "80",
+                    },
+                },
+            ],
+            close_brace: CLOSE_BRACE@103..104 "}",
+        },
+    ],
+}
+```
+
+vim:ft=markdown

@@ -1,0 +1,68 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# key-value-quoted-key-empty
+
+## Input
+
+```
+"" value
+'' value
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..18
+  ENTRY@0..8
+    QUOTED_KEY@0..2
+      DOUBLE_QUOTE@0..1 "\""
+      STRING@1..1 ""
+      DOUBLE_QUOTE@1..2 "\""
+    SPACE@2..3 " "
+    LINE_STRING@3..8
+      STRING@3..8 "value"
+  NEWLINE@8..9 "\n"
+  ENTRY@9..17
+    QUOTED_KEY@9..11
+      SINGLE_QUOTE@9..10 "'"
+      STRING@10..10 ""
+      SINGLE_QUOTE@10..11 "'"
+    SPACE@11..12 " "
+    LINE_STRING@12..17
+      STRING@12..17 "value"
+  NEWLINE@17..18 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: QuotedKey {
+                open_quote: DOUBLE_QUOTE@0..1 "\"",
+                string: STRING@1..1 "",
+                close_quote: DOUBLE_QUOTE@0..1 "\"",
+            },
+            value: LineString {
+                string: STRING@3..8 "value",
+            },
+        },
+        Entry {
+            key: QuotedKey {
+                open_quote: SINGLE_QUOTE@9..10 "'",
+                string: STRING@10..10 "",
+                close_quote: SINGLE_QUOTE@9..10 "'",
+            },
+            value: LineString {
+                string: STRING@12..17 "value",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

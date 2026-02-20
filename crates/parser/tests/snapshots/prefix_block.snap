@@ -1,0 +1,82 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# prefix-block
+
+## Input
+
+```
+server {
+  .host localhost
+  .port 8080
+}
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..42
+  PREFIX_BLOCK@0..42
+    WORD_KEY@0..6
+      WORD@0..6 "server"
+    SPACE@6..7 " "
+    OPEN_BRACE@7..8 "{"
+    NEWLINE@8..9 "\n"
+    SPACE@9..11 "  "
+    ENTRY@11..26
+      WORD_KEY@11..16
+        WORD@11..16 ".host"
+      SPACE@16..17 " "
+      LINE_STRING@17..26
+        STRING@17..26 "localhost"
+    NEWLINE@26..27 "\n"
+    SPACE@27..29 "  "
+    ENTRY@29..39
+      WORD_KEY@29..34
+        WORD@29..34 ".port"
+      SPACE@34..35 " "
+      INTEGER@35..39
+        NUMERAL@35..39 "8080"
+    NEWLINE@39..40 "\n"
+    CLOSE_BRACE@40..41 "}"
+    NEWLINE@41..42 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        PrefixBlock {
+            key: WordKey {
+                word: WORD@0..6 "server",
+            },
+            open_brace: OPEN_BRACE@7..8 "{",
+            items: [
+                Entry {
+                    key: WordKey {
+                        word: WORD@11..16 ".host",
+                    },
+                    value: LineString {
+                        string: STRING@17..26 "localhost",
+                    },
+                },
+                Entry {
+                    key: WordKey {
+                        word: WORD@29..34 ".port",
+                    },
+                    value: Integer {
+                        sign: none,
+                        numeral: NUMERAL@35..39 "8080",
+                    },
+                },
+            ],
+            close_brace: CLOSE_BRACE@40..41 "}",
+        },
+    ],
+}
+```
+
+vim:ft=markdown

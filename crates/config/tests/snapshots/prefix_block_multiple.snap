@@ -1,0 +1,27 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# prefix-block-multiple
+
+## Input
+
+```mical
+first {
+  a 1
+}
+second {
+  b 2
+}
+
+```
+
+## JSON
+
+```json
+{
+  "firsta": 1,
+  "secondb": 2
+}
+```
+
+vim:ft=markdown

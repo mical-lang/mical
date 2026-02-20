@@ -1,0 +1,118 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# block-string-consecutive
+
+## Input
+
+```
+a |
+  first
+b |
+  second
+c >
+  folded
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..38
+  ENTRY@0..11
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    BLOCK_STRING@2..11
+      BLOCK_STRING_HEADER@2..4
+        PIPE@2..3 "|"
+        NEWLINE@3..4 "\n"
+      SPACE@4..6 "  "
+      LINE_STRING@6..11
+        STRING@6..11 "first"
+  NEWLINE@11..12 "\n"
+  ENTRY@12..24
+    WORD_KEY@12..13
+      WORD@12..13 "b"
+    SPACE@13..14 " "
+    BLOCK_STRING@14..24
+      BLOCK_STRING_HEADER@14..16
+        PIPE@14..15 "|"
+        NEWLINE@15..16 "\n"
+      SPACE@16..18 "  "
+      LINE_STRING@18..24
+        STRING@18..24 "second"
+  NEWLINE@24..25 "\n"
+  ENTRY@25..37
+    WORD_KEY@25..26
+      WORD@25..26 "c"
+    SPACE@26..27 " "
+    BLOCK_STRING@27..37
+      BLOCK_STRING_HEADER@27..29
+        GT@27..28 ">"
+        NEWLINE@28..29 "\n"
+      SPACE@29..31 "  "
+      LINE_STRING@31..37
+        STRING@31..37 "folded"
+  NEWLINE@37..38 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: BlockString {
+                header: BlockStringHeader {
+                    style: PIPE@2..3 "|",
+                    chomp: none,
+                },
+                lines: [
+                    LineString {
+                        string: STRING@6..11 "first",
+                    },
+                ],
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@12..13 "b",
+            },
+            value: BlockString {
+                header: BlockStringHeader {
+                    style: PIPE@14..15 "|",
+                    chomp: none,
+                },
+                lines: [
+                    LineString {
+                        string: STRING@18..24 "second",
+                    },
+                ],
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@25..26 "c",
+            },
+            value: BlockString {
+                header: BlockStringHeader {
+                    style: GT@27..28 ">",
+                    chomp: none,
+                },
+                lines: [
+                    LineString {
+                        string: STRING@31..37 "folded",
+                    },
+                ],
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

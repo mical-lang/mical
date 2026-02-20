@@ -1,0 +1,25 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# key-value-hash-value
+
+## Input
+
+```mical
+a hello # not comment
+b #hash_start
+c # space then text
+
+```
+
+## JSON
+
+```json
+{
+  "a": "hello # not comment",
+  "b": "#hash_start",
+  "c": "# space then text"
+}
+```
+
+vim:ft=markdown

@@ -1,7 +1,7 @@
 ---
 source: crates/config/tests/snapshots.rs
 ---
-# quoted_strings
+# quoted-strings
 
 ## Input
 
@@ -18,7 +18,7 @@ i 'say \"hi\"'
 
 ```
 
-## Json
+## JSON
 
 ```json
 {

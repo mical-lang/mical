@@ -1,0 +1,31 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# key-value-punct-key
+
+## Input
+
+```mical
+| value
+> value
++ value
+- value
+{ value
+} value
+
+```
+
+## JSON
+
+```json
+{
+  "+": "value",
+  "-": "value",
+  ">": "value",
+  "{": "value",
+  "|": "value",
+  "}": "value"
+}
+```
+
+vim:ft=markdown

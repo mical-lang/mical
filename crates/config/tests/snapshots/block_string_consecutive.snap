@@ -1,0 +1,28 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# block-string-consecutive
+
+## Input
+
+```mical
+a |
+  first
+b |
+  second
+c >
+  folded
+
+```
+
+## JSON
+
+```json
+{
+  "a": "first\n",
+  "b": "second\n",
+  "c": "folded\n"
+}
+```
+
+vim:ft=markdown

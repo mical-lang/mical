@@ -1,7 +1,7 @@
 ---
 source: crates/config/tests/snapshots.rs
 ---
-# invalid_escape
+# invalid-escape
 
 ## Input
 
@@ -11,13 +11,13 @@ b value
 
 ```
 
-## Error
+## Config Error
 
 ```
 invalid escape sequence '\x' at 6..8
 ```
 
-## Json
+## JSON
 
 ```json
 {

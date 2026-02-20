@@ -1,7 +1,7 @@
 ---
 source: crates/config/tests/snapshots.rs
 ---
-# comments_directives
+# comments-directives
 
 ## Input
 
@@ -13,7 +13,7 @@ b 2
 
 ```
 
-## Json
+## JSON
 
 ```json
 {

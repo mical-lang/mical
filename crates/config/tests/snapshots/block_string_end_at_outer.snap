@@ -1,0 +1,24 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# block-string-end-at-outer
+
+## Input
+
+```mical
+foo |
+  line1
+bar baz
+
+```
+
+## JSON
+
+```json
+{
+  "bar": "baz",
+  "foo": "line1\n"
+}
+```
+
+vim:ft=markdown

@@ -1,0 +1,67 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# block-string-strip
+
+## Input
+
+```
+key |-
+  hello
+  world
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..23
+  ENTRY@0..22
+    WORD_KEY@0..3
+      WORD@0..3 "key"
+    SPACE@3..4 " "
+    BLOCK_STRING@4..22
+      BLOCK_STRING_HEADER@4..7
+        PIPE@4..5 "|"
+        MINUS@5..6 "-"
+        NEWLINE@6..7 "\n"
+      SPACE@7..9 "  "
+      LINE_STRING@9..14
+        STRING@9..14 "hello"
+      NEWLINE@14..15 "\n"
+      SPACE@15..17 "  "
+      LINE_STRING@17..22
+        STRING@17..22 "world"
+  NEWLINE@22..23 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..3 "key",
+            },
+            value: BlockString {
+                header: BlockStringHeader {
+                    style: PIPE@4..5 "|",
+                    chomp: MINUS@5..6 "-",
+                },
+                lines: [
+                    LineString {
+                        string: STRING@9..14 "hello",
+                    },
+                    LineString {
+                        string: STRING@17..22 "world",
+                    },
+                ],
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

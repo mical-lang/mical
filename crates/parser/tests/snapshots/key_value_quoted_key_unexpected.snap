@@ -1,0 +1,87 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# key-value-quoted-key-unexpected
+
+## Input
+
+```
+"quoted"ppp aaa
+'quoted'xxx bbb
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..32
+  ENTRY@0..15
+    QUOTED_KEY@0..11
+      DOUBLE_QUOTE@0..1 "\""
+      STRING@1..7 "quoted"
+      DOUBLE_QUOTE@7..8 "\""
+      ERROR@8..11
+        WORD@8..11 "ppp"
+    SPACE@11..12 " "
+    LINE_STRING@12..15
+      STRING@12..15 "aaa"
+  NEWLINE@15..16 "\n"
+  ENTRY@16..31
+    QUOTED_KEY@16..27
+      SINGLE_QUOTE@16..17 "'"
+      STRING@17..23 "quoted"
+      SINGLE_QUOTE@23..24 "'"
+      ERROR@24..27
+        WORD@24..27 "xxx"
+    SPACE@27..28 " "
+    LINE_STRING@28..31
+      STRING@28..31 "bbb"
+  NEWLINE@31..32 "\n"
+```
+
+## Syntax Error
+
+```
+[
+    SyntaxError {
+        message: "unexpected token after quoted key",
+        range: 8..8,
+    },
+    SyntaxError {
+        message: "unexpected token after quoted key",
+        range: 24..24,
+    },
+]
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: QuotedKey {
+                open_quote: DOUBLE_QUOTE@0..1 "\"",
+                string: STRING@1..7 "quoted",
+                close_quote: DOUBLE_QUOTE@0..1 "\"",
+            },
+            value: LineString {
+                string: STRING@12..15 "aaa",
+            },
+        },
+        Entry {
+            key: QuotedKey {
+                open_quote: SINGLE_QUOTE@16..17 "'",
+                string: STRING@17..23 "quoted",
+                close_quote: SINGLE_QUOTE@16..17 "'",
+            },
+            value: LineString {
+                string: STRING@28..31 "bbb",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

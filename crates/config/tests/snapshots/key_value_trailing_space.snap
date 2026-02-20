@@ -1,0 +1,29 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# key-value-trailing-space
+
+## Input
+
+```mical
+a true 
+b 42 
+c hello 
+d -10 
+e +5 
+
+```
+
+## JSON
+
+```json
+{
+  "a": true,
+  "b": 42,
+  "c": "hello",
+  "d": -10,
+  "e": 5
+}
+```
+
+vim:ft=markdown

@@ -1,0 +1,60 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# key-value-brace-in-key
+
+## Input
+
+```
+foo{ value
+a{b value
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..21
+  ENTRY@0..10
+    WORD_KEY@0..4
+      WORD@0..4 "foo{"
+    SPACE@4..5 " "
+    LINE_STRING@5..10
+      STRING@5..10 "value"
+  NEWLINE@10..11 "\n"
+  ENTRY@11..20
+    WORD_KEY@11..14
+      WORD@11..14 "a{b"
+    SPACE@14..15 " "
+    LINE_STRING@15..20
+      STRING@15..20 "value"
+  NEWLINE@20..21 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..4 "foo{",
+            },
+            value: LineString {
+                string: STRING@5..10 "value",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@11..14 "a{b",
+            },
+            value: LineString {
+                string: STRING@15..20 "value",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

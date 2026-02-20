@@ -1,7 +1,7 @@
 ---
 source: crates/parser/tests/snapshots.rs
 ---
-# block_string_fallback
+# block-string-fallback
 
 ## Input
 

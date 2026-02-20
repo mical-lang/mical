@@ -1,0 +1,9 @@
+{
+  "after_block": "done",
+  "count": 42,
+  "flag": true,
+  "name": "hello world # not comment",
+  "negative": -10,
+  "sectiondesc": "block line\n",
+  "sectioninnerkey": "value"
+}

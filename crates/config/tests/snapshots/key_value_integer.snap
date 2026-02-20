@@ -1,0 +1,31 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# key-value-integer
+
+## Input
+
+```mical
+a 0
+b 42
+c +1
+d -1
+e +0
+f -0
+
+```
+
+## JSON
+
+```json
+{
+  "a": 0,
+  "b": 42,
+  "c": 1,
+  "d": -1,
+  "e": 0,
+  "f": 0
+}
+```
+
+vim:ft=markdown

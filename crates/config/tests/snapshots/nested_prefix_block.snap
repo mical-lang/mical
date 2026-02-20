@@ -1,7 +1,7 @@
 ---
 source: crates/config/tests/snapshots.rs
 ---
-# nested_prefix_block
+# nested-prefix-block
 
 ## Input
 
@@ -14,7 +14,7 @@ a. {
 
 ```
 
-## Json
+## JSON
 
 ```json
 {

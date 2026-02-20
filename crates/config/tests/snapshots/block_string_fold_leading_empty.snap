@@ -1,0 +1,24 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# block-string-fold-leading-empty
+
+## Input
+
+```mical
+key >
+
+  hello
+  world
+
+```
+
+## JSON
+
+```json
+{
+  "key": "\nhello world\n"
+}
+```
+
+vim:ft=markdown

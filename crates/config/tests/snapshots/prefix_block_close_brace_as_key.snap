@@ -1,0 +1,23 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# prefix-block-close-brace-as-key
+
+## Input
+
+```mical
+section {
+  } value
+}
+
+```
+
+## JSON
+
+```json
+{
+  "section}": "value"
+}
+```
+
+vim:ft=markdown

@@ -1,7 +1,7 @@
 ---
 source: crates/config/tests/snapshots.rs
 ---
-# block_string_extra_indent
+# block-string-extra-indent
 
 ## Input
 
@@ -12,7 +12,7 @@ foo |
 
 ```
 
-## Json
+## JSON
 
 ```json
 {

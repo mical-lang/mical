@@ -1,0 +1,26 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# block-string-chomp-keep-trailing
+
+## Input
+
+```mical
+key |+
+  line
+
+
+foo bar
+
+```
+
+## JSON
+
+```json
+{
+  "foo": "bar",
+  "key": "line\n\n\n"
+}
+```
+
+vim:ft=markdown

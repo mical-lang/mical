@@ -1,7 +1,7 @@
 ---
 source: crates/config/tests/snapshots.rs
 ---
-# block_string_empty_body
+# block-string-empty-body
 
 ## Input
 
@@ -12,7 +12,7 @@ a b
 
 ```
 
-## Json
+## JSON
 
 ```json
 {

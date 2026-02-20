@@ -1,0 +1,42 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# key-value-boolean-at-eof
+
+## Input
+
+```
+b false
+```
+
+## CST
+
+```
+SOURCE_FILE@0..7
+  ENTRY@0..7
+    WORD_KEY@0..1
+      WORD@0..1 "b"
+    SPACE@1..2 " "
+    BOOLEAN@2..7
+      FALSE@2..7 "false"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "b",
+            },
+            value: Boolean {
+                token: FALSE@2..7 "false",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

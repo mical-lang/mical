@@ -1,0 +1,29 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# block-string-fallback
+
+## Input
+
+```mical
+a |not block
+b >not fold
+c |+not block
+d |abc
+e > text after
+
+```
+
+## JSON
+
+```json
+{
+  "a": "|not block",
+  "b": ">not fold",
+  "c": "|+not block",
+  "d": "|abc",
+  "e": "> text after"
+}
+```
+
+vim:ft=markdown

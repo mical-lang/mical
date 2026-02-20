@@ -1,0 +1,76 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# key-value-line-string
+
+## Input
+
+```
+key value
+name hello world
+path /usr/local/bin
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..47
+  ENTRY@0..9
+    WORD_KEY@0..3
+      WORD@0..3 "key"
+    SPACE@3..4 " "
+    LINE_STRING@4..9
+      STRING@4..9 "value"
+  NEWLINE@9..10 "\n"
+  ENTRY@10..26
+    WORD_KEY@10..14
+      WORD@10..14 "name"
+    SPACE@14..15 " "
+    LINE_STRING@15..26
+      STRING@15..26 "hello world"
+  NEWLINE@26..27 "\n"
+  ENTRY@27..46
+    WORD_KEY@27..31
+      WORD@27..31 "path"
+    SPACE@31..32 " "
+    LINE_STRING@32..46
+      STRING@32..46 "/usr/local/bin"
+  NEWLINE@46..47 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..3 "key",
+            },
+            value: LineString {
+                string: STRING@4..9 "value",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@10..14 "name",
+            },
+            value: LineString {
+                string: STRING@15..26 "hello world",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@27..31 "path",
+            },
+            value: LineString {
+                string: STRING@32..46 "/usr/local/bin",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

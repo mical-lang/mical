@@ -3,56 +3,572 @@
 
 mod utils;
 #[test]
+fn basic_entries() {
+    let source = include_str!("../../../test-suite/basic-entries/input.mical");
+    let snapshot = utils::make_snapshot("basic-entries", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_basic() {
+    let source = include_str!("../../../test-suite/block-string-basic/input.mical");
+    let snapshot = utils::make_snapshot("block-string-basic", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_chomp_empty() {
+    let source = include_str!("../../../test-suite/block-string-chomp-empty/input.mical");
+    let snapshot = utils::make_snapshot("block-string-chomp-empty", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_chomp_keep() {
+    let source = include_str!("../../../test-suite/block-string-chomp-keep/input.mical");
+    let snapshot = utils::make_snapshot("block-string-chomp-keep", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_chomp_keep_trailing() {
+    let source = include_str!("../../../test-suite/block-string-chomp-keep-trailing/input.mical");
+    let snapshot = utils::make_snapshot("block-string-chomp-keep-trailing", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_chomp_strip() {
+    let source = include_str!("../../../test-suite/block-string-chomp-strip/input.mical");
+    let snapshot = utils::make_snapshot("block-string-chomp-strip", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_clip_trailing() {
+    let source = include_str!("../../../test-suite/block-string-clip-trailing/input.mical");
+    let snapshot = utils::make_snapshot("block-string-clip-trailing", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_consecutive() {
+    let source = include_str!("../../../test-suite/block-string-consecutive/input.mical");
+    let snapshot = utils::make_snapshot("block-string-consecutive", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_empty() {
+    let source = include_str!("../../../test-suite/block-string-empty/input.mical");
+    let snapshot = utils::make_snapshot("block-string-empty", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_empty_body() {
+    let source = include_str!("../../../test-suite/block-string-empty-body/input.mical");
+    let snapshot = utils::make_snapshot("block-string-empty-body", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_empty_line() {
+    let source = include_str!("../../../test-suite/block-string-empty-line/input.mical");
+    let snapshot = utils::make_snapshot("block-string-empty-line", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_empty_lines_inside() {
+    let source = include_str!("../../../test-suite/block-string-empty-lines-inside/input.mical");
+    let snapshot = utils::make_snapshot("block-string-empty-lines-inside", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_end_at_outer() {
+    let source = include_str!("../../../test-suite/block-string-end-at-outer/input.mical");
+    let snapshot = utils::make_snapshot("block-string-end-at-outer", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_eof() {
+    let source = include_str!("../../../test-suite/block-string-eof/input.mical");
+    let snapshot = utils::make_snapshot("block-string-eof", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_eof_no_newline() {
+    let source = include_str!("../../../test-suite/block-string-eof-no-newline/input.mical");
+    let snapshot = utils::make_snapshot("block-string-eof-no-newline", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_extra_indent() {
+    let source = include_str!("../../../test-suite/block-string-extra-indent/input.mical");
+    let snapshot = utils::make_snapshot("block-string-extra-indent", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
 fn block_string_fallback() {
-    let source = include_str!("./cases/block_string_fallback.mical");
-    let snapshot = utils::make_snapshot("block_string_fallback", source);
-    utils::assert_snapshot!("", snapshot);
+    let source = include_str!("../../../test-suite/block-string-fallback/input.mical");
+    let snapshot = utils::make_snapshot("block-string-fallback", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_fold_leading_empty() {
+    let source = include_str!("../../../test-suite/block-string-fold-leading-empty/input.mical");
+    let snapshot = utils::make_snapshot("block-string-fold-leading-empty", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_fold_style() {
+    let source = include_str!("../../../test-suite/block-string-fold-style/input.mical");
+    let snapshot = utils::make_snapshot("block-string-fold-style", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_fold_trailing_empty() {
+    let source = include_str!("../../../test-suite/block-string-fold-trailing-empty/input.mical");
+    let snapshot = utils::make_snapshot("block-string-fold-trailing-empty", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_folded() {
+    let source = include_str!("../../../test-suite/block-string-folded/input.mical");
+    let snapshot = utils::make_snapshot("block-string-folded", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_folded_keep() {
+    let source = include_str!("../../../test-suite/block-string-folded-keep/input.mical");
+    let snapshot = utils::make_snapshot("block-string-folded-keep", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_folded_strip() {
+    let source = include_str!("../../../test-suite/block-string-folded-strip/input.mical");
+    let snapshot = utils::make_snapshot("block-string-folded-strip", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_header_trailing_space() {
+    let source = include_str!("../../../test-suite/block-string-header-trailing-space/input.mical");
+    let snapshot = utils::make_snapshot("block-string-header-trailing-space", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_in_prefix() {
+    let source = include_str!("../../../test-suite/block-string-in-prefix/input.mical");
+    let snapshot = utils::make_snapshot("block-string-in-prefix", source);
+    utils::assert_snapshot!(snapshot);
 }
 #[test]
 fn block_string_indent() {
-    let source = include_str!("./cases/block_string_indent.mical");
-    let snapshot = utils::make_snapshot("block_string_indent", source);
-    utils::assert_snapshot!("", snapshot);
+    let source = include_str!("../../../test-suite/block-string-indent/input.mical");
+    let snapshot = utils::make_snapshot("block-string-indent", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_insufficient_indent() {
+    let source = include_str!("../../../test-suite/block-string-insufficient-indent/input.mical");
+    let snapshot = utils::make_snapshot("block-string-insufficient-indent", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_keep() {
+    let source = include_str!("../../../test-suite/block-string-keep/input.mical");
+    let snapshot = utils::make_snapshot("block-string-keep", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_keep_multi_trailing() {
+    let source = include_str!("../../../test-suite/block-string-keep-multi-trailing/input.mical");
+    let snapshot = utils::make_snapshot("block-string-keep-multi-trailing", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_leading_empty_line() {
+    let source = include_str!("../../../test-suite/block-string-leading-empty-line/input.mical");
+    let snapshot = utils::make_snapshot("block-string-leading-empty-line", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_nested_indent() {
+    let source = include_str!("../../../test-suite/block-string-nested-indent/input.mical");
+    let snapshot = utils::make_snapshot("block-string-nested-indent", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_newline() {
+    let source = include_str!("../../../test-suite/block-string-newline/input.mical");
+    let snapshot = utils::make_snapshot("block-string-newline", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_only_empty_lines() {
+    let source = include_str!("../../../test-suite/block-string-only-empty-lines/input.mical");
+    let snapshot = utils::make_snapshot("block-string-only-empty-lines", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_strip() {
+    let source = include_str!("../../../test-suite/block-string-strip/input.mical");
+    let snapshot = utils::make_snapshot("block-string-strip", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_trailing_empty_lines() {
+    let source = include_str!("../../../test-suite/block-string-trailing-empty-lines/input.mical");
+    let snapshot = utils::make_snapshot("block-string-trailing-empty-lines", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_whitespace_only_line() {
+    let source = include_str!("../../../test-suite/block-string-whitespace-only-line/input.mical");
+    let snapshot = utils::make_snapshot("block-string-whitespace-only-line", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_whitespace_only_shallow() {
+    let source = include_str!("../../../test-suite/block-string-whitespace-only-shallow/input.mical");
+    let snapshot = utils::make_snapshot("block-string-whitespace-only-shallow", source);
+    utils::assert_snapshot!(snapshot);
 }
 #[test]
 fn brace_after_key() {
-    let source = include_str!("./cases/brace_after_key.mical");
-    let snapshot = utils::make_snapshot("brace_after_key", source);
-    utils::assert_snapshot!("", snapshot);
+    let source = include_str!("../../../test-suite/brace-after-key/input.mical");
+    let snapshot = utils::make_snapshot("brace-after-key", source);
+    utils::assert_snapshot!(snapshot);
 }
 #[test]
 fn brace_not_block() {
-    let source = include_str!("./cases/brace_not_block.mical");
-    let snapshot = utils::make_snapshot("brace_not_block", source);
-    utils::assert_snapshot!("", snapshot);
+    let source = include_str!("../../../test-suite/brace-not-block/input.mical");
+    let snapshot = utils::make_snapshot("brace-not-block", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn comments_directives() {
+    let source = include_str!("../../../test-suite/comments-directives/input.mical");
+    let snapshot = utils::make_snapshot("comments-directives", source);
+    utils::assert_snapshot!(snapshot);
 }
 #[test]
 fn directive() {
-    let source = include_str!("./cases/directive.mical");
+    let source = include_str!("../../../test-suite/directive/input.mical");
     let snapshot = utils::make_snapshot("directive", source);
-    utils::assert_snapshot!("", snapshot);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn duplicate_keys() {
+    let source = include_str!("../../../test-suite/duplicate-keys/input.mical");
+    let snapshot = utils::make_snapshot("duplicate-keys", source);
+    utils::assert_snapshot!(snapshot);
 }
 #[test]
 fn empty() {
-    let source = include_str!("./cases/empty.mical");
+    let source = include_str!("../../../test-suite/empty/input.mical");
     let snapshot = utils::make_snapshot("empty", source);
-    utils::assert_snapshot!("", snapshot);
+    utils::assert_snapshot!(snapshot);
 }
 #[test]
 fn hash_edge() {
-    let source = include_str!("./cases/hash_edge.mical");
-    let snapshot = utils::make_snapshot("hash_edge", source);
-    utils::assert_snapshot!("", snapshot);
+    let source = include_str!("../../../test-suite/hash-edge/input.mical");
+    let snapshot = utils::make_snapshot("hash-edge", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn invalid_escape() {
+    let source = include_str!("../../../test-suite/invalid-escape/input.mical");
+    let snapshot = utils::make_snapshot("invalid-escape", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn key_value_boolean() {
+    let source = include_str!("../../../test-suite/key-value-boolean/input.mical");
+    let snapshot = utils::make_snapshot("key-value-boolean", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn key_value_boolean_at_eof() {
+    let source = include_str!("../../../test-suite/key-value-boolean-at-eof/input.mical");
+    let snapshot = utils::make_snapshot("key-value-boolean-at-eof", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn key_value_boolean_like() {
+    let source = include_str!("../../../test-suite/key-value-boolean-like/input.mical");
+    let snapshot = utils::make_snapshot("key-value-boolean-like", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn key_value_brace_in_key() {
+    let source = include_str!("../../../test-suite/key-value-brace-in-key/input.mical");
+    let snapshot = utils::make_snapshot("key-value-brace-in-key", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn key_value_hash_value() {
+    let source = include_str!("../../../test-suite/key-value-hash-value/input.mical");
+    let snapshot = utils::make_snapshot("key-value-hash-value", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn key_value_indented_quoted_key() {
+    let source = include_str!("../../../test-suite/key-value-indented-quoted-key/input.mical");
+    let snapshot = utils::make_snapshot("key-value-indented-quoted-key", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn key_value_indented_word_key() {
+    let source = include_str!("../../../test-suite/key-value-indented-word-key/input.mical");
+    let snapshot = utils::make_snapshot("key-value-indented-word-key", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn key_value_integer() {
+    let source = include_str!("../../../test-suite/key-value-integer/input.mical");
+    let snapshot = utils::make_snapshot("key-value-integer", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn key_value_integer_at_eof() {
+    let source = include_str!("../../../test-suite/key-value-integer-at-eof/input.mical");
+    let snapshot = utils::make_snapshot("key-value-integer-at-eof", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn key_value_integer_like() {
+    let source = include_str!("../../../test-suite/key-value-integer-like/input.mical");
+    let snapshot = utils::make_snapshot("key-value-integer-like", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn key_value_line_string() {
+    let source = include_str!("../../../test-suite/key-value-line-string/input.mical");
+    let snapshot = utils::make_snapshot("key-value-line-string", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn key_value_missing_value() {
+    let source = include_str!("../../../test-suite/key-value-missing-value/input.mical");
+    let snapshot = utils::make_snapshot("key-value-missing-value", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn key_value_punct_key() {
+    let source = include_str!("../../../test-suite/key-value-punct-key/input.mical");
+    let snapshot = utils::make_snapshot("key-value-punct-key", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn key_value_quoted_in_line_string() {
+    let source = include_str!("../../../test-suite/key-value-quoted-in-line-string/input.mical");
+    let snapshot = utils::make_snapshot("key-value-quoted-in-line-string", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn key_value_quoted_key() {
+    let source = include_str!("../../../test-suite/key-value-quoted-key/input.mical");
+    let snapshot = utils::make_snapshot("key-value-quoted-key", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn key_value_quoted_key_empty() {
+    let source = include_str!("../../../test-suite/key-value-quoted-key-empty/input.mical");
+    let snapshot = utils::make_snapshot("key-value-quoted-key-empty", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn key_value_quoted_key_unclosed() {
+    let source = include_str!("../../../test-suite/key-value-quoted-key-unclosed/input.mical");
+    let snapshot = utils::make_snapshot("key-value-quoted-key-unclosed", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn key_value_quoted_key_unexpected() {
+    let source = include_str!("../../../test-suite/key-value-quoted-key-unexpected/input.mical");
+    let snapshot = utils::make_snapshot("key-value-quoted-key-unexpected", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn key_value_quoted_key_with_space() {
+    let source = include_str!("../../../test-suite/key-value-quoted-key-with-space/input.mical");
+    let snapshot = utils::make_snapshot("key-value-quoted-key-with-space", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn key_value_quoted_string() {
+    let source = include_str!("../../../test-suite/key-value-quoted-string/input.mical");
+    let snapshot = utils::make_snapshot("key-value-quoted-string", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn key_value_quoted_value_at_eof() {
+    let source = include_str!("../../../test-suite/key-value-quoted-value-at-eof/input.mical");
+    let snapshot = utils::make_snapshot("key-value-quoted-value-at-eof", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn key_value_quoted_value_trailing() {
+    let source = include_str!("../../../test-suite/key-value-quoted-value-trailing/input.mical");
+    let snapshot = utils::make_snapshot("key-value-quoted-value-trailing", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn key_value_sign_integer_at_eof() {
+    let source = include_str!("../../../test-suite/key-value-sign-integer-at-eof/input.mical");
+    let snapshot = utils::make_snapshot("key-value-sign-integer-at-eof", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn key_value_trailing_space() {
+    let source = include_str!("../../../test-suite/key-value-trailing-space/input.mical");
+    let snapshot = utils::make_snapshot("key-value-trailing-space", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn key_value_wide_separator() {
+    let source = include_str!("../../../test-suite/key-value-wide-separator/input.mical");
+    let snapshot = utils::make_snapshot("key-value-wide-separator", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn key_value_word_key() {
+    let source = include_str!("../../../test-suite/key-value-word-key/input.mical");
+    let snapshot = utils::make_snapshot("key-value-word-key", source);
+    utils::assert_snapshot!(snapshot);
 }
 #[test]
 fn mixed() {
-    let source = include_str!("./cases/mixed.mical");
+    let source = include_str!("../../../test-suite/mixed/input.mical");
     let snapshot = utils::make_snapshot("mixed", source);
-    utils::assert_snapshot!("", snapshot);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn nested_prefix_block() {
+    let source = include_str!("../../../test-suite/nested-prefix-block/input.mical");
+    let snapshot = utils::make_snapshot("nested-prefix-block", source);
+    utils::assert_snapshot!(snapshot);
 }
 #[test]
 fn newline() {
-    let source = include_str!("./cases/newline.mical");
+    let source = include_str!("../../../test-suite/newline/input.mical");
     let snapshot = utils::make_snapshot("newline", source);
-    utils::assert_snapshot!("", snapshot);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn prefix_block() {
+    let source = include_str!("../../../test-suite/prefix-block/input.mical");
+    let snapshot = utils::make_snapshot("prefix-block", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn prefix_block_after_entry() {
+    let source = include_str!("../../../test-suite/prefix-block-after-entry/input.mical");
+    let snapshot = utils::make_snapshot("prefix-block-after-entry", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn prefix_block_basic() {
+    let source = include_str!("../../../test-suite/prefix-block-basic/input.mical");
+    let snapshot = utils::make_snapshot("prefix-block-basic", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn prefix_block_block_string_nested() {
+    let source = include_str!("../../../test-suite/prefix-block-block-string-nested/input.mical");
+    let snapshot = utils::make_snapshot("prefix-block-block-string-nested", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn prefix_block_close_brace_as_key() {
+    let source = include_str!("../../../test-suite/prefix-block-close-brace-as-key/input.mical");
+    let snapshot = utils::make_snapshot("prefix-block-close-brace-as-key", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn prefix_block_deeply_nested() {
+    let source = include_str!("../../../test-suite/prefix-block-deeply-nested/input.mical");
+    let snapshot = utils::make_snapshot("prefix-block-deeply-nested", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn prefix_block_empty() {
+    let source = include_str!("../../../test-suite/prefix-block-empty/input.mical");
+    let snapshot = utils::make_snapshot("prefix-block-empty", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn prefix_block_empty_with_eof() {
+    let source = include_str!("../../../test-suite/prefix-block-empty-with-eof/input.mical");
+    let snapshot = utils::make_snapshot("prefix-block-empty-with-eof", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn prefix_block_eof_no_newline() {
+    let source = include_str!("../../../test-suite/prefix-block-eof-no-newline/input.mical");
+    let snapshot = utils::make_snapshot("prefix-block-eof-no-newline", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn prefix_block_missing_close() {
+    let source = include_str!("../../../test-suite/prefix-block-missing-close/input.mical");
+    let snapshot = utils::make_snapshot("prefix-block-missing-close", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn prefix_block_missing_close_with_eof() {
+    let source = include_str!("../../../test-suite/prefix-block-missing-close-with-eof/input.mical");
+    let snapshot = utils::make_snapshot("prefix-block-missing-close-with-eof", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn prefix_block_multiple() {
+    let source = include_str!("../../../test-suite/prefix-block-multiple/input.mical");
+    let snapshot = utils::make_snapshot("prefix-block-multiple", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn prefix_block_nested() {
+    let source = include_str!("../../../test-suite/prefix-block-nested/input.mical");
+    let snapshot = utils::make_snapshot("prefix-block-nested", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn prefix_block_quoted_key() {
+    let source = include_str!("../../../test-suite/prefix-block-quoted-key/input.mical");
+    let snapshot = utils::make_snapshot("prefix-block-quoted-key", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn prefix_block_trailing_space() {
+    let source = include_str!("../../../test-suite/prefix-block-trailing-space/input.mical");
+    let snapshot = utils::make_snapshot("prefix-block-trailing-space", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn prefix_block_values() {
+    let source = include_str!("../../../test-suite/prefix-block-values/input.mical");
+    let snapshot = utils::make_snapshot("prefix-block-values", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn prefix_block_with_values() {
+    let source = include_str!("../../../test-suite/prefix-block-with-values/input.mical");
+    let snapshot = utils::make_snapshot("prefix-block-with-values", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn quoted_keys() {
+    let source = include_str!("../../../test-suite/quoted-keys/input.mical");
+    let snapshot = utils::make_snapshot("quoted-keys", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn quoted_strings() {
+    let source = include_str!("../../../test-suite/quoted-strings/input.mical");
+    let snapshot = utils::make_snapshot("quoted-strings", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn shebang() {
+    let source = include_str!("../../../test-suite/shebang/input.mical");
+    let snapshot = utils::make_snapshot("shebang", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn typed_values() {
+    let source = include_str!("../../../test-suite/typed-values/input.mical");
+    let snapshot = utils::make_snapshot("typed-values", source);
+    utils::assert_snapshot!(snapshot);
 }

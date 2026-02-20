@@ -1,7 +1,7 @@
 ---
 source: crates/config/tests/snapshots.rs
 ---
-# prefix_block_values
+# prefix-block-values
 
 ## Input
 
@@ -21,7 +21,7 @@ http_ {
 
 ```
 
-## Json
+## JSON
 
 ```json
 {

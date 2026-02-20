@@ -1,0 +1,99 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# key-value-indented-word-key
+
+## Input
+
+```
+  key value
+  count 42
+  flag true
+  neg -1
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..44
+  SPACE@0..2 "  "
+  ENTRY@2..11
+    WORD_KEY@2..5
+      WORD@2..5 "key"
+    SPACE@5..6 " "
+    LINE_STRING@6..11
+      STRING@6..11 "value"
+  NEWLINE@11..12 "\n"
+  SPACE@12..14 "  "
+  ENTRY@14..22
+    WORD_KEY@14..19
+      WORD@14..19 "count"
+    SPACE@19..20 " "
+    INTEGER@20..22
+      NUMERAL@20..22 "42"
+  NEWLINE@22..23 "\n"
+  SPACE@23..25 "  "
+  ENTRY@25..34
+    WORD_KEY@25..29
+      WORD@25..29 "flag"
+    SPACE@29..30 " "
+    BOOLEAN@30..34
+      TRUE@30..34 "true"
+  NEWLINE@34..35 "\n"
+  SPACE@35..37 "  "
+  ENTRY@37..43
+    WORD_KEY@37..40
+      WORD@37..40 "neg"
+    SPACE@40..41 " "
+    INTEGER@41..43
+      MINUS@41..42 "-"
+      NUMERAL@42..43 "1"
+  NEWLINE@43..44 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@2..5 "key",
+            },
+            value: LineString {
+                string: STRING@6..11 "value",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@14..19 "count",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@20..22 "42",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@25..29 "flag",
+            },
+            value: Boolean {
+                token: TRUE@30..34 "true",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@37..40 "neg",
+            },
+            value: Integer {
+                sign: MINUS@41..42 "-",
+                numeral: NUMERAL@42..43 "1",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

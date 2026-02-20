@@ -1,0 +1,124 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# prefix-block-block-string-nested
+
+## Input
+
+```
+outer {
+  inner {
+    desc |
+      line 1
+      line 2
+    name value
+  }
+}
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..76
+  PREFIX_BLOCK@0..76
+    WORD_KEY@0..5
+      WORD@0..5 "outer"
+    SPACE@5..6 " "
+    OPEN_BRACE@6..7 "{"
+    NEWLINE@7..8 "\n"
+    SPACE@8..10 "  "
+    PREFIX_BLOCK@10..74
+      WORD_KEY@10..15
+        WORD@10..15 "inner"
+      SPACE@15..16 " "
+      OPEN_BRACE@16..17 "{"
+      NEWLINE@17..18 "\n"
+      SPACE@18..22 "    "
+      ENTRY@22..54
+        WORD_KEY@22..26
+          WORD@22..26 "desc"
+        SPACE@26..27 " "
+        BLOCK_STRING@27..54
+          BLOCK_STRING_HEADER@27..29
+            PIPE@27..28 "|"
+            NEWLINE@28..29 "\n"
+          SPACE@29..35 "      "
+          LINE_STRING@35..41
+            STRING@35..41 "line 1"
+          NEWLINE@41..42 "\n"
+          SPACE@42..48 "      "
+          LINE_STRING@48..54
+            STRING@48..54 "line 2"
+      NEWLINE@54..55 "\n"
+      SPACE@55..59 "    "
+      ENTRY@59..69
+        WORD_KEY@59..63
+          WORD@59..63 "name"
+        SPACE@63..64 " "
+        LINE_STRING@64..69
+          STRING@64..69 "value"
+      NEWLINE@69..70 "\n"
+      SPACE@70..72 "  "
+      CLOSE_BRACE@72..73 "}"
+      NEWLINE@73..74 "\n"
+    CLOSE_BRACE@74..75 "}"
+    NEWLINE@75..76 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        PrefixBlock {
+            key: WordKey {
+                word: WORD@0..5 "outer",
+            },
+            open_brace: OPEN_BRACE@6..7 "{",
+            items: [
+                PrefixBlock {
+                    key: WordKey {
+                        word: WORD@10..15 "inner",
+                    },
+                    open_brace: OPEN_BRACE@16..17 "{",
+                    items: [
+                        Entry {
+                            key: WordKey {
+                                word: WORD@22..26 "desc",
+                            },
+                            value: BlockString {
+                                header: BlockStringHeader {
+                                    style: PIPE@27..28 "|",
+                                    chomp: none,
+                                },
+                                lines: [
+                                    LineString {
+                                        string: STRING@35..41 "line 1",
+                                    },
+                                    LineString {
+                                        string: STRING@48..54 "line 2",
+                                    },
+                                ],
+                            },
+                        },
+                        Entry {
+                            key: WordKey {
+                                word: WORD@59..63 "name",
+                            },
+                            value: LineString {
+                                string: STRING@64..69 "value",
+                            },
+                        },
+                    ],
+                    close_brace: CLOSE_BRACE@72..73 "}",
+                },
+            ],
+            close_brace: CLOSE_BRACE@74..75 "}",
+        },
+    ],
+}
+```
+
+vim:ft=markdown

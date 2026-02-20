@@ -40,10 +40,10 @@ pub fn make_snapshot(name: &str, source: &str) -> String {
 #[macro_export]
 #[doc(hidden)]
 macro_rules! __insta_assert_snapshot_wrapper {
-    ($group:expr, $snapshot:expr) => {
+    ($snapshot:expr) => {
         insta::with_settings!({
             prepend_module_to_snapshot => false,
-            snapshot_path => format!("snapshots/{}", $group),
+            snapshot_path => "snapshots",
             omit_expression => true,
         }, {
             insta::assert_snapshot!($snapshot);

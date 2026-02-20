@@ -1,7 +1,7 @@
 ---
 source: crates/config/tests/snapshots.rs
 ---
-# duplicate_keys
+# duplicate-keys
 
 ## Input
 
@@ -12,7 +12,7 @@ tag production
 
 ```
 
-## Json
+## JSON
 
 ```json
 {

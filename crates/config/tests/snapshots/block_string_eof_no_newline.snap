@@ -1,0 +1,21 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# block-string-eof-no-newline
+
+## Input
+
+```mical
+key |
+  hello
+```
+
+## JSON
+
+```json
+{
+  "key": "hello\n"
+}
+```
+
+vim:ft=markdown

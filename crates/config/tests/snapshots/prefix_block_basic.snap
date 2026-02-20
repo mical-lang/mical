@@ -1,0 +1,25 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# prefix-block-basic
+
+## Input
+
+```mical
+section {
+  .key value
+  .name hello
+}
+
+```
+
+## JSON
+
+```json
+{
+  "section.key": "value",
+  "section.name": "hello"
+}
+```
+
+vim:ft=markdown

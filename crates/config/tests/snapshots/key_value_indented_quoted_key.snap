@@ -1,0 +1,23 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# key-value-indented-quoted-key
+
+## Input
+
+```mical
+  "double" value
+  'single' value
+
+```
+
+## JSON
+
+```json
+{
+  "double": "value",
+  "single": "value"
+}
+```
+
+vim:ft=markdown

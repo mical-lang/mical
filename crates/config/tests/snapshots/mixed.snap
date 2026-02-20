@@ -1,0 +1,40 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# mixed
+
+## Input
+
+```mical
+#version 1
+name hello world # not comment
+count 42
+flag true
+negative -10
+section {
+  desc |
+    block line
+  inner {
+    key value
+  }
+}
+# a comment
+after_block done
+
+```
+
+## JSON
+
+```json
+{
+  "after_block": "done",
+  "count": 42,
+  "flag": true,
+  "name": "hello world # not comment",
+  "negative": -10,
+  "sectiondesc": "block line\n",
+  "sectioninnerkey": "value"
+}
+```
+
+vim:ft=markdown

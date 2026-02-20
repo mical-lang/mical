@@ -1,0 +1,20 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# key-value-integer-at-eof
+
+## Input
+
+```mical
+a 42
+```
+
+## JSON
+
+```json
+{
+  "a": 42
+}
+```
+
+vim:ft=markdown

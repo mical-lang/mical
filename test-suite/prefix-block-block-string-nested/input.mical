@@ -1,0 +1,8 @@
+outer {
+  inner {
+    desc |
+      line 1
+      line 2
+    name value
+  }
+}

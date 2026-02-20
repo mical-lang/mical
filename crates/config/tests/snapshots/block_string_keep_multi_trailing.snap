@@ -1,7 +1,7 @@
 ---
 source: crates/config/tests/snapshots.rs
 ---
-# block_string_keep_multi_trailing
+# block-string-keep-multi-trailing
 
 ## Input
 
@@ -14,7 +14,7 @@ a b
 
 ```
 
-## Json
+## JSON
 
 ```json
 {

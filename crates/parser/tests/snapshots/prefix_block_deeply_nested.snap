@@ -1,0 +1,106 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# prefix-block-deeply-nested
+
+## Input
+
+```
+a. {
+  b. {
+    c. {
+      key value
+    }
+  }
+}
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..49
+  PREFIX_BLOCK@0..49
+    WORD_KEY@0..2
+      WORD@0..2 "a."
+    SPACE@2..3 " "
+    OPEN_BRACE@3..4 "{"
+    NEWLINE@4..5 "\n"
+    SPACE@5..7 "  "
+    PREFIX_BLOCK@7..47
+      WORD_KEY@7..9
+        WORD@7..9 "b."
+      SPACE@9..10 " "
+      OPEN_BRACE@10..11 "{"
+      NEWLINE@11..12 "\n"
+      SPACE@12..16 "    "
+      PREFIX_BLOCK@16..43
+        WORD_KEY@16..18
+          WORD@16..18 "c."
+        SPACE@18..19 " "
+        OPEN_BRACE@19..20 "{"
+        NEWLINE@20..21 "\n"
+        SPACE@21..27 "      "
+        ENTRY@27..36
+          WORD_KEY@27..30
+            WORD@27..30 "key"
+          SPACE@30..31 " "
+          LINE_STRING@31..36
+            STRING@31..36 "value"
+        NEWLINE@36..37 "\n"
+        SPACE@37..41 "    "
+        CLOSE_BRACE@41..42 "}"
+        NEWLINE@42..43 "\n"
+      SPACE@43..45 "  "
+      CLOSE_BRACE@45..46 "}"
+      NEWLINE@46..47 "\n"
+    CLOSE_BRACE@47..48 "}"
+    NEWLINE@48..49 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        PrefixBlock {
+            key: WordKey {
+                word: WORD@0..2 "a.",
+            },
+            open_brace: OPEN_BRACE@3..4 "{",
+            items: [
+                PrefixBlock {
+                    key: WordKey {
+                        word: WORD@7..9 "b.",
+                    },
+                    open_brace: OPEN_BRACE@10..11 "{",
+                    items: [
+                        PrefixBlock {
+                            key: WordKey {
+                                word: WORD@16..18 "c.",
+                            },
+                            open_brace: OPEN_BRACE@19..20 "{",
+                            items: [
+                                Entry {
+                                    key: WordKey {
+                                        word: WORD@27..30 "key",
+                                    },
+                                    value: LineString {
+                                        string: STRING@31..36 "value",
+                                    },
+                                },
+                            ],
+                            close_brace: CLOSE_BRACE@41..42 "}",
+                        },
+                    ],
+                    close_brace: CLOSE_BRACE@45..46 "}",
+                },
+            ],
+            close_brace: CLOSE_BRACE@47..48 "}",
+        },
+    ],
+}
+```
+
+vim:ft=markdown

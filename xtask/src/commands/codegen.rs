@@ -1,3 +1,4 @@
+mod config;
 mod parser;
 mod syntax;
 
@@ -15,10 +16,12 @@ impl flags::Codegen {
             flags::CodegenKind::All => {
                 syntax::generate(sh, check)?;
                 parser::generate(sh, check)?;
+                config::generate(sh, check)?;
                 Ok(())
             }
             flags::CodegenKind::Syntax => syntax::generate(sh, check),
             flags::CodegenKind::Parser => parser::generate(sh, check),
+            flags::CodegenKind::Config => config::generate(sh, check),
         }
     }
 }
@@ -52,4 +55,20 @@ fn ensure_file_contents(path: &Path, contents: &str, check: bool) -> Result<()> 
     message(Level::Warn, format!("updating {}", display_path(path)));
     fs::write(path, contents)?;
     Ok(())
+}
+
+fn collect_test_suite_cases(suite_dir: &Path) -> Result<Vec<String>> {
+    let mut cases = Vec::new();
+    for entry in fs::read_dir(suite_dir)? {
+        let entry = entry?;
+        let path = entry.path();
+        if path.is_dir()
+            && path.join("input.mical").exists()
+            && let Some(name) = path.file_name().and_then(|n| n.to_str())
+        {
+            cases.push(name.to_owned());
+        }
+    }
+    cases.sort();
+    Ok(cases)
 }

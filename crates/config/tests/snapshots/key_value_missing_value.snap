@@ -1,0 +1,32 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# key-value-missing-value
+
+## Input
+
+```mical
+lonely
+
+```
+
+## Parser Error
+
+```
+6..6: missing value for the key
+
+```
+
+## Config Error
+
+```
+missing syntax element at 0..6
+```
+
+## JSON
+
+```json
+{}
+```
+
+vim:ft=markdown

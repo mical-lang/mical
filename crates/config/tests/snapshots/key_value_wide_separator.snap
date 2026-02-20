@@ -1,0 +1,25 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# key-value-wide-separator
+
+## Input
+
+```mical
+a  value
+b   42
+c    true
+
+```
+
+## JSON
+
+```json
+{
+  "a": "value",
+  "b": 42,
+  "c": true
+}
+```
+
+vim:ft=markdown

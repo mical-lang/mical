@@ -1,0 +1,32 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# key-value-quoted-value-trailing
+
+## Input
+
+```mical
+a "trailing" extra
+b 'trailing' extra
+
+```
+
+## Parser Error
+
+```
+13..13: unexpected token after value
+
+32..32: unexpected token after value
+
+```
+
+## JSON
+
+```json
+{
+  "a": "trailing",
+  "b": "trailing"
+}
+```
+
+vim:ft=markdown

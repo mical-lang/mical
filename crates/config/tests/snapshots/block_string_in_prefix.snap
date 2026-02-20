@@ -1,7 +1,7 @@
 ---
 source: crates/config/tests/snapshots.rs
 ---
-# block_string_in_prefix
+# block-string-in-prefix
 
 ## Input
 
@@ -14,7 +14,7 @@ section {
 
 ```
 
-## Json
+## JSON
 
 ```json
 {

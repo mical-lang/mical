@@ -1,0 +1,62 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# prefix-block-eof-no-newline
+
+## Input
+
+```
+section {
+  key value
+}
+```
+
+## CST
+
+```
+SOURCE_FILE@0..23
+  PREFIX_BLOCK@0..23
+    WORD_KEY@0..7
+      WORD@0..7 "section"
+    SPACE@7..8 " "
+    OPEN_BRACE@8..9 "{"
+    NEWLINE@9..10 "\n"
+    SPACE@10..12 "  "
+    ENTRY@12..21
+      WORD_KEY@12..15
+        WORD@12..15 "key"
+      SPACE@15..16 " "
+      LINE_STRING@16..21
+        STRING@16..21 "value"
+    NEWLINE@21..22 "\n"
+    CLOSE_BRACE@22..23 "}"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        PrefixBlock {
+            key: WordKey {
+                word: WORD@0..7 "section",
+            },
+            open_brace: OPEN_BRACE@8..9 "{",
+            items: [
+                Entry {
+                    key: WordKey {
+                        word: WORD@12..15 "key",
+                    },
+                    value: LineString {
+                        string: STRING@16..21 "value",
+                    },
+                },
+            ],
+            close_brace: CLOSE_BRACE@22..23 "}",
+        },
+    ],
+}
+```
+
+vim:ft=markdown

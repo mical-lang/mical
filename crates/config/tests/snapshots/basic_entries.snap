@@ -1,7 +1,7 @@
 ---
 source: crates/config/tests/snapshots.rs
 ---
-# basic_entries
+# basic-entries
 
 ## Input
 
@@ -13,7 +13,7 @@ key hello # not a comment
 
 ```
 
-## Json
+## JSON
 
 ```json
 {

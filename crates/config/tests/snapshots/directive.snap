@@ -1,0 +1,26 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# directive
+
+## Input
+
+```mical
+#include path/to/file
+#version 1.0
+key1 value1
+# this is a comment
+key2 value2
+
+```
+
+## JSON
+
+```json
+{
+  "key1": "value1",
+  "key2": "value2"
+}
+```
+
+vim:ft=markdown

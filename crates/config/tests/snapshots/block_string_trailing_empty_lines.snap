@@ -1,0 +1,26 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# block-string-trailing-empty-lines
+
+## Input
+
+```mical
+a |
+  hello
+
+
+b value
+
+```
+
+## JSON
+
+```json
+{
+  "a": "hello\n",
+  "b": "value"
+}
+```
+
+vim:ft=markdown

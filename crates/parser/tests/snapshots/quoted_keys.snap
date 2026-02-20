@@ -1,0 +1,108 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# quoted-keys
+
+## Input
+
+```
+"my key" value
+'single key' value
+"" empty-key-value
+"key\"name" value
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..71
+  ENTRY@0..14
+    QUOTED_KEY@0..8
+      DOUBLE_QUOTE@0..1 "\""
+      STRING@1..7 "my key"
+      DOUBLE_QUOTE@7..8 "\""
+    SPACE@8..9 " "
+    LINE_STRING@9..14
+      STRING@9..14 "value"
+  NEWLINE@14..15 "\n"
+  ENTRY@15..33
+    QUOTED_KEY@15..27
+      SINGLE_QUOTE@15..16 "'"
+      STRING@16..26 "single key"
+      SINGLE_QUOTE@26..27 "'"
+    SPACE@27..28 " "
+    LINE_STRING@28..33
+      STRING@28..33 "value"
+  NEWLINE@33..34 "\n"
+  ENTRY@34..52
+    QUOTED_KEY@34..36
+      DOUBLE_QUOTE@34..35 "\""
+      STRING@35..35 ""
+      DOUBLE_QUOTE@35..36 "\""
+    SPACE@36..37 " "
+    LINE_STRING@37..52
+      STRING@37..52 "empty-key-value"
+  NEWLINE@52..53 "\n"
+  ENTRY@53..70
+    QUOTED_KEY@53..64
+      DOUBLE_QUOTE@53..54 "\""
+      STRING@54..63 "key\\\"name"
+      DOUBLE_QUOTE@63..64 "\""
+    SPACE@64..65 " "
+    LINE_STRING@65..70
+      STRING@65..70 "value"
+  NEWLINE@70..71 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: QuotedKey {
+                open_quote: DOUBLE_QUOTE@0..1 "\"",
+                string: STRING@1..7 "my key",
+                close_quote: DOUBLE_QUOTE@0..1 "\"",
+            },
+            value: LineString {
+                string: STRING@9..14 "value",
+            },
+        },
+        Entry {
+            key: QuotedKey {
+                open_quote: SINGLE_QUOTE@15..16 "'",
+                string: STRING@16..26 "single key",
+                close_quote: SINGLE_QUOTE@15..16 "'",
+            },
+            value: LineString {
+                string: STRING@28..33 "value",
+            },
+        },
+        Entry {
+            key: QuotedKey {
+                open_quote: DOUBLE_QUOTE@34..35 "\"",
+                string: STRING@35..35 "",
+                close_quote: DOUBLE_QUOTE@34..35 "\"",
+            },
+            value: LineString {
+                string: STRING@37..52 "empty-key-value",
+            },
+        },
+        Entry {
+            key: QuotedKey {
+                open_quote: DOUBLE_QUOTE@53..54 "\"",
+                string: STRING@54..63 "key\\\"name",
+                close_quote: DOUBLE_QUOTE@53..54 "\"",
+            },
+            value: LineString {
+                string: STRING@65..70 "value",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

@@ -1,7 +1,7 @@
 ---
 source: crates/config/tests/snapshots.rs
 ---
-# typed_values
+# typed-values
 
 ## Input
 
@@ -15,7 +15,7 @@ hex 0xFF
 
 ```
 
-## Json
+## JSON
 
 ```json
 {

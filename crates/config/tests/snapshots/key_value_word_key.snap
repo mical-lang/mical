@@ -1,0 +1,31 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# key-value-word-key
+
+## Input
+
+```mical
+hello world
+42  value
+-57 value
++13 value
+true  value
+false value
+
+```
+
+## JSON
+
+```json
+{
+  "+13": "value",
+  "-57": "value",
+  "42": "value",
+  "false": "value",
+  "hello": "world",
+  "true": "value"
+}
+```
+
+vim:ft=markdown

@@ -1,0 +1,29 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# prefix-block-missing-close
+
+## Input
+
+```mical
+section {
+  key value
+
+```
+
+## Parser Error
+
+```
+22..22: missing closing '}' for prefix block
+
+```
+
+## JSON
+
+```json
+{
+  "sectionkey": "value"
+}
+```
+
+vim:ft=markdown

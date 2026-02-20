@@ -1,0 +1,46 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# brace-after-key
+
+## Input
+
+```mical
+foo{
+}
+"key"{
+}
+
+```
+
+## Parser Error
+
+```
+4..4: missing value for the key
+
+6..6: missing value for the key
+
+12..12: unexpected token after quoted key
+
+13..13: missing value for the key
+
+15..15: missing value for the key
+
+```
+
+## Config Error
+
+```
+missing syntax element at 0..4
+missing syntax element at 5..6
+missing syntax element at 7..13
+missing syntax element at 14..15
+```
+
+## JSON
+
+```json
+{}
+```
+
+vim:ft=markdown

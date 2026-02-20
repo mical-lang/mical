@@ -1,7 +1,7 @@
 ---
 source: crates/parser/tests/snapshots.rs
 ---
-# block_string_indent
+# block-string-indent
 
 ## Input
 

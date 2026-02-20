@@ -1,0 +1,64 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# invalid-escape
+
+## Input
+
+```
+a "bad\x"
+b value
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..18
+  ENTRY@0..9
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    QUOTED_STRING@2..9
+      DOUBLE_QUOTE@2..3 "\""
+      STRING@3..8 "bad\\x"
+      DOUBLE_QUOTE@8..9 "\""
+  NEWLINE@9..10 "\n"
+  ENTRY@10..17
+    WORD_KEY@10..11
+      WORD@10..11 "b"
+    SPACE@11..12 " "
+    LINE_STRING@12..17
+      STRING@12..17 "value"
+  NEWLINE@17..18 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: QuotedString {
+                open_quote: DOUBLE_QUOTE@2..3 "\"",
+                string: STRING@3..8 "bad\\x",
+                close_quote: DOUBLE_QUOTE@2..3 "\"",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@10..11 "b",
+            },
+            value: LineString {
+                string: STRING@12..17 "value",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

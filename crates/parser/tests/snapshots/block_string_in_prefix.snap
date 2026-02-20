@@ -1,0 +1,95 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# block-string-in-prefix
+
+## Input
+
+```
+section {
+  desc |
+    block line
+  other value
+}
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..50
+  PREFIX_BLOCK@0..50
+    WORD_KEY@0..7
+      WORD@0..7 "section"
+    SPACE@7..8 " "
+    OPEN_BRACE@8..9 "{"
+    NEWLINE@9..10 "\n"
+    SPACE@10..12 "  "
+    ENTRY@12..33
+      WORD_KEY@12..16
+        WORD@12..16 "desc"
+      SPACE@16..17 " "
+      BLOCK_STRING@17..33
+        BLOCK_STRING_HEADER@17..19
+          PIPE@17..18 "|"
+          NEWLINE@18..19 "\n"
+        SPACE@19..23 "    "
+        LINE_STRING@23..33
+          STRING@23..33 "block line"
+    NEWLINE@33..34 "\n"
+    SPACE@34..36 "  "
+    ENTRY@36..47
+      WORD_KEY@36..41
+        WORD@36..41 "other"
+      SPACE@41..42 " "
+      LINE_STRING@42..47
+        STRING@42..47 "value"
+    NEWLINE@47..48 "\n"
+    CLOSE_BRACE@48..49 "}"
+    NEWLINE@49..50 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        PrefixBlock {
+            key: WordKey {
+                word: WORD@0..7 "section",
+            },
+            open_brace: OPEN_BRACE@8..9 "{",
+            items: [
+                Entry {
+                    key: WordKey {
+                        word: WORD@12..16 "desc",
+                    },
+                    value: BlockString {
+                        header: BlockStringHeader {
+                            style: PIPE@17..18 "|",
+                            chomp: none,
+                        },
+                        lines: [
+                            LineString {
+                                string: STRING@23..33 "block line",
+                            },
+                        ],
+                    },
+                },
+                Entry {
+                    key: WordKey {
+                        word: WORD@36..41 "other",
+                    },
+                    value: LineString {
+                        string: STRING@42..47 "value",
+                    },
+                },
+            ],
+            close_brace: CLOSE_BRACE@48..49 "}",
+        },
+    ],
+}
+```
+
+vim:ft=markdown

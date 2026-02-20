@@ -1,0 +1,76 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# duplicate-keys
+
+## Input
+
+```
+tag web
+tag server
+tag production
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..34
+  ENTRY@0..7
+    WORD_KEY@0..3
+      WORD@0..3 "tag"
+    SPACE@3..4 " "
+    LINE_STRING@4..7
+      STRING@4..7 "web"
+  NEWLINE@7..8 "\n"
+  ENTRY@8..18
+    WORD_KEY@8..11
+      WORD@8..11 "tag"
+    SPACE@11..12 " "
+    LINE_STRING@12..18
+      STRING@12..18 "server"
+  NEWLINE@18..19 "\n"
+  ENTRY@19..33
+    WORD_KEY@19..22
+      WORD@19..22 "tag"
+    SPACE@22..23 " "
+    LINE_STRING@23..33
+      STRING@23..33 "production"
+  NEWLINE@33..34 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..3 "tag",
+            },
+            value: LineString {
+                string: STRING@4..7 "web",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@8..11 "tag",
+            },
+            value: LineString {
+                string: STRING@12..18 "server",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@19..22 "tag",
+            },
+            value: LineString {
+                string: STRING@23..33 "production",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

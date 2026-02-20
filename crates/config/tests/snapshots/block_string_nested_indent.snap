@@ -1,0 +1,23 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# block-string-nested-indent
+
+## Input
+
+```mical
+  key |
+    line1
+    line2
+
+```
+
+## JSON
+
+```json
+{
+  "key": "line1\nline2\n"
+}
+```
+
+vim:ft=markdown

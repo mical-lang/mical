@@ -1,0 +1,76 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# key-value-hash-value
+
+## Input
+
+```
+a hello # not comment
+b #hash_start
+c # space then text
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..56
+  ENTRY@0..21
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    LINE_STRING@2..21
+      STRING@2..21 "hello # not comment"
+  NEWLINE@21..22 "\n"
+  ENTRY@22..35
+    WORD_KEY@22..23
+      WORD@22..23 "b"
+    SPACE@23..24 " "
+    LINE_STRING@24..35
+      STRING@24..35 "#hash_start"
+  NEWLINE@35..36 "\n"
+  ENTRY@36..55
+    WORD_KEY@36..37
+      WORD@36..37 "c"
+    SPACE@37..38 " "
+    LINE_STRING@38..55
+      STRING@38..55 "# space then text"
+  NEWLINE@55..56 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: LineString {
+                string: STRING@2..21 "hello # not comment",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@22..23 "b",
+            },
+            value: LineString {
+                string: STRING@24..35 "#hash_start",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@36..37 "c",
+            },
+            value: LineString {
+                string: STRING@38..55 "# space then text",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

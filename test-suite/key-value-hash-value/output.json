@@ -1,0 +1,5 @@
+{
+  "a": "hello # not comment",
+  "b": "#hash_start",
+  "c": "# space then text"
+}

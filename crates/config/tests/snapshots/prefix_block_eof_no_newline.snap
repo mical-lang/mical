@@ -1,0 +1,22 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# prefix-block-eof-no-newline
+
+## Input
+
+```mical
+section {
+  key value
+}
+```
+
+## JSON
+
+```json
+{
+  "sectionkey": "value"
+}
+```
+
+vim:ft=markdown

@@ -1,0 +1,88 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# comments-directives
+
+## Input
+
+```
+# This is a comment
+a 1
+#include path/to/file
+b 2
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..50
+  COMMENT@0..19
+    SHARP@0..1 "#"
+    SPACE@1..2 " "
+    WORD@2..6 "This"
+    SPACE@6..7 " "
+    WORD@7..9 "is"
+    SPACE@9..10 " "
+    WORD@10..11 "a"
+    SPACE@11..12 " "
+    WORD@12..19 "comment"
+  NEWLINE@19..20 "\n"
+  ENTRY@20..23
+    WORD_KEY@20..21
+      WORD@20..21 "a"
+    SPACE@21..22 " "
+    INTEGER@22..23
+      NUMERAL@22..23 "1"
+  NEWLINE@23..24 "\n"
+  DIRECTIVE@24..45
+    SHARP@24..25 "#"
+    WORD@25..32 "include"
+    LINE_STRING@32..45
+      STRING@32..45 " path/to/file"
+  NEWLINE@45..46 "\n"
+  ENTRY@46..49
+    WORD_KEY@46..47
+      WORD@46..47 "b"
+    SPACE@47..48 " "
+    INTEGER@48..49
+      NUMERAL@48..49 "2"
+  NEWLINE@49..50 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@20..21 "a",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@22..23 "1",
+            },
+        },
+        Directive {
+            sharp: SHARP@24..25 "#",
+            name: WORD@25..32 "include",
+            args: LineString {
+                string: STRING@32..45 " path/to/file",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@46..47 "b",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@48..49 "2",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

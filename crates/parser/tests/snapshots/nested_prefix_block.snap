@@ -1,0 +1,85 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# nested-prefix-block
+
+## Input
+
+```
+a. {
+  b. {
+    c value
+  }
+}
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..30
+  PREFIX_BLOCK@0..30
+    WORD_KEY@0..2
+      WORD@0..2 "a."
+    SPACE@2..3 " "
+    OPEN_BRACE@3..4 "{"
+    NEWLINE@4..5 "\n"
+    SPACE@5..7 "  "
+    PREFIX_BLOCK@7..28
+      WORD_KEY@7..9
+        WORD@7..9 "b."
+      SPACE@9..10 " "
+      OPEN_BRACE@10..11 "{"
+      NEWLINE@11..12 "\n"
+      SPACE@12..16 "    "
+      ENTRY@16..23
+        WORD_KEY@16..17
+          WORD@16..17 "c"
+        SPACE@17..18 " "
+        LINE_STRING@18..23
+          STRING@18..23 "value"
+      NEWLINE@23..24 "\n"
+      SPACE@24..26 "  "
+      CLOSE_BRACE@26..27 "}"
+      NEWLINE@27..28 "\n"
+    CLOSE_BRACE@28..29 "}"
+    NEWLINE@29..30 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        PrefixBlock {
+            key: WordKey {
+                word: WORD@0..2 "a.",
+            },
+            open_brace: OPEN_BRACE@3..4 "{",
+            items: [
+                PrefixBlock {
+                    key: WordKey {
+                        word: WORD@7..9 "b.",
+                    },
+                    open_brace: OPEN_BRACE@10..11 "{",
+                    items: [
+                        Entry {
+                            key: WordKey {
+                                word: WORD@16..17 "c",
+                            },
+                            value: LineString {
+                                string: STRING@18..23 "value",
+                            },
+                        },
+                    ],
+                    close_brace: CLOSE_BRACE@26..27 "}",
+                },
+            ],
+            close_brace: CLOSE_BRACE@28..29 "}",
+        },
+    ],
+}
+```
+
+vim:ft=markdown

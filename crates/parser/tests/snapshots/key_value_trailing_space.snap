@@ -1,0 +1,118 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# key-value-trailing-space
+
+## Input
+
+```
+a true 
+b 42 
+c hello 
+d -10 
+e +5 
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..36
+  ENTRY@0..7
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    BOOLEAN@2..6
+      TRUE@2..6 "true"
+    SPACE@6..7 " "
+  NEWLINE@7..8 "\n"
+  ENTRY@8..13
+    WORD_KEY@8..9
+      WORD@8..9 "b"
+    SPACE@9..10 " "
+    INTEGER@10..12
+      NUMERAL@10..12 "42"
+    SPACE@12..13 " "
+  NEWLINE@13..14 "\n"
+  ENTRY@14..22
+    WORD_KEY@14..15
+      WORD@14..15 "c"
+    SPACE@15..16 " "
+    LINE_STRING@16..21
+      STRING@16..21 "hello"
+    SPACE@21..22 " "
+  NEWLINE@22..23 "\n"
+  ENTRY@23..29
+    WORD_KEY@23..24
+      WORD@23..24 "d"
+    SPACE@24..25 " "
+    INTEGER@25..28
+      MINUS@25..26 "-"
+      NUMERAL@26..28 "10"
+    SPACE@28..29 " "
+  NEWLINE@29..30 "\n"
+  ENTRY@30..35
+    WORD_KEY@30..31
+      WORD@30..31 "e"
+    SPACE@31..32 " "
+    INTEGER@32..34
+      PLUS@32..33 "+"
+      NUMERAL@33..34 "5"
+    SPACE@34..35 " "
+  NEWLINE@35..36 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: Boolean {
+                token: TRUE@2..6 "true",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@8..9 "b",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@10..12 "42",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@14..15 "c",
+            },
+            value: LineString {
+                string: STRING@16..21 "hello",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@23..24 "d",
+            },
+            value: Integer {
+                sign: MINUS@25..26 "-",
+                numeral: NUMERAL@26..28 "10",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@30..31 "e",
+            },
+            value: Integer {
+                sign: PLUS@32..33 "+",
+                numeral: NUMERAL@33..34 "5",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

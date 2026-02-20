@@ -1,0 +1,89 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# block-string-clip-trailing
+
+## Input
+
+```
+key |
+  hello
+  world
+
+a 1
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..27
+  ENTRY@0..22
+    WORD_KEY@0..3
+      WORD@0..3 "key"
+    SPACE@3..4 " "
+    BLOCK_STRING@4..22
+      BLOCK_STRING_HEADER@4..6
+        PIPE@4..5 "|"
+        NEWLINE@5..6 "\n"
+      SPACE@6..8 "  "
+      LINE_STRING@8..13
+        STRING@8..13 "hello"
+      NEWLINE@13..14 "\n"
+      SPACE@14..16 "  "
+      LINE_STRING@16..21
+        STRING@16..21 "world"
+      NEWLINE@21..22 "\n"
+      LINE_STRING@22..22
+  NEWLINE@22..23 "\n"
+  ENTRY@23..26
+    WORD_KEY@23..24
+      WORD@23..24 "a"
+    SPACE@24..25 " "
+    INTEGER@25..26
+      NUMERAL@25..26 "1"
+  NEWLINE@26..27 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..3 "key",
+            },
+            value: BlockString {
+                header: BlockStringHeader {
+                    style: PIPE@4..5 "|",
+                    chomp: none,
+                },
+                lines: [
+                    LineString {
+                        string: STRING@8..13 "hello",
+                    },
+                    LineString {
+                        string: STRING@16..21 "world",
+                    },
+                    LineString {
+                        string: none,
+                    },
+                ],
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@23..24 "a",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@25..26 "1",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

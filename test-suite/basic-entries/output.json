@@ -1,0 +1,8 @@
+{
+  "key": [
+    "value",
+    "hello # not a comment"
+  ],
+  "name": "hello world",
+  "path": "/usr/local/bin"
+}

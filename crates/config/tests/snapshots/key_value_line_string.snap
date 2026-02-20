@@ -1,0 +1,25 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# key-value-line-string
+
+## Input
+
+```mical
+key value
+name hello world
+path /usr/local/bin
+
+```
+
+## JSON
+
+```json
+{
+  "key": "value",
+  "name": "hello world",
+  "path": "/usr/local/bin"
+}
+```
+
+vim:ft=markdown

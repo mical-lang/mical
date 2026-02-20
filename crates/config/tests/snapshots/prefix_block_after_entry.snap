@@ -1,0 +1,27 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# prefix-block-after-entry
+
+## Input
+
+```mical
+before hello
+section {
+  key value
+}
+after world
+
+```
+
+## JSON
+
+```json
+{
+  "after": "world",
+  "before": "hello",
+  "sectionkey": "value"
+}
+```
+
+vim:ft=markdown

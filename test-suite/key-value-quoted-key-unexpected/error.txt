@@ -1,0 +1,4 @@
+syntax error: 8..8: unexpected token after quoted key
+
+syntax error: 24..24: unexpected token after quoted key
+

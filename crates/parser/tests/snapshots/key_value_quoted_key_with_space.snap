@@ -1,0 +1,68 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# key-value-quoted-key-with-space
+
+## Input
+
+```
+"key with spaces" value
+'key with spaces' value
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..48
+  ENTRY@0..23
+    QUOTED_KEY@0..17
+      DOUBLE_QUOTE@0..1 "\""
+      STRING@1..16 "key with spaces"
+      DOUBLE_QUOTE@16..17 "\""
+    SPACE@17..18 " "
+    LINE_STRING@18..23
+      STRING@18..23 "value"
+  NEWLINE@23..24 "\n"
+  ENTRY@24..47
+    QUOTED_KEY@24..41
+      SINGLE_QUOTE@24..25 "'"
+      STRING@25..40 "key with spaces"
+      SINGLE_QUOTE@40..41 "'"
+    SPACE@41..42 " "
+    LINE_STRING@42..47
+      STRING@42..47 "value"
+  NEWLINE@47..48 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: QuotedKey {
+                open_quote: DOUBLE_QUOTE@0..1 "\"",
+                string: STRING@1..16 "key with spaces",
+                close_quote: DOUBLE_QUOTE@0..1 "\"",
+            },
+            value: LineString {
+                string: STRING@18..23 "value",
+            },
+        },
+        Entry {
+            key: QuotedKey {
+                open_quote: SINGLE_QUOTE@24..25 "'",
+                string: STRING@25..40 "key with spaces",
+                close_quote: SINGLE_QUOTE@24..25 "'",
+            },
+            value: LineString {
+                string: STRING@42..47 "value",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

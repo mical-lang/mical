@@ -1,7 +1,7 @@
 ---
 source: crates/parser/tests/snapshots.rs
 ---
-# brace_after_key
+# brace-after-key
 
 ## Input
 

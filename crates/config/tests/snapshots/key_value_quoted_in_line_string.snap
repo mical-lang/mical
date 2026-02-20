@@ -1,0 +1,27 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# key-value-quoted-in-line-string
+
+## Input
+
+```mical
+a hello "world" end
+b start 'mid' end
+c value "foo"
+d value 'bar'
+
+```
+
+## JSON
+
+```json
+{
+  "a": "hello \"world\" end",
+  "b": "start 'mid' end",
+  "c": "value \"foo\"",
+  "d": "value 'bar'"
+}
+```
+
+vim:ft=markdown

@@ -1,0 +1,8 @@
+{
+  "a": "two space indent\nsecond line\n",
+  "b": "four space indent\nsecond line\n",
+  "c": "",
+  "d": "shallow\n  deep\nback to shallow\n",
+  "e": "first block\n",
+  "f": "dedented body stops block\n"
+}

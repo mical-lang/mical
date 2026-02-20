@@ -1,0 +1,170 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# block-string-chomp-empty
+
+## Input
+
+```
+a |
+
+b |-
+
+c |+
+
+d >
+
+e >-
+
+f >+
+
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..34
+  ENTRY@0..4
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    BLOCK_STRING@2..4
+      BLOCK_STRING_HEADER@2..4
+        PIPE@2..3 "|"
+        NEWLINE@3..4 "\n"
+  NEWLINE@4..5 "\n"
+  ENTRY@5..10
+    WORD_KEY@5..6
+      WORD@5..6 "b"
+    SPACE@6..7 " "
+    BLOCK_STRING@7..10
+      BLOCK_STRING_HEADER@7..10
+        PIPE@7..8 "|"
+        MINUS@8..9 "-"
+        NEWLINE@9..10 "\n"
+  NEWLINE@10..11 "\n"
+  ENTRY@11..16
+    WORD_KEY@11..12
+      WORD@11..12 "c"
+    SPACE@12..13 " "
+    BLOCK_STRING@13..16
+      BLOCK_STRING_HEADER@13..16
+        PIPE@13..14 "|"
+        PLUS@14..15 "+"
+        NEWLINE@15..16 "\n"
+  NEWLINE@16..17 "\n"
+  ENTRY@17..21
+    WORD_KEY@17..18
+      WORD@17..18 "d"
+    SPACE@18..19 " "
+    BLOCK_STRING@19..21
+      BLOCK_STRING_HEADER@19..21
+        GT@19..20 ">"
+        NEWLINE@20..21 "\n"
+  NEWLINE@21..22 "\n"
+  ENTRY@22..27
+    WORD_KEY@22..23
+      WORD@22..23 "e"
+    SPACE@23..24 " "
+    BLOCK_STRING@24..27
+      BLOCK_STRING_HEADER@24..27
+        GT@24..25 ">"
+        MINUS@25..26 "-"
+        NEWLINE@26..27 "\n"
+  NEWLINE@27..28 "\n"
+  ENTRY@28..33
+    WORD_KEY@28..29
+      WORD@28..29 "f"
+    SPACE@29..30 " "
+    BLOCK_STRING@30..33
+      BLOCK_STRING_HEADER@30..33
+        GT@30..31 ">"
+        PLUS@31..32 "+"
+        NEWLINE@32..33 "\n"
+  NEWLINE@33..34 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: BlockString {
+                header: BlockStringHeader {
+                    style: PIPE@2..3 "|",
+                    chomp: none,
+                },
+                lines: [],
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@5..6 "b",
+            },
+            value: BlockString {
+                header: BlockStringHeader {
+                    style: PIPE@7..8 "|",
+                    chomp: MINUS@8..9 "-",
+                },
+                lines: [],
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@11..12 "c",
+            },
+            value: BlockString {
+                header: BlockStringHeader {
+                    style: PIPE@13..14 "|",
+                    chomp: PLUS@14..15 "+",
+                },
+                lines: [],
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@17..18 "d",
+            },
+            value: BlockString {
+                header: BlockStringHeader {
+                    style: GT@19..20 ">",
+                    chomp: none,
+                },
+                lines: [],
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@22..23 "e",
+            },
+            value: BlockString {
+                header: BlockStringHeader {
+                    style: GT@24..25 ">",
+                    chomp: MINUS@25..26 "-",
+                },
+                lines: [],
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@28..29 "f",
+            },
+            value: BlockString {
+                header: BlockStringHeader {
+                    style: GT@30..31 ">",
+                    chomp: PLUS@31..32 "+",
+                },
+                lines: [],
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

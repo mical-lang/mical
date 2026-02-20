@@ -1,0 +1,19 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# newline
+
+## Input
+
+```mical
+
+
+```
+
+## JSON
+
+```json
+{}
+```
+
+vim:ft=markdown

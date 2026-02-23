@@ -1,0 +1,23 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# block-string-body-trailing-whitespace
+
+## Input
+
+```mical
+key |
+  hello   
+  world  
+
+```
+
+## JSON
+
+```json
+{
+  "key": "hello   \nworld  \n"
+}
+```
+
+vim:ft=markdown

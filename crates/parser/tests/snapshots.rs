@@ -15,6 +15,12 @@ fn block_string_basic() {
     utils::assert_snapshot!(snapshot);
 }
 #[test]
+fn block_string_body_trailing_whitespace() {
+    let source = include_str!("../../../test-suite/block-string-body-trailing-whitespace/input.mical");
+    let snapshot = utils::make_snapshot("block-string-body-trailing-whitespace", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
 fn block_string_chomp_empty() {
     let source = include_str!("../../../test-suite/block-string-chomp-empty/input.mical");
     let snapshot = utils::make_snapshot("block-string-chomp-empty", source);

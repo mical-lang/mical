@@ -19,6 +19,14 @@ fn block_string_basic() {
     utils::assert_json_output("block-string-basic", source, expected_json);
 }
 #[test]
+fn block_string_body_trailing_whitespace() {
+    let source = include_str!("../../../test-suite/block-string-body-trailing-whitespace/input.mical");
+    let expected_json = include_str!("../../../test-suite/block-string-body-trailing-whitespace/output.json");
+    let snapshot = utils::make_snapshot("block-string-body-trailing-whitespace", source);
+    utils::assert_snapshot!(snapshot);
+    utils::assert_json_output("block-string-body-trailing-whitespace", source, expected_json);
+}
+#[test]
 fn block_string_chomp_empty() {
     let source = include_str!("../../../test-suite/block-string-chomp-empty/input.mical");
     let expected_json = include_str!("../../../test-suite/block-string-chomp-empty/output.json");

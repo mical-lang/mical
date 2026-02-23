@@ -241,7 +241,18 @@ fn block_string_empty_line(p: &mut Parser) {
 fn block_string_content_line(p: &mut Parser) {
     assert!(!(p.at(T!['\n']) || p.at_eof()));
 
-    line_string(p);
+    // line_string(p); leave trailing spaces.
+    // In this case, we should contains it.
+
+    let m = p.start();
+
+    let mut count = 0;
+    while !(p.nth_at(count, T!['\n']) || p.nth_at_eof(count)) {
+        count += 1;
+    }
+    p.bump_remap(T![string], count);
+
+    m.complete(p, LINE_STRING);
 }
 
 fn block_string_header(p: &mut Parser) {

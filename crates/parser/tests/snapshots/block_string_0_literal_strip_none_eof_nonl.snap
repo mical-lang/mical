@@ -1,0 +1,48 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# block-string-0-literal-strip-none-eof-nonl
+
+## Input
+
+```
+key |-
+```
+
+## CST
+
+```
+SOURCE_FILE@0..6
+  ENTRY@0..6
+    WORD_KEY@0..3
+      WORD@0..3 "key"
+    SPACE@3..4 " "
+    BLOCK_STRING@4..6
+      BLOCK_STRING_HEADER@4..6
+        PIPE@4..5 "|"
+        MINUS@5..6 "-"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..3 "key",
+            },
+            value: BlockString {
+                header: BlockStringHeader {
+                    style: PIPE@4..5 "|",
+                    chomp: MINUS@5..6 "-",
+                },
+                lines: [],
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

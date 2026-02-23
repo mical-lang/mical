@@ -9,9 +9,315 @@ fn basic_entries() {
     utils::assert_snapshot!(snapshot);
 }
 #[test]
-fn block_string_basic() {
-    let source = include_str!("../../../test-suite/block-string-basic/input.mical");
-    let snapshot = utils::make_snapshot("block-string-basic", source);
+fn block_string_0_folded_clip_emptyln_dedent() {
+    let source = include_str!("../../../test-suite/block-string-0-folded-clip-emptyln-dedent/input.mical");
+    let snapshot = utils::make_snapshot("block-string-0-folded-clip-emptyln-dedent", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_0_folded_clip_emptyln_eof() {
+    let source = include_str!("../../../test-suite/block-string-0-folded-clip-emptyln-eof/input.mical");
+    let snapshot = utils::make_snapshot("block-string-0-folded-clip-emptyln-eof", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_0_folded_clip_none_eof() {
+    let source = include_str!("../../../test-suite/block-string-0-folded-clip-none-eof/input.mical");
+    let snapshot = utils::make_snapshot("block-string-0-folded-clip-none-eof", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_0_folded_clip_none_eof_nonl() {
+    let source = include_str!("../../../test-suite/block-string-0-folded-clip-none-eof-nonl/input.mical");
+    let snapshot = utils::make_snapshot("block-string-0-folded-clip-none-eof-nonl", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_0_folded_clip_wsln_dedent() {
+    let source = include_str!("../../../test-suite/block-string-0-folded-clip-wsln-dedent/input.mical");
+    let snapshot = utils::make_snapshot("block-string-0-folded-clip-wsln-dedent", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_0_folded_clip_wsln_eof() {
+    let source = include_str!("../../../test-suite/block-string-0-folded-clip-wsln-eof/input.mical");
+    let snapshot = utils::make_snapshot("block-string-0-folded-clip-wsln-eof", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_0_folded_keep_emptyln_dedent() {
+    let source = include_str!("../../../test-suite/block-string-0-folded-keep-emptyln-dedent/input.mical");
+    let snapshot = utils::make_snapshot("block-string-0-folded-keep-emptyln-dedent", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_0_folded_keep_emptyln_eof() {
+    let source = include_str!("../../../test-suite/block-string-0-folded-keep-emptyln-eof/input.mical");
+    let snapshot = utils::make_snapshot("block-string-0-folded-keep-emptyln-eof", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_0_folded_keep_none_eof() {
+    let source = include_str!("../../../test-suite/block-string-0-folded-keep-none-eof/input.mical");
+    let snapshot = utils::make_snapshot("block-string-0-folded-keep-none-eof", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_0_folded_keep_none_eof_nonl() {
+    let source = include_str!("../../../test-suite/block-string-0-folded-keep-none-eof-nonl/input.mical");
+    let snapshot = utils::make_snapshot("block-string-0-folded-keep-none-eof-nonl", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_0_folded_keep_wsln_dedent() {
+    let source = include_str!("../../../test-suite/block-string-0-folded-keep-wsln-dedent/input.mical");
+    let snapshot = utils::make_snapshot("block-string-0-folded-keep-wsln-dedent", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_0_folded_keep_wsln_eof() {
+    let source = include_str!("../../../test-suite/block-string-0-folded-keep-wsln-eof/input.mical");
+    let snapshot = utils::make_snapshot("block-string-0-folded-keep-wsln-eof", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_0_folded_strip_emptyln_dedent() {
+    let source = include_str!("../../../test-suite/block-string-0-folded-strip-emptyln-dedent/input.mical");
+    let snapshot = utils::make_snapshot("block-string-0-folded-strip-emptyln-dedent", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_0_folded_strip_emptyln_eof() {
+    let source = include_str!("../../../test-suite/block-string-0-folded-strip-emptyln-eof/input.mical");
+    let snapshot = utils::make_snapshot("block-string-0-folded-strip-emptyln-eof", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_0_folded_strip_none_eof() {
+    let source = include_str!("../../../test-suite/block-string-0-folded-strip-none-eof/input.mical");
+    let snapshot = utils::make_snapshot("block-string-0-folded-strip-none-eof", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_0_folded_strip_none_eof_nonl() {
+    let source = include_str!("../../../test-suite/block-string-0-folded-strip-none-eof-nonl/input.mical");
+    let snapshot = utils::make_snapshot("block-string-0-folded-strip-none-eof-nonl", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_0_folded_strip_wsln_dedent() {
+    let source = include_str!("../../../test-suite/block-string-0-folded-strip-wsln-dedent/input.mical");
+    let snapshot = utils::make_snapshot("block-string-0-folded-strip-wsln-dedent", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_0_folded_strip_wsln_eof() {
+    let source = include_str!("../../../test-suite/block-string-0-folded-strip-wsln-eof/input.mical");
+    let snapshot = utils::make_snapshot("block-string-0-folded-strip-wsln-eof", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_0_literal_clip_emptyln_dedent() {
+    let source = include_str!("../../../test-suite/block-string-0-literal-clip-emptyln-dedent/input.mical");
+    let snapshot = utils::make_snapshot("block-string-0-literal-clip-emptyln-dedent", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_0_literal_clip_emptyln_eof() {
+    let source = include_str!("../../../test-suite/block-string-0-literal-clip-emptyln-eof/input.mical");
+    let snapshot = utils::make_snapshot("block-string-0-literal-clip-emptyln-eof", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_0_literal_clip_none_eof() {
+    let source = include_str!("../../../test-suite/block-string-0-literal-clip-none-eof/input.mical");
+    let snapshot = utils::make_snapshot("block-string-0-literal-clip-none-eof", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_0_literal_clip_none_eof_nonl() {
+    let source = include_str!("../../../test-suite/block-string-0-literal-clip-none-eof-nonl/input.mical");
+    let snapshot = utils::make_snapshot("block-string-0-literal-clip-none-eof-nonl", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_0_literal_clip_wsln_dedent() {
+    let source = include_str!("../../../test-suite/block-string-0-literal-clip-wsln-dedent/input.mical");
+    let snapshot = utils::make_snapshot("block-string-0-literal-clip-wsln-dedent", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_0_literal_clip_wsln_eof() {
+    let source = include_str!("../../../test-suite/block-string-0-literal-clip-wsln-eof/input.mical");
+    let snapshot = utils::make_snapshot("block-string-0-literal-clip-wsln-eof", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_0_literal_keep_emptyln_dedent() {
+    let source = include_str!("../../../test-suite/block-string-0-literal-keep-emptyln-dedent/input.mical");
+    let snapshot = utils::make_snapshot("block-string-0-literal-keep-emptyln-dedent", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_0_literal_keep_emptyln_eof() {
+    let source = include_str!("../../../test-suite/block-string-0-literal-keep-emptyln-eof/input.mical");
+    let snapshot = utils::make_snapshot("block-string-0-literal-keep-emptyln-eof", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_0_literal_keep_none_eof() {
+    let source = include_str!("../../../test-suite/block-string-0-literal-keep-none-eof/input.mical");
+    let snapshot = utils::make_snapshot("block-string-0-literal-keep-none-eof", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_0_literal_keep_none_eof_nonl() {
+    let source = include_str!("../../../test-suite/block-string-0-literal-keep-none-eof-nonl/input.mical");
+    let snapshot = utils::make_snapshot("block-string-0-literal-keep-none-eof-nonl", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_0_literal_keep_wsln_dedent() {
+    let source = include_str!("../../../test-suite/block-string-0-literal-keep-wsln-dedent/input.mical");
+    let snapshot = utils::make_snapshot("block-string-0-literal-keep-wsln-dedent", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_0_literal_keep_wsln_eof() {
+    let source = include_str!("../../../test-suite/block-string-0-literal-keep-wsln-eof/input.mical");
+    let snapshot = utils::make_snapshot("block-string-0-literal-keep-wsln-eof", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_0_literal_strip_emptyln_dedent() {
+    let source = include_str!("../../../test-suite/block-string-0-literal-strip-emptyln-dedent/input.mical");
+    let snapshot = utils::make_snapshot("block-string-0-literal-strip-emptyln-dedent", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_0_literal_strip_emptyln_eof() {
+    let source = include_str!("../../../test-suite/block-string-0-literal-strip-emptyln-eof/input.mical");
+    let snapshot = utils::make_snapshot("block-string-0-literal-strip-emptyln-eof", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_0_literal_strip_none_eof() {
+    let source = include_str!("../../../test-suite/block-string-0-literal-strip-none-eof/input.mical");
+    let snapshot = utils::make_snapshot("block-string-0-literal-strip-none-eof", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_0_literal_strip_none_eof_nonl() {
+    let source = include_str!("../../../test-suite/block-string-0-literal-strip-none-eof-nonl/input.mical");
+    let snapshot = utils::make_snapshot("block-string-0-literal-strip-none-eof-nonl", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_0_literal_strip_wsln_dedent() {
+    let source = include_str!("../../../test-suite/block-string-0-literal-strip-wsln-dedent/input.mical");
+    let snapshot = utils::make_snapshot("block-string-0-literal-strip-wsln-dedent", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_0_literal_strip_wsln_eof() {
+    let source = include_str!("../../../test-suite/block-string-0-literal-strip-wsln-eof/input.mical");
+    let snapshot = utils::make_snapshot("block-string-0-literal-strip-wsln-eof", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_1_folded_clip_emptyln_none_eof() {
+    let source = include_str!("../../../test-suite/block-string-1-folded-clip-emptyln-none-eof/input.mical");
+    let snapshot = utils::make_snapshot("block-string-1-folded-clip-emptyln-none-eof", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_1_folded_clip_none_emptyln_eof_nonl() {
+    let source = include_str!("../../../test-suite/block-string-1-folded-clip-none-emptyln-eof-nonl/input.mical");
+    let snapshot = utils::make_snapshot("block-string-1-folded-clip-none-emptyln-eof-nonl", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_1_folded_keep_emptyln_wsln_eof_nonl() {
+    let source = include_str!("../../../test-suite/block-string-1-folded-keep-emptyln-wsln-eof-nonl/input.mical");
+    let snapshot = utils::make_snapshot("block-string-1-folded-keep-emptyln-wsln-eof-nonl", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_1_folded_keep_none_emptyln_dedent() {
+    let source = include_str!("../../../test-suite/block-string-1-folded-keep-none-emptyln-dedent/input.mical");
+    let snapshot = utils::make_snapshot("block-string-1-folded-keep-none-emptyln-dedent", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_1_folded_strip_emptyln_wsln_eof() {
+    let source = include_str!("../../../test-suite/block-string-1-folded-strip-emptyln-wsln-eof/input.mical");
+    let snapshot = utils::make_snapshot("block-string-1-folded-strip-emptyln-wsln-eof", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_1_folded_strip_wsln_none_dedent() {
+    let source = include_str!("../../../test-suite/block-string-1-folded-strip-wsln-none-dedent/input.mical");
+    let snapshot = utils::make_snapshot("block-string-1-folded-strip-wsln-none-dedent", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_1_literal_clip_emptyln_none_eof_nonl() {
+    let source = include_str!("../../../test-suite/block-string-1-literal-clip-emptyln-none-eof-nonl/input.mical");
+    let snapshot = utils::make_snapshot("block-string-1-literal-clip-emptyln-none-eof-nonl", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_1_literal_clip_emptyln_wsln_dedent() {
+    let source = include_str!("../../../test-suite/block-string-1-literal-clip-emptyln-wsln-dedent/input.mical");
+    let snapshot = utils::make_snapshot("block-string-1-literal-clip-emptyln-wsln-dedent", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_1_literal_clip_none_none_eof_nonl() {
+    let source = include_str!("../../../test-suite/block-string-1-literal-clip-none-none-eof-nonl/input.mical");
+    let snapshot = utils::make_snapshot("block-string-1-literal-clip-none-none-eof-nonl", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_1_literal_clip_wsln_wsln_dedent() {
+    let source = include_str!("../../../test-suite/block-string-1-literal-clip-wsln-wsln-dedent/input.mical");
+    let snapshot = utils::make_snapshot("block-string-1-literal-clip-wsln-wsln-dedent", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_1_literal_keep_emptyln_wsln_eof_nonl() {
+    let source = include_str!("../../../test-suite/block-string-1-literal-keep-emptyln-wsln-eof-nonl/input.mical");
+    let snapshot = utils::make_snapshot("block-string-1-literal-keep-emptyln-wsln-eof-nonl", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_1_literal_keep_wsln_emptyln_eof() {
+    let source = include_str!("../../../test-suite/block-string-1-literal-keep-wsln-emptyln-eof/input.mical");
+    let snapshot = utils::make_snapshot("block-string-1-literal-keep-wsln-emptyln-eof", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_1_literal_keep_wsln_none_eof_nonl() {
+    let source = include_str!("../../../test-suite/block-string-1-literal-keep-wsln-none-eof-nonl/input.mical");
+    let snapshot = utils::make_snapshot("block-string-1-literal-keep-wsln-none-eof-nonl", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_1_literal_strip_emptyln_emptyln_eof_nonl() {
+    let source = include_str!("../../../test-suite/block-string-1-literal-strip-emptyln-emptyln-eof-nonl/input.mical");
+    let snapshot = utils::make_snapshot("block-string-1-literal-strip-emptyln-emptyln-eof-nonl", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_1_literal_strip_none_emptyln_eof() {
+    let source = include_str!("../../../test-suite/block-string-1-literal-strip-none-emptyln-eof/input.mical");
+    let snapshot = utils::make_snapshot("block-string-1-literal-strip-none-emptyln-eof", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_1_literal_strip_none_wsln_eof() {
+    let source = include_str!("../../../test-suite/block-string-1-literal-strip-none-wsln-eof/input.mical");
+    let snapshot = utils::make_snapshot("block-string-1-literal-strip-none-wsln-eof", source);
     utils::assert_snapshot!(snapshot);
 }
 #[test]
@@ -21,81 +327,15 @@ fn block_string_body_trailing_whitespace() {
     utils::assert_snapshot!(snapshot);
 }
 #[test]
-fn block_string_chomp_empty() {
-    let source = include_str!("../../../test-suite/block-string-chomp-empty/input.mical");
-    let snapshot = utils::make_snapshot("block-string-chomp-empty", source);
-    utils::assert_snapshot!(snapshot);
-}
-#[test]
-fn block_string_chomp_keep() {
-    let source = include_str!("../../../test-suite/block-string-chomp-keep/input.mical");
-    let snapshot = utils::make_snapshot("block-string-chomp-keep", source);
-    utils::assert_snapshot!(snapshot);
-}
-#[test]
-fn block_string_chomp_keep_trailing() {
-    let source = include_str!("../../../test-suite/block-string-chomp-keep-trailing/input.mical");
-    let snapshot = utils::make_snapshot("block-string-chomp-keep-trailing", source);
-    utils::assert_snapshot!(snapshot);
-}
-#[test]
-fn block_string_chomp_strip() {
-    let source = include_str!("../../../test-suite/block-string-chomp-strip/input.mical");
-    let snapshot = utils::make_snapshot("block-string-chomp-strip", source);
-    utils::assert_snapshot!(snapshot);
-}
-#[test]
-fn block_string_clip_trailing() {
-    let source = include_str!("../../../test-suite/block-string-clip-trailing/input.mical");
-    let snapshot = utils::make_snapshot("block-string-clip-trailing", source);
-    utils::assert_snapshot!(snapshot);
-}
-#[test]
 fn block_string_consecutive() {
     let source = include_str!("../../../test-suite/block-string-consecutive/input.mical");
     let snapshot = utils::make_snapshot("block-string-consecutive", source);
     utils::assert_snapshot!(snapshot);
 }
 #[test]
-fn block_string_empty() {
-    let source = include_str!("../../../test-suite/block-string-empty/input.mical");
-    let snapshot = utils::make_snapshot("block-string-empty", source);
-    utils::assert_snapshot!(snapshot);
-}
-#[test]
-fn block_string_empty_body() {
-    let source = include_str!("../../../test-suite/block-string-empty-body/input.mical");
-    let snapshot = utils::make_snapshot("block-string-empty-body", source);
-    utils::assert_snapshot!(snapshot);
-}
-#[test]
-fn block_string_empty_line() {
-    let source = include_str!("../../../test-suite/block-string-empty-line/input.mical");
-    let snapshot = utils::make_snapshot("block-string-empty-line", source);
-    utils::assert_snapshot!(snapshot);
-}
-#[test]
-fn block_string_empty_lines_inside() {
-    let source = include_str!("../../../test-suite/block-string-empty-lines-inside/input.mical");
-    let snapshot = utils::make_snapshot("block-string-empty-lines-inside", source);
-    utils::assert_snapshot!(snapshot);
-}
-#[test]
 fn block_string_end_at_outer() {
     let source = include_str!("../../../test-suite/block-string-end-at-outer/input.mical");
     let snapshot = utils::make_snapshot("block-string-end-at-outer", source);
-    utils::assert_snapshot!(snapshot);
-}
-#[test]
-fn block_string_eof() {
-    let source = include_str!("../../../test-suite/block-string-eof/input.mical");
-    let snapshot = utils::make_snapshot("block-string-eof", source);
-    utils::assert_snapshot!(snapshot);
-}
-#[test]
-fn block_string_eof_no_newline() {
-    let source = include_str!("../../../test-suite/block-string-eof-no-newline/input.mical");
-    let snapshot = utils::make_snapshot("block-string-eof-no-newline", source);
     utils::assert_snapshot!(snapshot);
 }
 #[test]
@@ -111,33 +351,9 @@ fn block_string_fallback() {
     utils::assert_snapshot!(snapshot);
 }
 #[test]
-fn block_string_fold_leading_empty() {
-    let source = include_str!("../../../test-suite/block-string-fold-leading-empty/input.mical");
-    let snapshot = utils::make_snapshot("block-string-fold-leading-empty", source);
-    utils::assert_snapshot!(snapshot);
-}
-#[test]
-fn block_string_fold_style() {
-    let source = include_str!("../../../test-suite/block-string-fold-style/input.mical");
-    let snapshot = utils::make_snapshot("block-string-fold-style", source);
-    utils::assert_snapshot!(snapshot);
-}
-#[test]
-fn block_string_fold_trailing_empty() {
-    let source = include_str!("../../../test-suite/block-string-fold-trailing-empty/input.mical");
-    let snapshot = utils::make_snapshot("block-string-fold-trailing-empty", source);
-    utils::assert_snapshot!(snapshot);
-}
-#[test]
 fn block_string_folded() {
     let source = include_str!("../../../test-suite/block-string-folded/input.mical");
     let snapshot = utils::make_snapshot("block-string-folded", source);
-    utils::assert_snapshot!(snapshot);
-}
-#[test]
-fn block_string_folded_keep() {
-    let source = include_str!("../../../test-suite/block-string-folded-keep/input.mical");
-    let snapshot = utils::make_snapshot("block-string-folded-keep", source);
     utils::assert_snapshot!(snapshot);
 }
 #[test]
@@ -171,63 +387,108 @@ fn block_string_insufficient_indent() {
     utils::assert_snapshot!(snapshot);
 }
 #[test]
-fn block_string_keep() {
-    let source = include_str!("../../../test-suite/block-string-keep/input.mical");
-    let snapshot = utils::make_snapshot("block-string-keep", source);
-    utils::assert_snapshot!(snapshot);
-}
-#[test]
 fn block_string_keep_multi_trailing() {
     let source = include_str!("../../../test-suite/block-string-keep-multi-trailing/input.mical");
     let snapshot = utils::make_snapshot("block-string-keep-multi-trailing", source);
     utils::assert_snapshot!(snapshot);
 }
 #[test]
-fn block_string_leading_empty_line() {
-    let source = include_str!("../../../test-suite/block-string-leading-empty-line/input.mical");
-    let snapshot = utils::make_snapshot("block-string-leading-empty-line", source);
+fn block_string_multi_folded_clip_emptyln_none_wsln_eof_nonl() {
+    let source =
+        include_str!("../../../test-suite/block-string-multi-folded-clip-emptyln-none-wsln-eof-nonl/input.mical");
+    let snapshot = utils::make_snapshot("block-string-multi-folded-clip-emptyln-none-wsln-eof-nonl", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_multi_folded_clip_wsln_emptyln_emptyln_eof() {
+    let source =
+        include_str!("../../../test-suite/block-string-multi-folded-clip-wsln-emptyln-emptyln-eof/input.mical");
+    let snapshot = utils::make_snapshot("block-string-multi-folded-clip-wsln-emptyln-emptyln-eof", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_multi_folded_keep_emptyln_emptyln_none_dedent() {
+    let source =
+        include_str!("../../../test-suite/block-string-multi-folded-keep-emptyln-emptyln-none-dedent/input.mical");
+    let snapshot = utils::make_snapshot("block-string-multi-folded-keep-emptyln-emptyln-none-dedent", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_multi_folded_keep_emptyln_wsln_none_eof() {
+    let source = include_str!("../../../test-suite/block-string-multi-folded-keep-emptyln-wsln-none-eof/input.mical");
+    let snapshot = utils::make_snapshot("block-string-multi-folded-keep-emptyln-wsln-none-eof", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_multi_folded_keep_wsln_wsln_emptyln_dedent() {
+    let source =
+        include_str!("../../../test-suite/block-string-multi-folded-keep-wsln-wsln-emptyln-dedent/input.mical");
+    let snapshot = utils::make_snapshot("block-string-multi-folded-keep-wsln-wsln-emptyln-dedent", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_multi_folded_strip_emptyln_emptyln_wsln_eof_nonl() {
+    let source =
+        include_str!("../../../test-suite/block-string-multi-folded-strip-emptyln-emptyln-wsln-eof-nonl/input.mical");
+    let snapshot = utils::make_snapshot("block-string-multi-folded-strip-emptyln-emptyln-wsln-eof-nonl", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_multi_folded_strip_none_wsln_emptyln_eof_nonl() {
+    let source =
+        include_str!("../../../test-suite/block-string-multi-folded-strip-none-wsln-emptyln-eof-nonl/input.mical");
+    let snapshot = utils::make_snapshot("block-string-multi-folded-strip-none-wsln-emptyln-eof-nonl", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_multi_folded_strip_wsln_none_wsln_dedent() {
+    let source = include_str!("../../../test-suite/block-string-multi-folded-strip-wsln-none-wsln-dedent/input.mical");
+    let snapshot = utils::make_snapshot("block-string-multi-folded-strip-wsln-none-wsln-dedent", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_multi_literal_clip_none_wsln_wsln_eof_nonl() {
+    let source =
+        include_str!("../../../test-suite/block-string-multi-literal-clip-none-wsln-wsln-eof-nonl/input.mical");
+    let snapshot = utils::make_snapshot("block-string-multi-literal-clip-none-wsln-wsln-eof-nonl", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_multi_literal_clip_wsln_wsln_none_dedent() {
+    let source = include_str!("../../../test-suite/block-string-multi-literal-clip-wsln-wsln-none-dedent/input.mical");
+    let snapshot = utils::make_snapshot("block-string-multi-literal-clip-wsln-wsln-none-dedent", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_multi_literal_keep_none_emptyln_wsln_eof() {
+    let source = include_str!("../../../test-suite/block-string-multi-literal-keep-none-emptyln-wsln-eof/input.mical");
+    let snapshot = utils::make_snapshot("block-string-multi-literal-keep-none-emptyln-wsln-eof", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_multi_literal_keep_wsln_none_none_eof_nonl() {
+    let source =
+        include_str!("../../../test-suite/block-string-multi-literal-keep-wsln-none-none-eof-nonl/input.mical");
+    let snapshot = utils::make_snapshot("block-string-multi-literal-keep-wsln-none-none-eof-nonl", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_multi_literal_strip_emptyln_none_emptyln_eof() {
+    let source =
+        include_str!("../../../test-suite/block-string-multi-literal-strip-emptyln-none-emptyln-eof/input.mical");
+    let snapshot = utils::make_snapshot("block-string-multi-literal-strip-emptyln-none-emptyln-eof", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn block_string_multi_literal_strip_none_none_none_dedent() {
+    let source = include_str!("../../../test-suite/block-string-multi-literal-strip-none-none-none-dedent/input.mical");
+    let snapshot = utils::make_snapshot("block-string-multi-literal-strip-none-none-none-dedent", source);
     utils::assert_snapshot!(snapshot);
 }
 #[test]
 fn block_string_nested_indent() {
     let source = include_str!("../../../test-suite/block-string-nested-indent/input.mical");
     let snapshot = utils::make_snapshot("block-string-nested-indent", source);
-    utils::assert_snapshot!(snapshot);
-}
-#[test]
-fn block_string_newline() {
-    let source = include_str!("../../../test-suite/block-string-newline/input.mical");
-    let snapshot = utils::make_snapshot("block-string-newline", source);
-    utils::assert_snapshot!(snapshot);
-}
-#[test]
-fn block_string_only_empty_lines() {
-    let source = include_str!("../../../test-suite/block-string-only-empty-lines/input.mical");
-    let snapshot = utils::make_snapshot("block-string-only-empty-lines", source);
-    utils::assert_snapshot!(snapshot);
-}
-#[test]
-fn block_string_strip() {
-    let source = include_str!("../../../test-suite/block-string-strip/input.mical");
-    let snapshot = utils::make_snapshot("block-string-strip", source);
-    utils::assert_snapshot!(snapshot);
-}
-#[test]
-fn block_string_trailing_empty_lines() {
-    let source = include_str!("../../../test-suite/block-string-trailing-empty-lines/input.mical");
-    let snapshot = utils::make_snapshot("block-string-trailing-empty-lines", source);
-    utils::assert_snapshot!(snapshot);
-}
-#[test]
-fn block_string_whitespace_only_line() {
-    let source = include_str!("../../../test-suite/block-string-whitespace-only-line/input.mical");
-    let snapshot = utils::make_snapshot("block-string-whitespace-only-line", source);
-    utils::assert_snapshot!(snapshot);
-}
-#[test]
-fn block_string_whitespace_only_shallow() {
-    let source = include_str!("../../../test-suite/block-string-whitespace-only-shallow/input.mical");
-    let snapshot = utils::make_snapshot("block-string-whitespace-only-shallow", source);
     utils::assert_snapshot!(snapshot);
 }
 #[test]

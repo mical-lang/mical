@@ -1,0 +1,22 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# block-string-0-literal-strip-wsln-eof
+
+## Input
+
+```mical
+key |-
+ 
+
+```
+
+## JSON
+
+```json
+{
+  "key": ""
+}
+```
+
+vim:ft=markdown

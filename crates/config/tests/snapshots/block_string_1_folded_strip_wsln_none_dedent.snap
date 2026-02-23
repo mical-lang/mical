@@ -1,0 +1,24 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# block-string-1-folded-strip-wsln-none-dedent
+
+## Input
+
+```mical
+key >-
+  hello
+other val
+
+```
+
+## JSON
+
+```json
+{
+  "key": "hello",
+  "other": "val"
+}
+```
+
+vim:ft=markdown

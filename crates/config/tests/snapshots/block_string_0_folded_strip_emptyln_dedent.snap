@@ -1,0 +1,24 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# block-string-0-folded-strip-emptyln-dedent
+
+## Input
+
+```mical
+key >-
+
+other val
+
+```
+
+## JSON
+
+```json
+{
+  "key": "",
+  "other": "val"
+}
+```
+
+vim:ft=markdown

@@ -1,0 +1,78 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# block-string-multi-literal-clip-none-wsln-wsln-eof-nonl
+
+## Input
+
+```
+key |
+  hello
+ 
+  world
+ 
+```
+
+## CST
+
+```
+SOURCE_FILE@0..25
+  ENTRY@0..25
+    WORD_KEY@0..3
+      WORD@0..3 "key"
+    SPACE@3..4 " "
+    BLOCK_STRING@4..25
+      BLOCK_STRING_HEADER@4..6
+        PIPE@4..5 "|"
+        NEWLINE@5..6 "\n"
+      SPACE@6..8 "  "
+      LINE_STRING@8..13
+        STRING@8..13 "hello"
+      NEWLINE@13..14 "\n"
+      SPACE@14..15 " "
+      LINE_STRING@15..15
+      NEWLINE@15..16 "\n"
+      SPACE@16..18 "  "
+      LINE_STRING@18..23
+        STRING@18..23 "world"
+      NEWLINE@23..24 "\n"
+      SPACE@24..25 " "
+      LINE_STRING@25..25
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..3 "key",
+            },
+            value: BlockString {
+                header: BlockStringHeader {
+                    style: PIPE@4..5 "|",
+                    chomp: none,
+                },
+                lines: [
+                    LineString {
+                        string: STRING@8..13 "hello",
+                    },
+                    LineString {
+                        string: none,
+                    },
+                    LineString {
+                        string: STRING@18..23 "world",
+                    },
+                    LineString {
+                        string: none,
+                    },
+                ],
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

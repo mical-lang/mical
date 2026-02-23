@@ -1,0 +1,89 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# block-string-multi-folded-keep-emptyln-emptyln-none-dedent
+
+## Input
+
+```
+key >+
+  hello
+
+  world
+other val
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..34
+  ENTRY@0..23
+    WORD_KEY@0..3
+      WORD@0..3 "key"
+    SPACE@3..4 " "
+    BLOCK_STRING@4..23
+      BLOCK_STRING_HEADER@4..7
+        GT@4..5 ">"
+        PLUS@5..6 "+"
+        NEWLINE@6..7 "\n"
+      SPACE@7..9 "  "
+      LINE_STRING@9..14
+        STRING@9..14 "hello"
+      NEWLINE@14..15 "\n"
+      LINE_STRING@15..15
+      NEWLINE@15..16 "\n"
+      SPACE@16..18 "  "
+      LINE_STRING@18..23
+        STRING@18..23 "world"
+  NEWLINE@23..24 "\n"
+  ENTRY@24..33
+    WORD_KEY@24..29
+      WORD@24..29 "other"
+    SPACE@29..30 " "
+    LINE_STRING@30..33
+      STRING@30..33 "val"
+  NEWLINE@33..34 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..3 "key",
+            },
+            value: BlockString {
+                header: BlockStringHeader {
+                    style: GT@4..5 ">",
+                    chomp: PLUS@5..6 "+",
+                },
+                lines: [
+                    LineString {
+                        string: STRING@9..14 "hello",
+                    },
+                    LineString {
+                        string: none,
+                    },
+                    LineString {
+                        string: STRING@18..23 "world",
+                    },
+                ],
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@24..29 "other",
+            },
+            value: LineString {
+                string: STRING@30..33 "val",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

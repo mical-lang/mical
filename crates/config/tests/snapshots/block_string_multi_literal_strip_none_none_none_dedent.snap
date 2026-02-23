@@ -1,0 +1,25 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# block-string-multi-literal-strip-none-none-none-dedent
+
+## Input
+
+```mical
+key |-
+  hello
+  world
+other val
+
+```
+
+## JSON
+
+```json
+{
+  "key": "hello\nworld",
+  "other": "val"
+}
+```
+
+vim:ft=markdown

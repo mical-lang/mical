@@ -1,0 +1,75 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# block-string-1-folded-keep-none-emptyln-dedent
+
+## Input
+
+```
+key >+
+  hello
+other val
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..25
+  ENTRY@0..14
+    WORD_KEY@0..3
+      WORD@0..3 "key"
+    SPACE@3..4 " "
+    BLOCK_STRING@4..14
+      BLOCK_STRING_HEADER@4..7
+        GT@4..5 ">"
+        PLUS@5..6 "+"
+        NEWLINE@6..7 "\n"
+      SPACE@7..9 "  "
+      LINE_STRING@9..14
+        STRING@9..14 "hello"
+  NEWLINE@14..15 "\n"
+  ENTRY@15..24
+    WORD_KEY@15..20
+      WORD@15..20 "other"
+    SPACE@20..21 " "
+    LINE_STRING@21..24
+      STRING@21..24 "val"
+  NEWLINE@24..25 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..3 "key",
+            },
+            value: BlockString {
+                header: BlockStringHeader {
+                    style: GT@4..5 ">",
+                    chomp: PLUS@5..6 "+",
+                },
+                lines: [
+                    LineString {
+                        string: STRING@9..14 "hello",
+                    },
+                ],
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@15..20 "other",
+            },
+            value: LineString {
+                string: STRING@21..24 "val",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

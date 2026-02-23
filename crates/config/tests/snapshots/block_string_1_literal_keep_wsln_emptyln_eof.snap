@@ -1,0 +1,22 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# block-string-1-literal-keep-wsln-emptyln-eof
+
+## Input
+
+```mical
+key |+
+  hello
+
+```
+
+## JSON
+
+```json
+{
+  "key": "hello\n"
+}
+```
+
+vim:ft=markdown

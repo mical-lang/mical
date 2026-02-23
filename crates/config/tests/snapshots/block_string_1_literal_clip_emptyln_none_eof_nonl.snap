@@ -1,0 +1,21 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# block-string-1-literal-clip-emptyln-none-eof-nonl
+
+## Input
+
+```mical
+key |
+  hello
+```
+
+## JSON
+
+```json
+{
+  "key": "hello\n"
+}
+```
+
+vim:ft=markdown

@@ -1,0 +1,67 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# block-string-0-literal-clip-emptyln-dedent
+
+## Input
+
+```
+key |
+
+other val
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..17
+  ENTRY@0..6
+    WORD_KEY@0..3
+      WORD@0..3 "key"
+    SPACE@3..4 " "
+    BLOCK_STRING@4..6
+      BLOCK_STRING_HEADER@4..6
+        PIPE@4..5 "|"
+        NEWLINE@5..6 "\n"
+  NEWLINE@6..7 "\n"
+  ENTRY@7..16
+    WORD_KEY@7..12
+      WORD@7..12 "other"
+    SPACE@12..13 " "
+    LINE_STRING@13..16
+      STRING@13..16 "val"
+  NEWLINE@16..17 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..3 "key",
+            },
+            value: BlockString {
+                header: BlockStringHeader {
+                    style: PIPE@4..5 "|",
+                    chomp: none,
+                },
+                lines: [],
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@7..12 "other",
+            },
+            value: LineString {
+                string: STRING@13..16 "val",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

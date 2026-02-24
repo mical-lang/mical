@@ -25,29 +25,40 @@ def mical_eval(input)
   [nil, stderr.strip]
 end
 
+# Returns :ok, :broken, or :fail
 def write_test_case(name, input, expected_output: nil)
   dir = File.join(SUITE_DIR, name)
   FileUtils.mkdir_p(dir)
-  File.binwrite(File.join(dir, 'input.mical'), input)
-
-  if expected_output
-    File.write(File.join(dir, 'output.json'), expected_output)
-    puts "OK   #{name} (manual output)"
-    return true
-  end
 
   output, err = mical_eval(input)
-  if output.nil?
-    $stderr.puts "SKIP #{name}: #{err}"
-    FileUtils.rm_rf(dir)
-    return false
+
+  if output
+    File.binwrite(File.join(dir, 'input.mical'), input)
+    # Remove stale input.broken.mical if the case now succeeds
+    broken_path = File.join(dir, 'input.broken.mical')
+    FileUtils.rm_f(broken_path)
+
+    parsed = JSON.parse(output)
+    pretty = JSON.pretty_generate(parsed) + "\n"
+    File.write(File.join(dir, 'output.json'), pretty)
+    puts "OK     #{name}"
+    return :ok
   end
 
-  parsed = JSON.parse(output)
-  pretty = JSON.pretty_generate(parsed) + "\n"
-  File.write(File.join(dir, 'output.json'), pretty)
-  puts "OK   #{name}"
-  true
+  if expected_output
+    File.binwrite(File.join(dir, 'input.broken.mical'), input)
+    # Remove stale input.mical if present
+    mical_path = File.join(dir, 'input.mical')
+    FileUtils.rm_f(mical_path)
+
+    File.write(File.join(dir, 'output.json'), expected_output)
+    puts "BROKEN #{name}: #{err}"
+    return :broken
+  end
+
+  File.binwrite(File.join(dir, 'input.mical'), input)
+  $stderr.puts "FAIL   #{name}: #{err}"
+  :fail
 end
 
 def pretty_json(hash)
@@ -144,8 +155,8 @@ def chomp_name(idx); CHOMPS[idx][0]; end
 def run_phase1
   phase1_cases = []
 
-  STYLES.each_with_index do |(sname, schar), si|
-    CHOMPS.each_with_index do |(cname, cchar), ci|
+  STYLES.each do |(sname, schar)|
+    CHOMPS.each do |(cname, cchar)|
       ind = "#{schar}#{cchar}"
 
       phase1_cases << {
@@ -164,8 +175,8 @@ def run_phase1
     end
   end
 
-  STYLES.each_with_index do |(sname, schar), si|
-    CHOMPS.each_with_index do |(cname, cchar), ci|
+  STYLES.each do |(sname, schar)|
+    CHOMPS.each do |(cname, cchar)|
       ind = "#{schar}#{cchar}"
 
       phase1_cases << {
@@ -179,8 +190,8 @@ def run_phase1
     end
   end
 
-  STYLES.each_with_index do |(sname, schar), si|
-    CHOMPS.each_with_index do |(cname, cchar), ci|
+  STYLES.each do |(sname, schar)|
+    CHOMPS.each do |(cname, cchar)|
       ind = "#{schar}#{cchar}"
 
       phase1_cases << {
@@ -307,17 +318,27 @@ end
 
 # --- Runner ---
 
+$has_failures = false
+
 def run_cases(cases)
   ok = 0
+  broken = 0
   fail_count = 0
   cases.each do |c|
-    if write_test_case(c[:name], c[:input], expected_output: c[:expected_output])
-      ok += 1
-    else
-      fail_count += 1
+    result = write_test_case(c[:name], c[:input], expected_output: c[:expected_output])
+    case result
+    when :ok     then ok += 1
+    when :broken then broken += 1
+    when :fail   then fail_count += 1
     end
   end
-  puts "Result: #{ok} OK, #{fail_count} FAIL (total #{cases.size})"
+
+  parts = ["#{ok} ok"]
+  parts << "#{broken} broken" if broken > 0
+  parts << "#{fail_count} FAIL" if fail_count > 0
+  puts "Result: #{parts.join(', ')} (total #{cases.size})"
+
+  $has_failures = true if fail_count > 0
 end
 
 phase = ARGV[0]&.to_i || 0
@@ -331,3 +352,5 @@ else
   run_phase2
   run_phase3
 end
+
+exit 1 if $has_failures

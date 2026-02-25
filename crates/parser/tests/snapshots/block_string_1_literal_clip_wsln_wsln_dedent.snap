@@ -7,7 +7,9 @@ source: crates/parser/tests/snapshots.rs
 
 ```
 key |
+ 
   hello
+ 
 other val
 
 ```
@@ -15,26 +17,32 @@ other val
 ## CST
 
 ```
-SOURCE_FILE@0..24
-  ENTRY@0..13
+SOURCE_FILE@0..28
+  ENTRY@0..17
     WORD_KEY@0..3
       WORD@0..3 "key"
     SPACE@3..4 " "
-    BLOCK_STRING@4..13
+    BLOCK_STRING@4..17
       BLOCK_STRING_HEADER@4..6
         PIPE@4..5 "|"
         NEWLINE@5..6 "\n"
-      SPACE@6..8 "  "
-      LINE_STRING@8..13
-        STRING@8..13 "hello"
-  NEWLINE@13..14 "\n"
-  ENTRY@14..23
-    WORD_KEY@14..19
-      WORD@14..19 "other"
-    SPACE@19..20 " "
-    LINE_STRING@20..23
-      STRING@20..23 "val"
-  NEWLINE@23..24 "\n"
+      SPACE@6..7 " "
+      LINE_STRING@7..7
+      NEWLINE@7..8 "\n"
+      SPACE@8..10 "  "
+      LINE_STRING@10..15
+        STRING@10..15 "hello"
+      NEWLINE@15..16 "\n"
+      SPACE@16..17 " "
+      LINE_STRING@17..17
+  NEWLINE@17..18 "\n"
+  ENTRY@18..27
+    WORD_KEY@18..23
+      WORD@18..23 "other"
+    SPACE@23..24 " "
+    LINE_STRING@24..27
+      STRING@24..27 "val"
+  NEWLINE@27..28 "\n"
 ```
 
 ## AST
@@ -54,17 +62,23 @@ SourceFile {
                 },
                 lines: [
                     LineString {
-                        string: STRING@8..13 "hello",
+                        string: none,
+                    },
+                    LineString {
+                        string: STRING@10..15 "hello",
+                    },
+                    LineString {
+                        string: none,
                     },
                 ],
             },
         },
         Entry {
             key: WordKey {
-                word: WORD@14..19 "other",
+                word: WORD@18..23 "other",
             },
             value: LineString {
-                string: STRING@20..23 "val",
+                string: STRING@24..27 "val",
             },
         },
     ],

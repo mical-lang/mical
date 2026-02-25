@@ -7,6 +7,7 @@ source: crates/parser/tests/snapshots.rs
 
 ```
 key >
+ 
   hello
 
   world
@@ -17,27 +18,30 @@ key >
 ## CST
 
 ```
-SOURCE_FILE@0..24
-  ENTRY@0..23
+SOURCE_FILE@0..26
+  ENTRY@0..25
     WORD_KEY@0..3
       WORD@0..3 "key"
     SPACE@3..4 " "
-    BLOCK_STRING@4..23
+    BLOCK_STRING@4..25
       BLOCK_STRING_HEADER@4..6
         GT@4..5 ">"
         NEWLINE@5..6 "\n"
-      SPACE@6..8 "  "
-      LINE_STRING@8..13
-        STRING@8..13 "hello"
-      NEWLINE@13..14 "\n"
-      LINE_STRING@14..14
-      NEWLINE@14..15 "\n"
-      SPACE@15..17 "  "
-      LINE_STRING@17..22
-        STRING@17..22 "world"
-      NEWLINE@22..23 "\n"
-      LINE_STRING@23..23
-  NEWLINE@23..24 "\n"
+      SPACE@6..7 " "
+      LINE_STRING@7..7
+      NEWLINE@7..8 "\n"
+      SPACE@8..10 "  "
+      LINE_STRING@10..15
+        STRING@10..15 "hello"
+      NEWLINE@15..16 "\n"
+      LINE_STRING@16..16
+      NEWLINE@16..17 "\n"
+      SPACE@17..19 "  "
+      LINE_STRING@19..24
+        STRING@19..24 "world"
+      NEWLINE@24..25 "\n"
+      LINE_STRING@25..25
+  NEWLINE@25..26 "\n"
 ```
 
 ## AST
@@ -57,13 +61,16 @@ SourceFile {
                 },
                 lines: [
                     LineString {
-                        string: STRING@8..13 "hello",
+                        string: none,
+                    },
+                    LineString {
+                        string: STRING@10..15 "hello",
                     },
                     LineString {
                         string: none,
                     },
                     LineString {
-                        string: STRING@17..22 "world",
+                        string: STRING@19..24 "world",
                     },
                     LineString {
                         string: none,

@@ -7,6 +7,7 @@ source: crates/config/tests/snapshots.rs
 
 ```mical
 key >-
+ 
   hello
 other val
 
@@ -16,7 +17,7 @@ other val
 
 ```json
 {
-  "key": "hello",
+  "key": "\nhello",
   "other": "val"
 }
 ```

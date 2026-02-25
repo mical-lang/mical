@@ -255,8 +255,9 @@ def run_phase2
 
   phase2_cases = rows.map do |row|
     si, ci, li, ti, xi = row
-    name = "block-string-1-#{style_name(si)}-#{chomp_name(ci)}-#{LEADS[li]}-#{TRAILS[ti]}-#{TERMS[xi]}"
-    input = build_1line_input(si, ci, li, ti, TERMS[xi])
+    lead, trail, term = LEADS[li], TRAILS[ti], TERMS[xi]
+    name = "block-string-1-#{style_name(si)}-#{chomp_name(ci)}-#{lead}-#{trail}-#{term}"
+    input = build_1line_input(si, ci, lead, trail, term)
     { name: name, input: input }
   end
 
@@ -306,9 +307,9 @@ def run_phase3
 
   phase3_cases = rows.map do |row|
     si, ci, li, mi, ti, xi = row
-    mids = ['none', 'emptyln', 'wsln']
-    name = "block-string-multi-#{style_name(si)}-#{chomp_name(ci)}-#{LEADS[li]}-#{mids[mi]}-#{TRAILS[ti]}-#{TERMS[xi]}"
-    input = build_multiline_input(si, ci, li, mids[mi], TRAILS[ti], TERMS[xi])
+    lead, mid, trail, term = LEADS[li], LEADS[mi], TRAILS[ti], TERMS[xi]
+    name = "block-string-multi-#{style_name(si)}-#{chomp_name(ci)}-#{lead}-#{mid}-#{trail}-#{term}"
+    input = build_multiline_input(si, ci, lead, mid, trail, term)
     { name: name, input: input }
   end
 

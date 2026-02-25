@@ -7,6 +7,7 @@ source: crates/parser/tests/snapshots.rs
 
 ```
 key >+
+ 
   hello
  
   world
@@ -18,36 +19,39 @@ other val
 ## CST
 
 ```
-SOURCE_FILE@0..36
-  ENTRY@0..25
+SOURCE_FILE@0..38
+  ENTRY@0..27
     WORD_KEY@0..3
       WORD@0..3 "key"
     SPACE@3..4 " "
-    BLOCK_STRING@4..25
+    BLOCK_STRING@4..27
       BLOCK_STRING_HEADER@4..7
         GT@4..5 ">"
         PLUS@5..6 "+"
         NEWLINE@6..7 "\n"
-      SPACE@7..9 "  "
-      LINE_STRING@9..14
-        STRING@9..14 "hello"
-      NEWLINE@14..15 "\n"
-      SPACE@15..16 " "
-      LINE_STRING@16..16
+      SPACE@7..8 " "
+      LINE_STRING@8..8
+      NEWLINE@8..9 "\n"
+      SPACE@9..11 "  "
+      LINE_STRING@11..16
+        STRING@11..16 "hello"
       NEWLINE@16..17 "\n"
-      SPACE@17..19 "  "
-      LINE_STRING@19..24
-        STRING@19..24 "world"
-      NEWLINE@24..25 "\n"
-      LINE_STRING@25..25
-  NEWLINE@25..26 "\n"
-  ENTRY@26..35
-    WORD_KEY@26..31
-      WORD@26..31 "other"
-    SPACE@31..32 " "
-    LINE_STRING@32..35
-      STRING@32..35 "val"
-  NEWLINE@35..36 "\n"
+      SPACE@17..18 " "
+      LINE_STRING@18..18
+      NEWLINE@18..19 "\n"
+      SPACE@19..21 "  "
+      LINE_STRING@21..26
+        STRING@21..26 "world"
+      NEWLINE@26..27 "\n"
+      LINE_STRING@27..27
+  NEWLINE@27..28 "\n"
+  ENTRY@28..37
+    WORD_KEY@28..33
+      WORD@28..33 "other"
+    SPACE@33..34 " "
+    LINE_STRING@34..37
+      STRING@34..37 "val"
+  NEWLINE@37..38 "\n"
 ```
 
 ## AST
@@ -67,13 +71,16 @@ SourceFile {
                 },
                 lines: [
                     LineString {
-                        string: STRING@9..14 "hello",
+                        string: none,
+                    },
+                    LineString {
+                        string: STRING@11..16 "hello",
                     },
                     LineString {
                         string: none,
                     },
                     LineString {
-                        string: STRING@19..24 "world",
+                        string: STRING@21..26 "world",
                     },
                     LineString {
                         string: none,
@@ -83,10 +90,10 @@ SourceFile {
         },
         Entry {
             key: WordKey {
-                word: WORD@26..31 "other",
+                word: WORD@28..33 "other",
             },
             value: LineString {
-                string: STRING@32..35 "val",
+                string: STRING@34..37 "val",
             },
         },
     ],

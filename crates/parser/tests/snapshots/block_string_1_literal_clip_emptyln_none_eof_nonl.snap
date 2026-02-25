@@ -7,24 +7,27 @@ source: crates/parser/tests/snapshots.rs
 
 ```
 key |
+
   hello
 ```
 
 ## CST
 
 ```
-SOURCE_FILE@0..13
-  ENTRY@0..13
+SOURCE_FILE@0..14
+  ENTRY@0..14
     WORD_KEY@0..3
       WORD@0..3 "key"
     SPACE@3..4 " "
-    BLOCK_STRING@4..13
+    BLOCK_STRING@4..14
       BLOCK_STRING_HEADER@4..6
         PIPE@4..5 "|"
         NEWLINE@5..6 "\n"
-      SPACE@6..8 "  "
-      LINE_STRING@8..13
-        STRING@8..13 "hello"
+      LINE_STRING@6..6
+      NEWLINE@6..7 "\n"
+      SPACE@7..9 "  "
+      LINE_STRING@9..14
+        STRING@9..14 "hello"
 ```
 
 ## AST
@@ -44,7 +47,10 @@ SourceFile {
                 },
                 lines: [
                     LineString {
-                        string: STRING@8..13 "hello",
+                        string: none,
+                    },
+                    LineString {
+                        string: STRING@9..14 "hello",
                     },
                 ],
             },

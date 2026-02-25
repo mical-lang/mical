@@ -20,7 +20,15 @@ pub(super) fn value(p: &mut Parser, indent_level: u32) {
     assert!(p.at_ts(VALUE_FIRST));
 
     match unsafe { p.current().unwrap_unchecked() } {
-        quote @ (T!['"'] | T!['\'']) => quoted_value(p, quote),
+        quote @ (T!['"'] | T!['\'']) => {
+            quoted_value(p, quote);
+            if !(p.at(T!['\n']) || p.at_eof()) {
+                p.error("unexpected token after quoted value");
+                let m = p.start();
+                eat_to_end_of_line(p);
+                m.complete(p, ERROR);
+            }
+        }
         T![|] | T![>] => {
             let mut shift = 1;
             if p.nth_at(shift, T![+]) || p.nth_at(shift, T![-]) {

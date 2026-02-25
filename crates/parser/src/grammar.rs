@@ -23,3 +23,9 @@ fn is_rest_of_line_blank(p: &Parser, n: usize) -> bool {
     }
     p.nth_at(n, T![' ']) && (p.nth_at(n + 1, T!['\n']) || p.nth_at_eof(n + 1))
 }
+
+fn eat_to_end_of_line(p: &mut Parser) {
+    while !(p.at(T!['\n']) || p.at_eof()) {
+        p.bump_any();
+    }
+}

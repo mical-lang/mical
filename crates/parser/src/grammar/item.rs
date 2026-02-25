@@ -26,7 +26,7 @@ pub(super) fn item(p: &mut Parser) {
     if p.at(T!['\t']) {
         p.error("tab indent is not allowed, skipping this line");
         let m = p.start();
-        skip_to_end_of_line(p);
+        eat_to_end_of_line(p);
         m.complete(p, ERROR);
         return;
     }
@@ -73,7 +73,7 @@ fn entry_or_prefix_block(p: &mut Parser, indent_level: u32) {
     if !p.at_ts(key::KEY_FIRST) {
         p.error("expected a key");
         let m = p.start();
-        skip_to_end_of_line(p);
+        eat_to_end_of_line(p);
         m.complete(p, ERROR);
         return;
     }
@@ -154,21 +154,9 @@ fn entry(p: &mut Parser, m: Marker, indent_level: u32) {
         value::value(p, indent_level);
     }
 
-    // trailing spaces
+    // trailing whitespaces
     p.eat(T![' ']);
-
-    if !(p.at(T!['\n']) || p.at_eof()) {
-        p.error("unexpected token after value");
-        let m = p.start();
-        skip_to_end_of_line(p);
-        m.complete(p, ERROR);
-    }
+    p.eat(T!['\n']);
 
     m.complete(p, ENTRY);
-}
-
-fn skip_to_end_of_line(p: &mut Parser) {
-    while !(p.at(T!['\n']) || p.at_eof()) {
-        p.bump_any();
-    }
 }

@@ -16,7 +16,7 @@ bar baz
 
 ```
 SOURCE_FILE@0..22
-  ENTRY@0..13
+  ENTRY@0..14
     WORD_KEY@0..3
       WORD@0..3 "foo"
     SPACE@3..4 " "
@@ -27,14 +27,14 @@ SOURCE_FILE@0..22
       SPACE@6..8 "  "
       LINE_STRING@8..13
         STRING@8..13 "line1"
-  NEWLINE@13..14 "\n"
-  ENTRY@14..21
+    NEWLINE@13..14 "\n"
+  ENTRY@14..22
     WORD_KEY@14..17
       WORD@14..17 "bar"
     SPACE@17..18 " "
     LINE_STRING@18..21
       STRING@18..21 "baz"
-  NEWLINE@21..22 "\n"
+    NEWLINE@21..22 "\n"
 ```
 
 ## AST

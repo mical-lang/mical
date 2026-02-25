@@ -16,7 +16,7 @@ key |-
 
 ```
 SOURCE_FILE@0..17
-  ENTRY@0..16
+  ENTRY@0..17
     WORD_KEY@0..3
       WORD@0..3 "key"
     SPACE@3..4 " "
@@ -31,7 +31,7 @@ SOURCE_FILE@0..17
       NEWLINE@14..15 "\n"
       SPACE@15..16 " "
       LINE_STRING@16..16
-  NEWLINE@16..17 "\n"
+    NEWLINE@16..17 "\n"
 ```
 
 ## AST

@@ -15,7 +15,7 @@ b value
 
 ```
 SOURCE_FILE@0..18
-  ENTRY@0..9
+  ENTRY@0..10
     WORD_KEY@0..1
       WORD@0..1 "a"
     SPACE@1..2 " "
@@ -23,14 +23,14 @@ SOURCE_FILE@0..18
       DOUBLE_QUOTE@2..3 "\""
       STRING@3..8 "bad\\x"
       DOUBLE_QUOTE@8..9 "\""
-  NEWLINE@9..10 "\n"
-  ENTRY@10..17
+    NEWLINE@9..10 "\n"
+  ENTRY@10..18
     WORD_KEY@10..11
       WORD@10..11 "b"
     SPACE@11..12 " "
     LINE_STRING@12..17
       STRING@12..17 "value"
-  NEWLINE@17..18 "\n"
+    NEWLINE@17..18 "\n"
 ```
 
 ## AST

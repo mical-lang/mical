@@ -24,21 +24,21 @@ SOURCE_FILE@0..39
     OPEN_BRACE@8..9 "{"
     NEWLINE@9..10 "\n"
     SPACE@10..12 "  "
-    ENTRY@12..22
+    ENTRY@12..23
       WORD_KEY@12..16
         WORD@12..16 ".key"
       SPACE@16..17 " "
       LINE_STRING@17..22
         STRING@17..22 "value"
-    NEWLINE@22..23 "\n"
+      NEWLINE@22..23 "\n"
     SPACE@23..25 "  "
-    ENTRY@25..36
+    ENTRY@25..37
       WORD_KEY@25..30
         WORD@25..30 ".name"
       SPACE@30..31 " "
       LINE_STRING@31..36
         STRING@31..36 "hello"
-    NEWLINE@36..37 "\n"
+      NEWLINE@36..37 "\n"
     CLOSE_BRACE@37..38 "}"
     NEWLINE@38..39 "\n"
 ```

@@ -22,13 +22,13 @@ SOURCE_FILE@0..22
     OPEN_BRACE@8..9 "{"
     NEWLINE@9..10 "\n"
     SPACE@10..12 "  "
-    ENTRY@12..21
+    ENTRY@12..22
       WORD_KEY@12..15
         WORD@12..15 "key"
       SPACE@15..16 " "
       LINE_STRING@16..21
         STRING@16..21 "value"
-    NEWLINE@21..22 "\n"
+      NEWLINE@21..22 "\n"
 ```
 
 ## Syntax Error

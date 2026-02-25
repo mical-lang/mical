@@ -19,7 +19,7 @@ c >
 
 ```
 SOURCE_FILE@0..38
-  ENTRY@0..11
+  ENTRY@0..12
     WORD_KEY@0..1
       WORD@0..1 "a"
     SPACE@1..2 " "
@@ -30,8 +30,8 @@ SOURCE_FILE@0..38
       SPACE@4..6 "  "
       LINE_STRING@6..11
         STRING@6..11 "first"
-  NEWLINE@11..12 "\n"
-  ENTRY@12..24
+    NEWLINE@11..12 "\n"
+  ENTRY@12..25
     WORD_KEY@12..13
       WORD@12..13 "b"
     SPACE@13..14 " "
@@ -42,8 +42,8 @@ SOURCE_FILE@0..38
       SPACE@16..18 "  "
       LINE_STRING@18..24
         STRING@18..24 "second"
-  NEWLINE@24..25 "\n"
-  ENTRY@25..37
+    NEWLINE@24..25 "\n"
+  ENTRY@25..38
     WORD_KEY@25..26
       WORD@25..26 "c"
     SPACE@26..27 " "
@@ -54,7 +54,7 @@ SOURCE_FILE@0..38
       SPACE@29..31 "  "
       LINE_STRING@31..37
         STRING@31..37 "folded"
-  NEWLINE@37..38 "\n"
+    NEWLINE@37..38 "\n"
 ```
 
 ## AST

@@ -28,13 +28,13 @@ SOURCE_FILE@0..51
     OPEN_BRACE@10..11 "{"
     NEWLINE@11..12 "\n"
     SPACE@12..14 "  "
-    ENTRY@14..23
+    ENTRY@14..24
       WORD_KEY@14..17
         WORD@14..17 "key"
       SPACE@17..18 " "
       LINE_STRING@18..23
         STRING@18..23 "value"
-    NEWLINE@23..24 "\n"
+      NEWLINE@23..24 "\n"
     CLOSE_BRACE@24..25 "}"
     NEWLINE@25..26 "\n"
   PREFIX_BLOCK@26..51
@@ -46,13 +46,13 @@ SOURCE_FILE@0..51
     OPEN_BRACE@34..35 "{"
     NEWLINE@35..36 "\n"
     SPACE@36..38 "  "
-    ENTRY@38..48
+    ENTRY@38..49
       WORD_KEY@38..42
         WORD@38..42 "name"
       SPACE@42..43 " "
       LINE_STRING@43..48
         STRING@43..48 "hello"
-    NEWLINE@48..49 "\n"
+      NEWLINE@48..49 "\n"
     CLOSE_BRACE@49..50 "}"
     NEWLINE@50..51 "\n"
 ```

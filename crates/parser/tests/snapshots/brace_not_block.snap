@@ -17,33 +17,33 @@ d }not_close value
 
 ```
 SOURCE_FILE@0..51
-  ENTRY@0..14
+  ENTRY@0..15
     WORD_KEY@0..1
       WORD@0..1 "a"
     SPACE@1..2 " "
     LINE_STRING@2..14
       STRING@2..14 "{not a block"
-  NEWLINE@14..15 "\n"
-  ENTRY@15..27
+    NEWLINE@14..15 "\n"
+  ENTRY@15..28
     WORD_KEY@15..16
       WORD@15..16 "b"
     SPACE@16..17 " "
     LINE_STRING@17..27
       STRING@17..27 "{ also not"
-  NEWLINE@27..28 "\n"
+    NEWLINE@27..28 "\n"
   PREFIX_BLOCK@28..51
     WORD_KEY@28..29
       WORD@28..29 "c"
     SPACE@29..30 " "
     OPEN_BRACE@30..31 "{"
     NEWLINE@31..32 "\n"
-    ENTRY@32..50
+    ENTRY@32..51
       WORD_KEY@32..33
         WORD@32..33 "d"
       SPACE@33..34 " "
       LINE_STRING@34..50
         STRING@34..50 "}not_close value"
-    NEWLINE@50..51 "\n"
+      NEWLINE@50..51 "\n"
 ```
 
 ## Syntax Error

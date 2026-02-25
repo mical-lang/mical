@@ -19,50 +19,50 @@ hex 0xFF
 
 ```
 SOURCE_FILE@0..40
-  ENTRY@0..6
+  ENTRY@0..7
     WORD_KEY@0..1
       WORD@0..1 "a"
     SPACE@1..2 " "
     BOOLEAN@2..6
       TRUE@2..6 "true"
-  NEWLINE@6..7 "\n"
-  ENTRY@7..14
+    NEWLINE@6..7 "\n"
+  ENTRY@7..15
     WORD_KEY@7..8
       WORD@7..8 "b"
     SPACE@8..9 " "
     BOOLEAN@9..14
       FALSE@9..14 "false"
-  NEWLINE@14..15 "\n"
-  ENTRY@15..19
+    NEWLINE@14..15 "\n"
+  ENTRY@15..20
     WORD_KEY@15..16
       WORD@15..16 "x"
     SPACE@16..17 " "
     INTEGER@17..19
       NUMERAL@17..19 "42"
-  NEWLINE@19..20 "\n"
-  ENTRY@20..25
+    NEWLINE@19..20 "\n"
+  ENTRY@20..26
     WORD_KEY@20..21
       WORD@20..21 "y"
     SPACE@21..22 " "
     INTEGER@22..25
       MINUS@22..23 "-"
       NUMERAL@23..25 "10"
-  NEWLINE@25..26 "\n"
-  ENTRY@26..30
+    NEWLINE@25..26 "\n"
+  ENTRY@26..31
     WORD_KEY@26..27
       WORD@26..27 "z"
     SPACE@27..28 " "
     INTEGER@28..30
       PLUS@28..29 "+"
       NUMERAL@29..30 "7"
-  NEWLINE@30..31 "\n"
-  ENTRY@31..39
+    NEWLINE@30..31 "\n"
+  ENTRY@31..40
     WORD_KEY@31..34
       WORD@31..34 "hex"
     SPACE@34..35 " "
     INTEGER@35..39
       NUMERAL@35..39 "0xFF"
-  NEWLINE@39..40 "\n"
+    NEWLINE@39..40 "\n"
 ```
 
 ## AST

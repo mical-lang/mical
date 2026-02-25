@@ -16,7 +16,7 @@ source: crates/parser/tests/snapshots.rs
 ```
 SOURCE_FILE@0..34
   SPACE@0..2 "  "
-  ENTRY@2..16
+  ENTRY@2..17
     QUOTED_KEY@2..10
       DOUBLE_QUOTE@2..3 "\""
       STRING@3..9 "double"
@@ -24,9 +24,9 @@ SOURCE_FILE@0..34
     SPACE@10..11 " "
     LINE_STRING@11..16
       STRING@11..16 "value"
-  NEWLINE@16..17 "\n"
+    NEWLINE@16..17 "\n"
   SPACE@17..19 "  "
-  ENTRY@19..33
+  ENTRY@19..34
     QUOTED_KEY@19..27
       SINGLE_QUOTE@19..20 "'"
       STRING@20..26 "single"
@@ -34,7 +34,7 @@ SOURCE_FILE@0..34
     SPACE@27..28 " "
     LINE_STRING@28..33
       STRING@28..33 "value"
-  NEWLINE@33..34 "\n"
+    NEWLINE@33..34 "\n"
 ```
 
 ## AST

@@ -15,7 +15,7 @@ b 'trailing' extra
 
 ```
 SOURCE_FILE@0..38
-  ENTRY@0..18
+  ENTRY@0..19
     WORD_KEY@0..1
       WORD@0..1 "a"
     SPACE@1..2 " "
@@ -23,11 +23,11 @@ SOURCE_FILE@0..38
       DOUBLE_QUOTE@2..3 "\""
       STRING@3..11 "trailing"
       DOUBLE_QUOTE@11..12 "\""
-    SPACE@12..13 " "
-    ERROR@13..18
+    ERROR@12..18
+      SPACE@12..13 " "
       WORD@13..18 "extra"
-  NEWLINE@18..19 "\n"
-  ENTRY@19..37
+    NEWLINE@18..19 "\n"
+  ENTRY@19..38
     WORD_KEY@19..20
       WORD@19..20 "b"
     SPACE@20..21 " "
@@ -35,10 +35,10 @@ SOURCE_FILE@0..38
       SINGLE_QUOTE@21..22 "'"
       STRING@22..30 "trailing"
       SINGLE_QUOTE@30..31 "'"
-    SPACE@31..32 " "
-    ERROR@32..37
+    ERROR@31..37
+      SPACE@31..32 " "
       WORD@32..37 "extra"
-  NEWLINE@37..38 "\n"
+    NEWLINE@37..38 "\n"
 ```
 
 ## Syntax Error
@@ -46,12 +46,12 @@ SOURCE_FILE@0..38
 ```
 [
     SyntaxError {
-        message: "unexpected token after value",
-        range: 13..13,
+        message: "unexpected token after quoted value",
+        range: 12..12,
     },
     SyntaxError {
-        message: "unexpected token after value",
-        range: 32..32,
+        message: "unexpected token after quoted value",
+        range: 31..31,
     },
 ]
 ```

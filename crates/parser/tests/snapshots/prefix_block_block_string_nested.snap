@@ -35,7 +35,7 @@ SOURCE_FILE@0..76
       OPEN_BRACE@16..17 "{"
       NEWLINE@17..18 "\n"
       SPACE@18..22 "    "
-      ENTRY@22..54
+      ENTRY@22..55
         WORD_KEY@22..26
           WORD@22..26 "desc"
         SPACE@26..27 " "
@@ -50,15 +50,15 @@ SOURCE_FILE@0..76
           SPACE@42..48 "      "
           LINE_STRING@48..54
             STRING@48..54 "line 2"
-      NEWLINE@54..55 "\n"
+        NEWLINE@54..55 "\n"
       SPACE@55..59 "    "
-      ENTRY@59..69
+      ENTRY@59..70
         WORD_KEY@59..63
           WORD@59..63 "name"
         SPACE@63..64 " "
         LINE_STRING@64..69
           STRING@64..69 "value"
-      NEWLINE@69..70 "\n"
+        NEWLINE@69..70 "\n"
       SPACE@70..72 "  "
       CLOSE_BRACE@72..73 "}"
       NEWLINE@73..74 "\n"

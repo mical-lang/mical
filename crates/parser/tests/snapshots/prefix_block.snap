@@ -24,21 +24,21 @@ SOURCE_FILE@0..42
     OPEN_BRACE@7..8 "{"
     NEWLINE@8..9 "\n"
     SPACE@9..11 "  "
-    ENTRY@11..26
+    ENTRY@11..27
       WORD_KEY@11..16
         WORD@11..16 ".host"
       SPACE@16..17 " "
       LINE_STRING@17..26
         STRING@17..26 "localhost"
-    NEWLINE@26..27 "\n"
+      NEWLINE@26..27 "\n"
     SPACE@27..29 "  "
-    ENTRY@29..39
+    ENTRY@29..40
       WORD_KEY@29..34
         WORD@29..34 ".port"
       SPACE@34..35 " "
       INTEGER@35..39
         NUMERAL@35..39 "8080"
-    NEWLINE@39..40 "\n"
+      NEWLINE@39..40 "\n"
     CLOSE_BRACE@40..41 "}"
     NEWLINE@41..42 "\n"
 ```

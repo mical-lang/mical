@@ -30,13 +30,13 @@ SOURCE_FILE@0..79
     LINE_STRING@30..34
       STRING@30..34 " 1.0"
   NEWLINE@34..35 "\n"
-  ENTRY@35..46
+  ENTRY@35..47
     WORD_KEY@35..39
       WORD@35..39 "key1"
     SPACE@39..40 " "
     LINE_STRING@40..46
       STRING@40..46 "value1"
-  NEWLINE@46..47 "\n"
+    NEWLINE@46..47 "\n"
   COMMENT@47..66
     SHARP@47..48 "#"
     SPACE@48..49 " "
@@ -48,13 +48,13 @@ SOURCE_FILE@0..79
     SPACE@58..59 " "
     WORD@59..66 "comment"
   NEWLINE@66..67 "\n"
-  ENTRY@67..78
+  ENTRY@67..79
     WORD_KEY@67..71
       WORD@67..71 "key2"
     SPACE@71..72 " "
     LINE_STRING@72..78
       STRING@72..78 "value2"
-  NEWLINE@78..79 "\n"
+    NEWLINE@78..79 "\n"
 ```
 
 ## AST

@@ -18,31 +18,31 @@ e +5
 
 ```
 SOURCE_FILE@0..36
-  ENTRY@0..7
+  ENTRY@0..8
     WORD_KEY@0..1
       WORD@0..1 "a"
     SPACE@1..2 " "
     BOOLEAN@2..6
       TRUE@2..6 "true"
     SPACE@6..7 " "
-  NEWLINE@7..8 "\n"
-  ENTRY@8..13
+    NEWLINE@7..8 "\n"
+  ENTRY@8..14
     WORD_KEY@8..9
       WORD@8..9 "b"
     SPACE@9..10 " "
     INTEGER@10..12
       NUMERAL@10..12 "42"
     SPACE@12..13 " "
-  NEWLINE@13..14 "\n"
-  ENTRY@14..22
+    NEWLINE@13..14 "\n"
+  ENTRY@14..23
     WORD_KEY@14..15
       WORD@14..15 "c"
     SPACE@15..16 " "
     LINE_STRING@16..21
       STRING@16..21 "hello"
     SPACE@21..22 " "
-  NEWLINE@22..23 "\n"
-  ENTRY@23..29
+    NEWLINE@22..23 "\n"
+  ENTRY@23..30
     WORD_KEY@23..24
       WORD@23..24 "d"
     SPACE@24..25 " "
@@ -50,8 +50,8 @@ SOURCE_FILE@0..36
       MINUS@25..26 "-"
       NUMERAL@26..28 "10"
     SPACE@28..29 " "
-  NEWLINE@29..30 "\n"
-  ENTRY@30..35
+    NEWLINE@29..30 "\n"
+  ENTRY@30..36
     WORD_KEY@30..31
       WORD@30..31 "e"
     SPACE@31..32 " "
@@ -59,7 +59,7 @@ SOURCE_FILE@0..36
       PLUS@32..33 "+"
       NUMERAL@33..34 "5"
     SPACE@34..35 " "
-  NEWLINE@35..36 "\n"
+    NEWLINE@35..36 "\n"
 ```
 
 ## AST

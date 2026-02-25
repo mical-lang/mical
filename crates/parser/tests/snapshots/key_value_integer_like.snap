@@ -20,55 +20,55 @@ g - 1
 
 ```
 SOURCE_FILE@0..60
-  ENTRY@0..10
+  ENTRY@0..11
     WORD_KEY@0..1
       WORD@0..1 "a"
     SPACE@1..2 " "
     LINE_STRING@2..10
       STRING@2..10 "42 extra"
-  NEWLINE@10..11 "\n"
-  ENTRY@11..25
+    NEWLINE@10..11 "\n"
+  ENTRY@11..26
     WORD_KEY@11..12
       WORD@11..12 "b"
     SPACE@12..13 " "
     LINE_STRING@13..25
       STRING@13..25 "-10 trailing"
-  NEWLINE@25..26 "\n"
-  ENTRY@26..39
+    NEWLINE@25..26 "\n"
+  ENTRY@26..40
     WORD_KEY@26..27
       WORD@26..27 "c"
     SPACE@27..28 " "
     LINE_STRING@28..39
       STRING@28..39 "+5 trailing"
-  NEWLINE@39..40 "\n"
-  ENTRY@40..43
+    NEWLINE@39..40 "\n"
+  ENTRY@40..44
     WORD_KEY@40..41
       WORD@40..41 "d"
     SPACE@41..42 " "
     LINE_STRING@42..43
       STRING@42..43 "+"
-  NEWLINE@43..44 "\n"
-  ENTRY@44..47
+    NEWLINE@43..44 "\n"
+  ENTRY@44..48
     WORD_KEY@44..45
       WORD@44..45 "e"
     SPACE@45..46 " "
     LINE_STRING@46..47
       STRING@46..47 "-"
-  NEWLINE@47..48 "\n"
-  ENTRY@48..53
+    NEWLINE@47..48 "\n"
+  ENTRY@48..54
     WORD_KEY@48..49
       WORD@48..49 "f"
     SPACE@49..50 " "
     LINE_STRING@50..53
       STRING@50..53 "+ 1"
-  NEWLINE@53..54 "\n"
-  ENTRY@54..59
+    NEWLINE@53..54 "\n"
+  ENTRY@54..60
     WORD_KEY@54..55
       WORD@54..55 "g"
     SPACE@55..56 " "
     LINE_STRING@56..59
       STRING@56..59 "- 1"
-  NEWLINE@59..60 "\n"
+    NEWLINE@59..60 "\n"
 ```
 
 ## AST

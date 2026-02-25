@@ -16,7 +16,7 @@ foo |
 
 ```
 SOURCE_FILE@0..17
-  ENTRY@0..16
+  ENTRY@0..17
     WORD_KEY@0..3
       WORD@0..3 "foo"
     SPACE@3..4 " "
@@ -31,7 +31,7 @@ SOURCE_FILE@0..17
       ERROR@12..16
         SPACE@12..13 " "
         WORD@13..16 "baz"
-  NEWLINE@16..17 "\n"
+    NEWLINE@16..17 "\n"
 ```
 
 ## Syntax Error

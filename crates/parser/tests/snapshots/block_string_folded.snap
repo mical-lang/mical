@@ -19,7 +19,7 @@ text >
 
 ```
 SOURCE_FILE@0..73
-  ENTRY@0..72
+  ENTRY@0..73
     WORD_KEY@0..4
       WORD@0..4 "text"
     SPACE@4..5 " "
@@ -44,7 +44,7 @@ SOURCE_FILE@0..73
       SPACE@56..58 "  "
       LINE_STRING@58..72
         STRING@58..72 "New paragraph."
-  NEWLINE@72..73 "\n"
+    NEWLINE@72..73 "\n"
 ```
 
 ## AST

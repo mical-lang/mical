@@ -29,7 +29,7 @@ f |
 ## Parser Error
 
 ```
-83..83: unexpected token after value
+83..83: tab indent is not allowed, skipping this line
 
 95..95: tab indent is not allowed, skipping this line
 

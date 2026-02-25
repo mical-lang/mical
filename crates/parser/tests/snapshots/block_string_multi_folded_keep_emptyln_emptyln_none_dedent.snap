@@ -19,7 +19,7 @@ other val
 
 ```
 SOURCE_FILE@0..35
-  ENTRY@0..24
+  ENTRY@0..25
     WORD_KEY@0..3
       WORD@0..3 "key"
     SPACE@3..4 " "
@@ -39,14 +39,14 @@ SOURCE_FILE@0..35
       SPACE@17..19 "  "
       LINE_STRING@19..24
         STRING@19..24 "world"
-  NEWLINE@24..25 "\n"
-  ENTRY@25..34
+    NEWLINE@24..25 "\n"
+  ENTRY@25..35
     WORD_KEY@25..30
       WORD@25..30 "other"
     SPACE@30..31 " "
     LINE_STRING@31..34
       STRING@31..34 "val"
-  NEWLINE@34..35 "\n"
+    NEWLINE@34..35 "\n"
 ```
 
 ## AST

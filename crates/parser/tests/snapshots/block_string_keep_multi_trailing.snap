@@ -18,7 +18,7 @@ a b
 
 ```
 SOURCE_FILE@0..17
-  ENTRY@0..12
+  ENTRY@0..13
     WORD_KEY@0..3
       WORD@0..3 "key"
     SPACE@3..4 " "
@@ -34,14 +34,14 @@ SOURCE_FILE@0..17
       LINE_STRING@11..11
       NEWLINE@11..12 "\n"
       LINE_STRING@12..12
-  NEWLINE@12..13 "\n"
-  ENTRY@13..16
+    NEWLINE@12..13 "\n"
+  ENTRY@13..17
     WORD_KEY@13..14
       WORD@13..14 "a"
     SPACE@14..15 " "
     LINE_STRING@15..16
       STRING@15..16 "b"
-  NEWLINE@16..17 "\n"
+    NEWLINE@16..17 "\n"
 ```
 
 ## AST

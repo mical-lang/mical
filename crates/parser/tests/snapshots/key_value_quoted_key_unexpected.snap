@@ -15,7 +15,7 @@ source: crates/parser/tests/snapshots.rs
 
 ```
 SOURCE_FILE@0..32
-  ENTRY@0..15
+  ENTRY@0..16
     QUOTED_KEY@0..11
       DOUBLE_QUOTE@0..1 "\""
       STRING@1..7 "quoted"
@@ -25,8 +25,8 @@ SOURCE_FILE@0..32
     SPACE@11..12 " "
     LINE_STRING@12..15
       STRING@12..15 "aaa"
-  NEWLINE@15..16 "\n"
-  ENTRY@16..31
+    NEWLINE@15..16 "\n"
+  ENTRY@16..32
     QUOTED_KEY@16..27
       SINGLE_QUOTE@16..17 "'"
       STRING@17..23 "quoted"
@@ -36,7 +36,7 @@ SOURCE_FILE@0..32
     SPACE@27..28 " "
     LINE_STRING@28..31
       STRING@28..31 "bbb"
-  NEWLINE@31..32 "\n"
+    NEWLINE@31..32 "\n"
 ```
 
 ## Syntax Error

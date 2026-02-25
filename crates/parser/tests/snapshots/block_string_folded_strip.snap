@@ -17,7 +17,7 @@ text >-
 
 ```
 SOURCE_FILE@0..56
-  ENTRY@0..55
+  ENTRY@0..56
     WORD_KEY@0..4
       WORD@0..4 "text"
     SPACE@4..5 " "
@@ -37,7 +37,7 @@ SOURCE_FILE@0..56
       SPACE@42..44 "  "
       LINE_STRING@44..55
         STRING@44..55 "over lines."
-  NEWLINE@55..56 "\n"
+    NEWLINE@55..56 "\n"
 ```
 
 ## AST

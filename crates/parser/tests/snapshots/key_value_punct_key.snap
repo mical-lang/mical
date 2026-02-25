@@ -19,48 +19,48 @@ source: crates/parser/tests/snapshots.rs
 
 ```
 SOURCE_FILE@0..48
-  ENTRY@0..7
+  ENTRY@0..8
     WORD_KEY@0..1
       WORD@0..1 "|"
     SPACE@1..2 " "
     LINE_STRING@2..7
       STRING@2..7 "value"
-  NEWLINE@7..8 "\n"
-  ENTRY@8..15
+    NEWLINE@7..8 "\n"
+  ENTRY@8..16
     WORD_KEY@8..9
       WORD@8..9 ">"
     SPACE@9..10 " "
     LINE_STRING@10..15
       STRING@10..15 "value"
-  NEWLINE@15..16 "\n"
-  ENTRY@16..23
+    NEWLINE@15..16 "\n"
+  ENTRY@16..24
     WORD_KEY@16..17
       WORD@16..17 "+"
     SPACE@17..18 " "
     LINE_STRING@18..23
       STRING@18..23 "value"
-  NEWLINE@23..24 "\n"
-  ENTRY@24..31
+    NEWLINE@23..24 "\n"
+  ENTRY@24..32
     WORD_KEY@24..25
       WORD@24..25 "-"
     SPACE@25..26 " "
     LINE_STRING@26..31
       STRING@26..31 "value"
-  NEWLINE@31..32 "\n"
-  ENTRY@32..39
+    NEWLINE@31..32 "\n"
+  ENTRY@32..40
     WORD_KEY@32..33
       WORD@32..33 "{"
     SPACE@33..34 " "
     LINE_STRING@34..39
       STRING@34..39 "value"
-  NEWLINE@39..40 "\n"
-  ENTRY@40..47
+    NEWLINE@39..40 "\n"
+  ENTRY@40..48
     WORD_KEY@40..41
       WORD@40..41 "}"
     SPACE@41..42 " "
     LINE_STRING@42..47
       STRING@42..47 "value"
-  NEWLINE@47..48 "\n"
+    NEWLINE@47..48 "\n"
 ```
 
 ## AST

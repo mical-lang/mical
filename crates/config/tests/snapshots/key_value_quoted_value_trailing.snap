@@ -14,9 +14,9 @@ b 'trailing' extra
 ## Parser Error
 
 ```
-13..13: unexpected token after value
+12..12: unexpected token after quoted value
 
-32..32: unexpected token after value
+31..31: unexpected token after quoted value
 
 ```
 

@@ -17,7 +17,7 @@ source: crates/parser/tests/snapshots.rs
 
 ```
 SOURCE_FILE@0..71
-  ENTRY@0..14
+  ENTRY@0..15
     QUOTED_KEY@0..8
       DOUBLE_QUOTE@0..1 "\""
       STRING@1..7 "my key"
@@ -25,8 +25,8 @@ SOURCE_FILE@0..71
     SPACE@8..9 " "
     LINE_STRING@9..14
       STRING@9..14 "value"
-  NEWLINE@14..15 "\n"
-  ENTRY@15..33
+    NEWLINE@14..15 "\n"
+  ENTRY@15..34
     QUOTED_KEY@15..27
       SINGLE_QUOTE@15..16 "'"
       STRING@16..26 "single key"
@@ -34,8 +34,8 @@ SOURCE_FILE@0..71
     SPACE@27..28 " "
     LINE_STRING@28..33
       STRING@28..33 "value"
-  NEWLINE@33..34 "\n"
-  ENTRY@34..52
+    NEWLINE@33..34 "\n"
+  ENTRY@34..53
     QUOTED_KEY@34..36
       DOUBLE_QUOTE@34..35 "\""
       STRING@35..35 ""
@@ -43,8 +43,8 @@ SOURCE_FILE@0..71
     SPACE@36..37 " "
     LINE_STRING@37..52
       STRING@37..52 "empty-key-value"
-  NEWLINE@52..53 "\n"
-  ENTRY@53..70
+    NEWLINE@52..53 "\n"
+  ENTRY@53..71
     QUOTED_KEY@53..64
       DOUBLE_QUOTE@53..54 "\""
       STRING@54..63 "key\\\"name"
@@ -52,7 +52,7 @@ SOURCE_FILE@0..71
     SPACE@64..65 " "
     LINE_STRING@65..70
       STRING@65..70 "value"
-  NEWLINE@70..71 "\n"
+    NEWLINE@70..71 "\n"
 ```
 
 ## AST

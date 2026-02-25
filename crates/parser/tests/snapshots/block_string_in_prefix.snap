@@ -25,7 +25,7 @@ SOURCE_FILE@0..50
     OPEN_BRACE@8..9 "{"
     NEWLINE@9..10 "\n"
     SPACE@10..12 "  "
-    ENTRY@12..33
+    ENTRY@12..34
       WORD_KEY@12..16
         WORD@12..16 "desc"
       SPACE@16..17 " "
@@ -36,15 +36,15 @@ SOURCE_FILE@0..50
         SPACE@19..23 "    "
         LINE_STRING@23..33
           STRING@23..33 "block line"
-    NEWLINE@33..34 "\n"
+      NEWLINE@33..34 "\n"
     SPACE@34..36 "  "
-    ENTRY@36..47
+    ENTRY@36..48
       WORD_KEY@36..41
         WORD@36..41 "other"
       SPACE@41..42 " "
       LINE_STRING@42..47
         STRING@42..47 "value"
-    NEWLINE@47..48 "\n"
+      NEWLINE@47..48 "\n"
     CLOSE_BRACE@48..49 "}"
     NEWLINE@49..50 "\n"
 ```

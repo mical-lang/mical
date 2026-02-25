@@ -32,13 +32,13 @@ SOURCE_FILE@0..38
       OPEN_BRACE@16..17 "{"
       NEWLINE@17..18 "\n"
       SPACE@18..22 "    "
-      ENTRY@22..31
+      ENTRY@22..32
         WORD_KEY@22..25
           WORD@22..25 "key"
         SPACE@25..26 " "
         LINE_STRING@26..31
           STRING@26..31 "value"
-      NEWLINE@31..32 "\n"
+        NEWLINE@31..32 "\n"
       SPACE@32..34 "  "
       CLOSE_BRACE@34..35 "}"
       NEWLINE@35..36 "\n"

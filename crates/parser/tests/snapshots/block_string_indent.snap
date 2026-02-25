@@ -30,7 +30,7 @@ f |
 
 ```
 SOURCE_FILE@0..201
-  ENTRY@0..36
+  ENTRY@0..37
     WORD_KEY@0..1
       WORD@0..1 "a"
     SPACE@1..2 " "
@@ -45,8 +45,8 @@ SOURCE_FILE@0..201
       SPACE@23..25 "  "
       LINE_STRING@25..36
         STRING@25..36 "second line"
-  NEWLINE@36..37 "\n"
-  ENTRY@37..78
+    NEWLINE@36..37 "\n"
+  ENTRY@37..79
     WORD_KEY@37..38
       WORD@37..38 "b"
     SPACE@38..39 " "
@@ -61,8 +61,8 @@ SOURCE_FILE@0..201
       SPACE@63..67 "    "
       LINE_STRING@67..78
         STRING@67..78 "second line"
-  NEWLINE@78..79 "\n"
-  ENTRY@79..94
+    NEWLINE@78..79 "\n"
+  ENTRY@79..83
     WORD_KEY@79..80
       WORD@79..80 "c"
     SPACE@80..81 " "
@@ -70,11 +70,11 @@ SOURCE_FILE@0..201
       BLOCK_STRING_HEADER@81..83
         PIPE@81..82 "|"
         NEWLINE@82..83 "\n"
-    ERROR@83..94
-      TAB@83..84 "\t"
-      WORD@84..87 "tab"
-      SPACE@87..88 " "
-      WORD@88..94 "indent"
+  ERROR@83..94
+    TAB@83..84 "\t"
+    WORD@84..87 "tab"
+    SPACE@87..88 " "
+    WORD@88..94 "indent"
   NEWLINE@94..95 "\n"
   ERROR@95..107
     TAB@95..96 "\t"
@@ -82,7 +82,7 @@ SOURCE_FILE@0..201
     SPACE@102..103 " "
     WORD@103..107 "line"
   NEWLINE@107..108 "\n"
-  ENTRY@108..148
+  ENTRY@108..149
     WORD_KEY@108..109
       WORD@108..109 "d"
     SPACE@109..110 " "
@@ -101,8 +101,8 @@ SOURCE_FILE@0..201
       SPACE@131..133 "  "
       LINE_STRING@133..148
         STRING@133..148 "back to shallow"
-  NEWLINE@148..149 "\n"
-  ENTRY@149..166
+    NEWLINE@148..149 "\n"
+  ENTRY@149..167
     WORD_KEY@149..150
       WORD@149..150 "e"
     SPACE@150..151 " "
@@ -113,8 +113,8 @@ SOURCE_FILE@0..201
       SPACE@153..155 "  "
       LINE_STRING@155..166
         STRING@155..166 "first block"
-  NEWLINE@166..167 "\n"
-  ENTRY@167..200
+    NEWLINE@166..167 "\n"
+  ENTRY@167..201
     WORD_KEY@167..168
       WORD@167..168 "f"
     SPACE@168..169 " "
@@ -125,7 +125,7 @@ SOURCE_FILE@0..201
       SPACE@171..175 "    "
       LINE_STRING@175..200
         STRING@175..200 "dedented body stops b ..."
-  NEWLINE@200..201 "\n"
+    NEWLINE@200..201 "\n"
 ```
 
 ## Syntax Error
@@ -133,7 +133,7 @@ SOURCE_FILE@0..201
 ```
 [
     SyntaxError {
-        message: "unexpected token after value",
+        message: "tab indent is not allowed, skipping this line",
         range: 83..83,
     },
     SyntaxError {

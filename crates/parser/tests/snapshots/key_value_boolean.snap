@@ -15,20 +15,20 @@ b false
 
 ```
 SOURCE_FILE@0..15
-  ENTRY@0..6
+  ENTRY@0..7
     WORD_KEY@0..1
       WORD@0..1 "a"
     SPACE@1..2 " "
     BOOLEAN@2..6
       TRUE@2..6 "true"
-  NEWLINE@6..7 "\n"
-  ENTRY@7..14
+    NEWLINE@6..7 "\n"
+  ENTRY@7..15
     WORD_KEY@7..8
       WORD@7..8 "b"
     SPACE@8..9 " "
     BOOLEAN@9..14
       FALSE@9..14 "false"
-  NEWLINE@14..15 "\n"
+    NEWLINE@14..15 "\n"
 ```
 
 ## AST

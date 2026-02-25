@@ -19,7 +19,7 @@ key >
 
 ```
 SOURCE_FILE@0..26
-  ENTRY@0..25
+  ENTRY@0..26
     WORD_KEY@0..3
       WORD@0..3 "key"
     SPACE@3..4 " "
@@ -41,7 +41,7 @@ SOURCE_FILE@0..26
         STRING@19..24 "world"
       NEWLINE@24..25 "\n"
       LINE_STRING@25..25
-  NEWLINE@25..26 "\n"
+    NEWLINE@25..26 "\n"
 ```
 
 ## AST

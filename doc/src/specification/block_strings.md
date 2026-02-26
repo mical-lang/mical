@@ -167,6 +167,29 @@ text >
 
 (Similar to YAML's folded block scalar.)
 
+#### Fold Suppression for More-Indented Lines
+
+Lines whose stripped content starts with spaces (i.e. lines with indentation beyond \\( I_{base} \\)) suppress folding. The newline **before** and **after** a more-indented line is preserved as a literal `\n`, not replaced by a space.
+
+```mical
+key >
+  a
+  b
+    c
+  d
+  e
+```
+
+After stripping \\( I_{base} = 2 \\) spaces, the lines are: `"a"`, `"b"`, `"  c"`, `"d"`, `"e"`. Line `"  c"` starts with spaces (more-indented), so:
+
+- The newline between `"b"` and `"  c"` is preserved (not folded).
+- The newline between `"  c"` and `"d"` is preserved (not folded).
+- Adjacent non-indented lines (`"a"`/`"b"` and `"d"`/`"e"`) are folded as normal.
+
+```json
+{ "key": "a b\n  c\nd e\n" }
+```
+
 ## Chomping Indicators
 
 Chomping indicators control how trailing newlines at the end of the block string are handled during evaluation:

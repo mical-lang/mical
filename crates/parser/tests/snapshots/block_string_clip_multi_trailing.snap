@@ -1,0 +1,86 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# block-string-clip-multi-trailing
+
+## Input
+
+```
+key |
+  hello
+
+
+other val
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..26
+  ENTRY@0..16
+    WORD_KEY@0..3
+      WORD@0..3 "key"
+    SPACE@3..4 " "
+    BLOCK_STRING@4..15
+      BLOCK_STRING_HEADER@4..6
+        PIPE@4..5 "|"
+        NEWLINE@5..6 "\n"
+      SPACE@6..8 "  "
+      LINE_STRING@8..13
+        STRING@8..13 "hello"
+      NEWLINE@13..14 "\n"
+      LINE_STRING@14..14
+      NEWLINE@14..15 "\n"
+      LINE_STRING@15..15
+    NEWLINE@15..16 "\n"
+  ENTRY@16..26
+    WORD_KEY@16..21
+      WORD@16..21 "other"
+    SPACE@21..22 " "
+    LINE_STRING@22..25
+      STRING@22..25 "val"
+    NEWLINE@25..26 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..3 "key",
+            },
+            value: BlockString {
+                header: BlockStringHeader {
+                    style: PIPE@4..5 "|",
+                    chomp: none,
+                },
+                lines: [
+                    LineString {
+                        string: STRING@8..13 "hello",
+                    },
+                    LineString {
+                        string: none,
+                    },
+                    LineString {
+                        string: none,
+                    },
+                ],
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@16..21 "other",
+            },
+            value: LineString {
+                string: STRING@22..25 "val",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

@@ -3,5 +3,6 @@
   "b": ">not fold",
   "c": "|+not block",
   "d": "|abc",
-  "e": "> text after"
+  "e": "> text after",
+  "f": "|\tafter tab"
 }

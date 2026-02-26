@@ -11,13 +11,14 @@ b >not fold
 c |+not block
 d |abc
 e > text after
+f |	after tab
 
 ```
 
 ## CST
 
 ```
-SOURCE_FILE@0..61
+SOURCE_FILE@0..75
   ENTRY@0..13
     WORD_KEY@0..1
       WORD@0..1 "a"
@@ -53,6 +54,13 @@ SOURCE_FILE@0..61
     LINE_STRING@48..60
       STRING@48..60 "> text after"
     NEWLINE@60..61 "\n"
+  ENTRY@61..75
+    WORD_KEY@61..62
+      WORD@61..62 "f"
+    SPACE@62..63 " "
+    LINE_STRING@63..74
+      STRING@63..74 "|\tafter tab"
+    NEWLINE@74..75 "\n"
 ```
 
 ## AST
@@ -99,6 +107,14 @@ SourceFile {
             },
             value: LineString {
                 string: STRING@48..60 "> text after",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@61..62 "f",
+            },
+            value: LineString {
+                string: STRING@63..74 "|\tafter tab",
             },
         },
     ],

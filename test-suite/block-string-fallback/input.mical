@@ -3,3 +3,4 @@ b >not fold
 c |+not block
 d |abc
 e > text after
+f |	after tab

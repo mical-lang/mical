@@ -1,0 +1,24 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# block-string-nested-edge-cases
+
+## Input
+
+```mical
+  key |
+    content
+  sibling val
+
+```
+
+## JSON
+
+```json
+{
+  "key": "content\n",
+  "sibling": "val"
+}
+```
+
+vim:ft=markdown

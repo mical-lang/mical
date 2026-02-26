@@ -67,18 +67,22 @@ These tests cover scenarios outside the dimension analysis:
 | Test | Purpose |
 |------|---------|
 | block-string-body-trailing-whitespace | Trailing whitespace within content lines |
-| block-string-consecutive | Multiple consecutive block strings |
-| block-string-end-at-outer | Block string terminated by outer-level dedent |
+| block-string-clip-multi-trailing | Clip with multiple trailing empty lines |
 | block-string-extra-indent | Extra indentation within block string |
-| block-string-fallback | Fallback behavior for invalid block strings |
+| block-string-fallback | Fallback behavior for invalid block strings (incl. tab after header) |
 | block-string-folded | 3+ line folded with paragraph breaks |
-| block-string-folded-strip | 3+ line folded with strip chomp |
+| block-string-folded-extra-indent | Folded style with more-indented lines (clip) |
+| block-string-folded-extra-indent-keep | Folded style with more-indented lines (keep) |
+| block-string-folded-extra-indent-strip | Folded style with more-indented lines (strip) |
 | block-string-header-trailing-space | Trailing space after block string indicator |
 | block-string-in-prefix | Block string inside prefix block |
 | block-string-indent | Various indent levels and tab handling |
 | block-string-insufficient-indent | Insufficient indentation edge case |
 | block-string-keep-multi-trailing | Keep chomp with multiple trailing empty lines |
+| block-string-nested-edge-cases | I_parent > 0 with sibling termination |
 | block-string-nested-indent | Nested indentation levels |
+| block-string-tab-after-content | Tab line terminates block with error |
+| block-string-wsln-above-base | Whitespace-only line with I_L >= I_base treated as empty |
 
 ## Summary
 
@@ -87,5 +91,5 @@ These tests cover scenarios outside the dimension analysis:
 | 0-line | 42 | exhaustive |
 | 1-line | 16 | pairwise |
 | multi-line | 14 | pairwise |
-| legacy (non-dimensional) | 13 | manual |
-| **Total** | **85** | |
+| legacy (non-dimensional) | 17 | manual |
+| **Total** | **89** | |

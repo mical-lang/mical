@@ -488,20 +488,12 @@ fn block_string_body_trailing_whitespace() {
     utils::assert_json_output("block-string-body-trailing-whitespace", source, expected_json);
 }
 #[test]
-fn block_string_consecutive() {
-    let source = include_str!("../../../test-suite/block-string-consecutive/input.mical");
-    let expected_json = include_str!("../../../test-suite/block-string-consecutive/output.json");
-    let snapshot = utils::make_snapshot("block-string-consecutive", source);
+fn block_string_clip_multi_trailing() {
+    let source = include_str!("../../../test-suite/block-string-clip-multi-trailing/input.mical");
+    let expected_json = include_str!("../../../test-suite/block-string-clip-multi-trailing/output.json");
+    let snapshot = utils::make_snapshot("block-string-clip-multi-trailing", source);
     utils::assert_snapshot!(snapshot);
-    utils::assert_json_output("block-string-consecutive", source, expected_json);
-}
-#[test]
-fn block_string_end_at_outer() {
-    let source = include_str!("../../../test-suite/block-string-end-at-outer/input.mical");
-    let expected_json = include_str!("../../../test-suite/block-string-end-at-outer/output.json");
-    let snapshot = utils::make_snapshot("block-string-end-at-outer", source);
-    utils::assert_snapshot!(snapshot);
-    utils::assert_json_output("block-string-end-at-outer", source, expected_json);
+    utils::assert_json_output("block-string-clip-multi-trailing", source, expected_json);
 }
 #[test]
 fn block_string_extra_indent() {
@@ -526,14 +518,6 @@ fn block_string_folded() {
     let snapshot = utils::make_snapshot("block-string-folded", source);
     utils::assert_snapshot!(snapshot);
     utils::assert_json_output("block-string-folded", source, expected_json);
-}
-#[test]
-fn block_string_folded_strip() {
-    let source = include_str!("../../../test-suite/block-string-folded-strip/input.mical");
-    let expected_json = include_str!("../../../test-suite/block-string-folded-strip/output.json");
-    let snapshot = utils::make_snapshot("block-string-folded-strip", source);
-    utils::assert_snapshot!(snapshot);
-    utils::assert_json_output("block-string-folded-strip", source, expected_json);
 }
 #[test]
 fn block_string_header_trailing_space() {
@@ -711,12 +695,36 @@ fn block_string_multi_literal_strip_none_none_none_dedent() {
     utils::assert_json_output("block-string-multi-literal-strip-none-none-none-dedent", source, expected_json);
 }
 #[test]
+fn block_string_nested_edge_cases() {
+    let source = include_str!("../../../test-suite/block-string-nested-edge-cases/input.mical");
+    let expected_json = include_str!("../../../test-suite/block-string-nested-edge-cases/output.json");
+    let snapshot = utils::make_snapshot("block-string-nested-edge-cases", source);
+    utils::assert_snapshot!(snapshot);
+    utils::assert_json_output("block-string-nested-edge-cases", source, expected_json);
+}
+#[test]
 fn block_string_nested_indent() {
     let source = include_str!("../../../test-suite/block-string-nested-indent/input.mical");
     let expected_json = include_str!("../../../test-suite/block-string-nested-indent/output.json");
     let snapshot = utils::make_snapshot("block-string-nested-indent", source);
     utils::assert_snapshot!(snapshot);
     utils::assert_json_output("block-string-nested-indent", source, expected_json);
+}
+#[test]
+fn block_string_tab_after_content() {
+    let source = include_str!("../../../test-suite/block-string-tab-after-content/input.mical");
+    let expected_json = include_str!("../../../test-suite/block-string-tab-after-content/output.json");
+    let snapshot = utils::make_snapshot("block-string-tab-after-content", source);
+    utils::assert_snapshot!(snapshot);
+    utils::assert_json_output("block-string-tab-after-content", source, expected_json);
+}
+#[test]
+fn block_string_wsln_above_base() {
+    let source = include_str!("../../../test-suite/block-string-wsln-above-base/input.mical");
+    let expected_json = include_str!("../../../test-suite/block-string-wsln-above-base/output.json");
+    let snapshot = utils::make_snapshot("block-string-wsln-above-base", source);
+    utils::assert_snapshot!(snapshot);
+    utils::assert_json_output("block-string-wsln-above-base", source, expected_json);
 }
 #[test]
 fn brace_after_key() {

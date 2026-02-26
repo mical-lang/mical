@@ -11,6 +11,7 @@ b >not fold
 c |+not block
 d |abc
 e > text after
+f |	after tab
 
 ```
 
@@ -22,7 +23,8 @@ e > text after
   "b": ">not fold",
   "c": "|+not block",
   "d": "|abc",
-  "e": "> text after"
+  "e": "> text after",
+  "f": "|\tafter tab"
 }
 ```
 

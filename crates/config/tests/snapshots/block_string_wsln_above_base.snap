@@ -1,0 +1,25 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# block-string-wsln-above-base
+
+## Input
+
+```mical
+key |
+   
+  a
+   
+  b
+
+```
+
+## JSON
+
+```json
+{
+  "key": "\na\n\nb\n"
+}
+```
+
+vim:ft=markdown

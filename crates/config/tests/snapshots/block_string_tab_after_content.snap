@@ -1,0 +1,30 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# block-string-tab-after-content
+
+## Input
+
+```mical
+foo |
+  bar
+	baz
+
+```
+
+## Parser Error
+
+```
+12..12: tab indent is not allowed, skipping this line
+
+```
+
+## JSON
+
+```json
+{
+  "foo": "bar\n"
+}
+```
+
+vim:ft=markdown

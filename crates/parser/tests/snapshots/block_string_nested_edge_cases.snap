@@ -1,0 +1,76 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# block-string-nested-edge-cases
+
+## Input
+
+```
+  key |
+    content
+  sibling val
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..34
+  SPACE@0..2 "  "
+  ENTRY@2..20
+    WORD_KEY@2..5
+      WORD@2..5 "key"
+    SPACE@5..6 " "
+    BLOCK_STRING@6..19
+      BLOCK_STRING_HEADER@6..8
+        PIPE@6..7 "|"
+        NEWLINE@7..8 "\n"
+      SPACE@8..12 "    "
+      LINE_STRING@12..19
+        STRING@12..19 "content"
+    NEWLINE@19..20 "\n"
+  SPACE@20..22 "  "
+  ENTRY@22..34
+    WORD_KEY@22..29
+      WORD@22..29 "sibling"
+    SPACE@29..30 " "
+    LINE_STRING@30..33
+      STRING@30..33 "val"
+    NEWLINE@33..34 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@2..5 "key",
+            },
+            value: BlockString {
+                header: BlockStringHeader {
+                    style: PIPE@6..7 "|",
+                    chomp: none,
+                },
+                lines: [
+                    LineString {
+                        string: STRING@12..19 "content",
+                    },
+                ],
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@22..29 "sibling",
+            },
+            value: LineString {
+                string: STRING@30..33 "val",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

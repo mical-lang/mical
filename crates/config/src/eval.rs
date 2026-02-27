@@ -160,9 +160,8 @@ impl Eval for ast::Value {
                 ValueRaw::String(text_id)
             }
             ast::Value::BlockString(bs) => {
-                let text = bs.eval(ctx);
-                let id = ctx.arena.alloc(&text);
-                ValueRaw::String(id)
+                let text_id = bs.eval(ctx)?;
+                ValueRaw::String(text_id)
             }
         };
         Some(value)
@@ -185,12 +184,12 @@ impl Eval for ast::Integer {
     type Output = Option<TextId>;
 
     fn eval(&self, ctx: &mut Context) -> Self::Output {
-        let text = ctx.temporary_string.get();
+        let buf = ctx.temporary_string.get();
         if let Some(sign) = self.sign() {
-            text.push_str(sign.text());
+            buf.push_str(sign.text());
         }
-        text.push_str(self.numeral()?.text());
-        Some(ctx.arena.alloc(text))
+        buf.push_str(self.numeral()?.text());
+        Some(ctx.arena.alloc(buf))
     }
 }
 
@@ -199,16 +198,16 @@ impl Eval for ast::QuotedString {
 
     fn eval(&self, ctx: &mut Context) -> Self::Output {
         let string = self.string()?;
-        let text = ctx.temporary_string.get();
-        unescape(string.text(), text, string.text_range().start(), &mut ctx.errors);
-        Some(ctx.arena.alloc(text))
+        let buf = ctx.temporary_string.get();
+        unescape(string.text(), buf, string.text_range().start(), &mut ctx.errors);
+        Some(ctx.arena.alloc(buf))
     }
 }
 
 impl Eval for ast::BlockString {
-    type Output = String;
+    type Output = Option<TextId>;
 
-    fn eval(&self, _ctx: &mut Context) -> Self::Output {
+    fn eval(&self, ctx: &mut Context) -> Self::Output {
         let (is_folded, chomp) = match self.header() {
             Some(h) => {
                 let is_folded = h.style().is_some_and(|s| s.kind() == SyntaxKind::GT);
@@ -218,127 +217,64 @@ impl Eval for ast::BlockString {
             None => (false, None),
         };
 
-        let lines: Vec<Option<String>> =
-            self.lines().map(|line| line.string().map(|t| t.text().to_string())).collect();
+        let buf = ctx.temporary_string.get();
+        let mut has_lines = false;
 
-        if lines.is_empty() {
-            return String::new();
-        }
-
-        let raw = if is_folded { fold_lines(&lines) } else { literal_lines(&lines) };
-        apply_chomp(&raw, chomp)
-    }
-}
-
-/// Literal style (`|`): newlines between lines are preserved as-is.
-fn literal_lines(lines: &[Option<String>]) -> String {
-    let mut result = String::new();
-    for (i, line) in lines.iter().enumerate() {
-        if i > 0 {
-            result.push('\n');
-        }
-        if let Some(text) = line {
-            result.push_str(text);
-        }
-    }
-    result.push('\n');
-    result
-}
-
-/// Folded style (`>`): single newlines between adjacent content lines are
-/// replaced by spaces.  Empty lines produce `\n` in the output.
-fn fold_lines(lines: &[Option<String>]) -> String {
-    let mut result = String::new();
-    let mut prev_was_content = false;
-    for line in lines {
-        match line {
-            Some(text) => {
-                if prev_was_content {
-                    result.push(' ');
+        if is_folded {
+            let mut prev_content: Option<bool> = None;
+            for line in self.lines() {
+                has_lines = true;
+                match line.string() {
+                    Some(token) => {
+                        let text = token.text();
+                        let more_indented = text.starts_with(' ');
+                        if let Some(prev_was_more) = prev_content {
+                            if prev_was_more || more_indented {
+                                buf.push('\n');
+                            } else {
+                                buf.push(' ');
+                            }
+                        }
+                        buf.push_str(text);
+                        prev_content = Some(more_indented);
+                    }
+                    None => {
+                        buf.push('\n');
+                        prev_content = None;
+                    }
                 }
-                result.push_str(text);
-                prev_was_content = true;
             }
-            None => {
-                result.push('\n');
-                prev_was_content = false;
+        } else {
+            for (i, line) in self.lines().enumerate() {
+                has_lines = true;
+                if i > 0 {
+                    buf.push('\n');
+                }
+                if let Some(token) = line.string() {
+                    buf.push_str(token.text());
+                }
             }
         }
-    }
-    result.push('\n');
-    result
-}
 
-fn apply_chomp(raw: &str, chomp: Option<SyntaxKind>) -> String {
-    match chomp {
-        Some(SyntaxKind::MINUS) => raw.trim_end_matches('\n').to_string(),
-        Some(SyntaxKind::PLUS) => raw.to_string(),
-        _ => {
-            let trimmed = raw.trim_end_matches('\n');
-            format!("{trimmed}\n")
+        if !has_lines {
+            return Some(ctx.arena.alloc(""));
         }
-    }
-}
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+        buf.push('\n');
 
-    #[test]
-    fn literal_lines_basic() {
-        let lines = vec![Some("a".into()), Some("b".into())];
-        assert_eq!(literal_lines(&lines), "a\nb\n");
-    }
+        match chomp {
+            Some(SyntaxKind::MINUS) => {
+                let end = buf.trim_end_matches('\n').len();
+                buf.truncate(end);
+            }
+            Some(SyntaxKind::PLUS) => {}
+            _ => {
+                let end = buf.trim_end_matches('\n').len();
+                buf.truncate(end);
+                buf.push('\n');
+            }
+        }
 
-    #[test]
-    fn literal_lines_with_empty() {
-        let lines = vec![Some("a".into()), None, Some("b".into())];
-        assert_eq!(literal_lines(&lines), "a\n\nb\n");
-    }
-
-    #[test]
-    fn literal_lines_trailing_empty() {
-        let lines = vec![Some("x".into()), None, None];
-        assert_eq!(literal_lines(&lines), "x\n\n\n");
-    }
-
-    #[test]
-    fn fold_lines_basic() {
-        let lines = vec![
-            Some("This is a long".into()),
-            Some("sentence split".into()),
-            Some("over lines.".into()),
-            None,
-            Some("New paragraph.".into()),
-        ];
-        assert_eq!(
-            fold_lines(&lines),
-            "This is a long sentence split over lines.\nNew paragraph.\n"
-        );
-    }
-
-    #[test]
-    fn fold_lines_multiple_empty() {
-        let lines = vec![Some("a".into()), None, None, Some("b".into())];
-        assert_eq!(fold_lines(&lines), "a\n\nb\n");
-    }
-
-    #[test]
-    fn chomp_clip() {
-        assert_eq!(apply_chomp("hello\nworld\n", None), "hello\nworld\n");
-        assert_eq!(apply_chomp("hello\nworld\n\n", None), "hello\nworld\n");
-        assert_eq!(apply_chomp("a\n\n\n", None), "a\n");
-    }
-
-    #[test]
-    fn chomp_strip() {
-        assert_eq!(apply_chomp("hello\nworld\n", Some(SyntaxKind::MINUS)), "hello\nworld");
-        assert_eq!(apply_chomp("hello\nworld\n\n", Some(SyntaxKind::MINUS)), "hello\nworld");
-    }
-
-    #[test]
-    fn chomp_keep() {
-        assert_eq!(apply_chomp("hello\n\n\n", Some(SyntaxKind::PLUS)), "hello\n\n\n");
-        assert_eq!(apply_chomp("x\n", Some(SyntaxKind::PLUS)), "x\n");
+        Some(ctx.arena.alloc(buf))
     }
 }

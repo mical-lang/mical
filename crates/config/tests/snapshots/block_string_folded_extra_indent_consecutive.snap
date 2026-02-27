@@ -1,0 +1,26 @@
+---
+source: crates/config/tests/snapshots.rs
+assertion_line: 535
+---
+# block-string-folded-extra-indent-consecutive
+
+## Input
+
+```mical
+key >
+  a
+    b
+    c
+  d
+
+```
+
+## JSON
+
+```json
+{
+  "key": "a\n  b\n  c\nd\n"
+}
+```
+
+vim:ft=markdown

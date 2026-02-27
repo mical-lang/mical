@@ -520,6 +520,46 @@ fn block_string_folded() {
     utils::assert_json_output("block-string-folded", source, expected_json);
 }
 #[test]
+fn block_string_folded_extra_indent_clip() {
+    let source = include_str!("../../../test-suite/block-string-folded-extra-indent-clip/input.mical");
+    let expected_json = include_str!("../../../test-suite/block-string-folded-extra-indent-clip/output.json");
+    let snapshot = utils::make_snapshot("block-string-folded-extra-indent-clip", source);
+    utils::assert_snapshot!(snapshot);
+    utils::assert_json_output("block-string-folded-extra-indent-clip", source, expected_json);
+}
+#[test]
+fn block_string_folded_extra_indent_consecutive() {
+    let source = include_str!("../../../test-suite/block-string-folded-extra-indent-consecutive/input.mical");
+    let expected_json = include_str!("../../../test-suite/block-string-folded-extra-indent-consecutive/output.json");
+    let snapshot = utils::make_snapshot("block-string-folded-extra-indent-consecutive", source);
+    utils::assert_snapshot!(snapshot);
+    utils::assert_json_output("block-string-folded-extra-indent-consecutive", source, expected_json);
+}
+#[test]
+fn block_string_folded_extra_indent_empty_line() {
+    let source = include_str!("../../../test-suite/block-string-folded-extra-indent-empty-line/input.mical");
+    let expected_json = include_str!("../../../test-suite/block-string-folded-extra-indent-empty-line/output.json");
+    let snapshot = utils::make_snapshot("block-string-folded-extra-indent-empty-line", source);
+    utils::assert_snapshot!(snapshot);
+    utils::assert_json_output("block-string-folded-extra-indent-empty-line", source, expected_json);
+}
+#[test]
+fn block_string_folded_extra_indent_keep() {
+    let source = include_str!("../../../test-suite/block-string-folded-extra-indent-keep/input.mical");
+    let expected_json = include_str!("../../../test-suite/block-string-folded-extra-indent-keep/output.json");
+    let snapshot = utils::make_snapshot("block-string-folded-extra-indent-keep", source);
+    utils::assert_snapshot!(snapshot);
+    utils::assert_json_output("block-string-folded-extra-indent-keep", source, expected_json);
+}
+#[test]
+fn block_string_folded_extra_indent_strip() {
+    let source = include_str!("../../../test-suite/block-string-folded-extra-indent-strip/input.mical");
+    let expected_json = include_str!("../../../test-suite/block-string-folded-extra-indent-strip/output.json");
+    let snapshot = utils::make_snapshot("block-string-folded-extra-indent-strip", source);
+    utils::assert_snapshot!(snapshot);
+    utils::assert_json_output("block-string-folded-extra-indent-strip", source, expected_json);
+}
+#[test]
 fn block_string_header_trailing_space() {
     let source = include_str!("../../../test-suite/block-string-header-trailing-space/input.mical");
     let expected_json = include_str!("../../../test-suite/block-string-header-trailing-space/output.json");

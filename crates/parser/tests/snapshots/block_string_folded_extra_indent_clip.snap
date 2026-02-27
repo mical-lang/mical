@@ -1,0 +1,91 @@
+---
+source: crates/parser/tests/snapshots.rs
+assertion_line: 393
+---
+# block-string-folded-extra-indent-clip
+
+## Input
+
+```
+key >
+  a
+  b
+    c
+  d
+  e
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..28
+  ENTRY@0..28
+    WORD_KEY@0..3
+      WORD@0..3 "key"
+    SPACE@3..4 " "
+    BLOCK_STRING@4..27
+      BLOCK_STRING_HEADER@4..6
+        GT@4..5 ">"
+        NEWLINE@5..6 "\n"
+      SPACE@6..8 "  "
+      LINE_STRING@8..9
+        STRING@8..9 "a"
+      NEWLINE@9..10 "\n"
+      SPACE@10..12 "  "
+      LINE_STRING@12..13
+        STRING@12..13 "b"
+      NEWLINE@13..14 "\n"
+      SPACE@14..16 "  "
+      LINE_STRING@16..19
+        STRING@16..19 "  c"
+      NEWLINE@19..20 "\n"
+      SPACE@20..22 "  "
+      LINE_STRING@22..23
+        STRING@22..23 "d"
+      NEWLINE@23..24 "\n"
+      SPACE@24..26 "  "
+      LINE_STRING@26..27
+        STRING@26..27 "e"
+    NEWLINE@27..28 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..3 "key",
+            },
+            value: BlockString {
+                header: BlockStringHeader {
+                    style: GT@4..5 ">",
+                    chomp: none,
+                },
+                lines: [
+                    LineString {
+                        string: STRING@8..9 "a",
+                    },
+                    LineString {
+                        string: STRING@12..13 "b",
+                    },
+                    LineString {
+                        string: STRING@16..19 "  c",
+                    },
+                    LineString {
+                        string: STRING@22..23 "d",
+                    },
+                    LineString {
+                        string: STRING@26..27 "e",
+                    },
+                ],
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

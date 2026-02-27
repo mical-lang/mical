@@ -1,0 +1,30 @@
+---
+source: crates/config/tests/snapshots.rs
+assertion_line: 535
+---
+# block-string-folded-extra-indent-keep
+
+## Input
+
+```mical
+key >+
+  a
+  b
+    c
+  d
+  e
+
+other val
+
+```
+
+## JSON
+
+```json
+{
+  "key": "a b\n  c\nd e\n\n",
+  "other": "val"
+}
+```
+
+vim:ft=markdown

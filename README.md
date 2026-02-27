@@ -28,6 +28,8 @@ $ mical eval config.mical
 
 ## Install
 
+[![Crates.io](https://img.shields.io/crates/v/mical-cli.svg)](https://crates.io/crates/mical-cli)
+
 ```sh
 cargo install mical-cli
 ```
@@ -50,7 +52,7 @@ mical eval -o out.json config.mical
 
 ## Documentation
 
-See the [language specification](https://ryota2357.github.io/mical/) for details on syntax, keys, values, prefix blocks, and block strings.
+See the [language documentation](https://mical-lang.github.io/mical/) for details on syntax, keys, values, prefix blocks, and block strings.
 
 ## License
 

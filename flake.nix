@@ -46,6 +46,8 @@
         devShells.default = pkgs.mkShellNoCC {
           packages = with pkgs; [
             toolchain
+            cargo-insta
+            cargo-nextest
             nil
             mdbook
           ];

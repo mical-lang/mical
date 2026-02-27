@@ -5,7 +5,7 @@ mod text_arena;
 use text_arena::{TextArena, TextId};
 
 mod error;
-pub use error::ConfigError;
+pub use error::Error;
 
 mod eval;
 pub mod json;
@@ -46,10 +46,8 @@ impl ValueRaw {
 }
 
 impl Config {
-    pub fn from_source_file(source_file: ast::SourceFile) -> (Self, Vec<ConfigError>) {
-        let ctx = eval::eval(&source_file);
-        let eval::EvalContext { arena, entries, errors, .. } = ctx;
-
+    pub fn from_source_file(source_file: ast::SourceFile) -> (Self, Vec<Error>) {
+        let eval::Output { arena, entries, errors } = eval::eval_source_file(&source_file);
         let (sorted_indices, group_order) = Self::build_indices(&arena, &entries);
         (Config { arena, entries, sorted_indices, group_order }, errors)
     }

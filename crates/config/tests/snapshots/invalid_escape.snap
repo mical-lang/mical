@@ -21,6 +21,7 @@ invalid escape sequence '\x' at 6..8
 
 ```json
 {
+  "a": "badx",
   "b": "value"
 }
 ```

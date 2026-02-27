@@ -1,36 +1,66 @@
-use mical_cli_syntax::ast::{self, AstNode, BooleanKind};
-use mical_cli_syntax::{SyntaxKind, TextRange, TextSize};
+use crate::{
+    Error, ValueRaw,
+    text_arena::{TextArena, TextId},
+};
+use mical_cli_syntax::{
+    SyntaxKind,
+    ast::{self, BooleanKind},
+};
 
-use crate::ValueRaw;
-use crate::error::ConfigError;
-use crate::text_arena::{TextArena, TextId};
+mod joined_str;
+use joined_str::*;
 
-pub(crate) struct EvalContext {
+mod temporary_string;
+use temporary_string::*;
+
+mod unescape;
+use unescape::*;
+
+pub(crate) struct Output {
     pub(crate) arena: TextArena,
     pub(crate) entries: Vec<(TextId, ValueRaw)>,
-    pub(crate) errors: Vec<ConfigError>,
-    prefix: String,
+    pub(crate) errors: Vec<Error>,
 }
 
-impl EvalContext {
-    pub(crate) fn new() -> Self {
-        Self {
+pub(crate) fn eval_source_file(source_file: &ast::SourceFile) -> Output {
+    let mut ctx = Context::new();
+    source_file.eval(&mut ctx);
+    ctx.finish()
+}
+
+struct Context {
+    arena: TextArena,
+    entries: Vec<(TextId, ValueRaw)>,
+    prefix: String,
+    temporary_string: TemporaryString,
+    errors: Vec<Error>,
+}
+
+impl Context {
+    fn new() -> Self {
+        Context {
             arena: TextArena::new(),
             entries: Vec::new(),
-            errors: Vec::new(),
             prefix: String::new(),
+            temporary_string: TemporaryString::new(),
+            errors: Vec::new(),
         }
+    }
+
+    fn finish(self) -> Output {
+        Output { arena: self.arena, entries: self.entries, errors: self.errors }
     }
 }
 
 trait Eval {
     type Output;
-    fn eval(&self, ctx: &mut EvalContext) -> Self::Output;
+    fn eval(&self, ctx: &mut Context) -> Self::Output;
 }
 
 impl Eval for ast::SourceFile {
     type Output = ();
-    fn eval(&self, ctx: &mut EvalContext) {
+
+    fn eval(&self, ctx: &mut Context) {
         for item in self.items() {
             item.eval(ctx);
         }
@@ -39,7 +69,8 @@ impl Eval for ast::SourceFile {
 
 impl Eval for ast::Item {
     type Output = ();
-    fn eval(&self, ctx: &mut EvalContext) {
+
+    fn eval(&self, ctx: &mut Context) {
         match self {
             ast::Item::Entry(entry) => entry.eval(ctx),
             ast::Item::PrefixBlock(block) => block.eval(ctx),
@@ -50,20 +81,26 @@ impl Eval for ast::Item {
 
 impl Eval for ast::Entry {
     type Output = ();
-    fn eval(&self, ctx: &mut EvalContext) {
-        let Some(key) = self.key() else {
-            ctx.errors.push(ConfigError::MissingSyntax { range: self.syntax().text_range() });
-            return;
-        };
-        let Some(value) = self.value() else {
-            ctx.errors.push(ConfigError::MissingSyntax { range: self.syntax().text_range() });
-            return;
-        };
 
-        let Some(key_text) = key.eval(ctx) else { return };
-        let full_key =
-            if ctx.prefix.is_empty() { key_text } else { format!("{}{key_text}", ctx.prefix) };
-        let key_id = ctx.arena.alloc(&full_key);
+    fn eval(&self, ctx: &mut Context) {
+        let Some(key) = self.key() else { return };
+        let Some(value) = self.value() else { return };
+
+        let key_id = {
+            let full_key = match key {
+                ast::Key::Word(word_key) => {
+                    let Some(token) = word_key.word() else { return };
+                    ctx.prefix.joined(token.text())
+                }
+                ast::Key::Quoted(quoted_key) => {
+                    let Some(string) = quoted_key.string() else { return };
+                    let espaced: &mut String = ctx.temporary_string.get();
+                    unescape(string.text(), espaced, string.text_range().start(), &mut ctx.errors);
+                    ctx.prefix.joined(espaced)
+                }
+            };
+            ctx.arena.alloc(&full_key)
+        };
 
         let Some(value_raw) = value.eval(ctx) else { return };
         ctx.entries.push((key_id, value_raw));
@@ -72,15 +109,24 @@ impl Eval for ast::Entry {
 
 impl Eval for ast::PrefixBlock {
     type Output = ();
-    fn eval(&self, ctx: &mut EvalContext) {
-        let Some(key) = self.key() else {
-            ctx.errors.push(ConfigError::MissingSyntax { range: self.syntax().text_range() });
-            return;
-        };
-        let Some(key_text) = key.eval(ctx) else { return };
+
+    fn eval(&self, ctx: &mut Context) {
+        let Some(key) = self.key() else { return };
 
         let prev_prefix_len = ctx.prefix.len();
-        ctx.prefix.push_str(&key_text);
+
+        match key {
+            ast::Key::Word(word_key) => {
+                let Some(token) = word_key.word() else { return };
+                ctx.prefix.push_str(token.text());
+            }
+            ast::Key::Quoted(quoted_key) => {
+                let Some(string) = quoted_key.string() else { return };
+                let espaced: &mut String = ctx.temporary_string.get();
+                unescape(string.text(), espaced, string.text_range().start(), &mut ctx.errors);
+                ctx.prefix.push_str(espaced);
+            }
+        };
 
         for item in self.items() {
             item.eval(ctx);
@@ -90,114 +136,79 @@ impl Eval for ast::PrefixBlock {
     }
 }
 
-impl Eval for ast::Key {
-    type Output = Option<String>;
-    fn eval(&self, ctx: &mut EvalContext) -> Option<String> {
-        match self {
-            ast::Key::Word(word_key) => match word_key.word() {
-                Some(token) => Some(token.text().to_string()),
-                None => {
-                    ctx.errors
-                        .push(ConfigError::MissingSyntax { range: word_key.syntax().text_range() });
-                    None
-                }
-            },
-            ast::Key::Quoted(quoted_key) => match quoted_key.string() {
-                Some(t) => {
-                    let text = t.text();
-                    if text.is_empty() || !text.contains('\\') {
-                        Some(text.to_string())
-                    } else {
-                        resolve_escapes(text, t.text_range(), &mut ctx.errors)
-                    }
-                }
-                None => {
-                    ctx.errors.push(ConfigError::MissingSyntax {
-                        range: quoted_key.syntax().text_range(),
-                    });
-                    None
-                }
-            },
-        }
-    }
-}
-
 impl Eval for ast::Value {
     type Output = Option<ValueRaw>;
-    fn eval(&self, ctx: &mut EvalContext) -> Option<ValueRaw> {
-        match self {
+
+    fn eval(&self, ctx: &mut Context) -> Option<ValueRaw> {
+        let value = match self {
             ast::Value::Boolean(b) => {
-                let kind = match b.kind() {
-                    Some(k) => k,
-                    None => {
-                        ctx.errors
-                            .push(ConfigError::MissingSyntax { range: b.syntax().text_range() });
-                        return None;
-                    }
-                };
-                let val = match kind {
-                    BooleanKind::True => true,
-                    BooleanKind::False => false,
-                };
-                Some(ValueRaw::Bool(val))
+                let val = b.eval(ctx)?;
+                ValueRaw::Bool(val)
             }
             ast::Value::Integer(i) => {
-                let text = i.eval(ctx)?;
-                let id = ctx.arena.alloc(&text);
-                Some(ValueRaw::Integer(id))
+                let text_id = i.eval(ctx)?;
+                ValueRaw::Integer(text_id)
             }
             ast::Value::LineString(ls) => {
-                let text = ls.string().map(|t| t.text().to_string()).unwrap_or_default();
-                let id = ctx.arena.alloc(&text);
-                Some(ValueRaw::String(id))
+                let string = ls.string()?;
+                let text = string.text();
+                let text_id = ctx.arena.alloc(text);
+                ValueRaw::String(text_id)
             }
             ast::Value::QuotedString(qs) => {
-                let text = match qs.string() {
-                    Some(t) => {
-                        let raw = t.text();
-                        if raw.is_empty() || !raw.contains('\\') {
-                            raw.to_string()
-                        } else {
-                            resolve_escapes(raw, t.text_range(), &mut ctx.errors)?
-                        }
-                    }
-                    None => String::new(),
-                };
-                let id = ctx.arena.alloc(&text);
-                Some(ValueRaw::String(id))
+                let text_id = qs.eval(ctx)?;
+                ValueRaw::String(text_id)
             }
             ast::Value::BlockString(bs) => {
                 let text = bs.eval(ctx);
                 let id = ctx.arena.alloc(&text);
-                Some(ValueRaw::String(id))
+                ValueRaw::String(id)
             }
-        }
+        };
+        Some(value)
+    }
+}
+
+impl Eval for ast::Boolean {
+    type Output = Option<bool>;
+
+    fn eval(&self, _ctx: &mut Context) -> Self::Output {
+        let val = match self.kind()? {
+            BooleanKind::True => true,
+            BooleanKind::False => false,
+        };
+        Some(val)
     }
 }
 
 impl Eval for ast::Integer {
-    type Output = Option<String>;
+    type Output = Option<TextId>;
 
-    fn eval(&self, ctx: &mut EvalContext) -> Self::Output {
-        let mut text = String::new();
+    fn eval(&self, ctx: &mut Context) -> Self::Output {
+        let text = ctx.temporary_string.get();
         if let Some(sign) = self.sign() {
             text.push_str(sign.text());
         }
-        match self.numeral() {
-            Some(n) => text.push_str(n.text()),
-            None => {
-                ctx.errors.push(ConfigError::MissingSyntax { range: self.syntax().text_range() });
-                return None;
-            }
-        }
-        Some(text)
+        text.push_str(self.numeral()?.text());
+        Some(ctx.arena.alloc(text))
+    }
+}
+
+impl Eval for ast::QuotedString {
+    type Output = Option<TextId>;
+
+    fn eval(&self, ctx: &mut Context) -> Self::Output {
+        let string = self.string()?;
+        let text = ctx.temporary_string.get();
+        unescape(string.text(), text, string.text_range().start(), &mut ctx.errors);
+        Some(ctx.arena.alloc(text))
     }
 }
 
 impl Eval for ast::BlockString {
     type Output = String;
 
-    fn eval(&self, _ctx: &mut EvalContext) -> Self::Output {
+    fn eval(&self, _ctx: &mut Context) -> Self::Output {
         let (is_folded, chomp) = match self.header() {
             Some(h) => {
                 let is_folded = h.style().is_some_and(|s| s.kind() == SyntaxKind::GT);
@@ -269,113 +280,9 @@ fn apply_chomp(raw: &str, chomp: Option<SyntaxKind>) -> String {
     }
 }
 
-/// Resolve escape sequences in a raw string token.
-///
-/// Supported escapes:
-///   `\"` → `"`   `\'` → `'`   `\\` → `\`
-///   `\n` → LF    `\r` → CR    `\t` → TAB
-fn resolve_escapes(
-    text: &str,
-    token_range: TextRange,
-    errors: &mut Vec<ConfigError>,
-) -> Option<String> {
-    debug_assert!(text.contains('\\'));
-
-    let base_offset: u32 = token_range.start().into();
-    let mut result = String::with_capacity(text.len());
-    let mut chars = text.char_indices();
-
-    while let Some((_, c)) = chars.next() {
-        if c != '\\' {
-            result.push(c);
-            continue;
-        }
-        match chars.next() {
-            Some((_, '"')) => result.push('"'),
-            Some((_, '\'')) => result.push('\''),
-            Some((_, '\\')) => result.push('\\'),
-            Some((_, 'n')) => result.push('\n'),
-            Some((_, 'r')) => result.push('\r'),
-            Some((_, 't')) => result.push('\t'),
-            Some((byte_offset, other)) => {
-                let esc_start = base_offset + (byte_offset as u32 - 1);
-                let esc_len = 1 + other.len_utf8() as u32;
-                let range = TextRange::at(TextSize::from(esc_start), TextSize::from(esc_len));
-                errors.push(ConfigError::InvalidEscape { range, sequence: format!("\\{other}") });
-                return None;
-            }
-            None => {
-                let esc_start = base_offset + (text.len() as u32 - 1);
-                let range = TextRange::at(TextSize::from(esc_start), TextSize::from(1));
-                errors.push(ConfigError::InvalidEscape { range, sequence: "\\".to_string() });
-                return None;
-            }
-        }
-    }
-
-    Some(result)
-}
-
-pub(crate) fn eval(source_file: &ast::SourceFile) -> EvalContext {
-    let mut ctx = EvalContext::new();
-    source_file.eval(&mut ctx);
-    ctx
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    #[test]
-    fn escape_basic() {
-        let range = TextRange::default();
-        let mut errors = Vec::new();
-
-        assert_eq!(
-            resolve_escapes(r#"hello \"world\""#, range, &mut errors),
-            Some(r#"hello "world""#.into())
-        );
-        assert!(errors.is_empty());
-
-        assert_eq!(resolve_escapes(r"a\\b", range, &mut errors), Some("a\\b".into()));
-        assert!(errors.is_empty());
-
-        assert_eq!(
-            resolve_escapes(r"line1\nline2", range, &mut errors),
-            Some("line1\nline2".into())
-        );
-        assert!(errors.is_empty());
-
-        assert_eq!(resolve_escapes(r"\t\r", range, &mut errors), Some("\t\r".into()));
-        assert!(errors.is_empty());
-
-        assert_eq!(resolve_escapes(r"can\'t", range, &mut errors), Some("can't".into()));
-        assert!(errors.is_empty());
-    }
-
-    #[test]
-    fn escape_invalid() {
-        let range = TextRange::default();
-        let mut errors = Vec::new();
-
-        assert_eq!(resolve_escapes(r"\x", range, &mut errors), None);
-        assert_eq!(errors.len(), 1);
-        assert!(
-            matches!(&errors[0], ConfigError::InvalidEscape { sequence, .. } if sequence == r"\x")
-        );
-    }
-
-    #[test]
-    fn escape_trailing_backslash() {
-        let range = TextRange::default();
-        let mut errors = Vec::new();
-
-        assert_eq!(resolve_escapes("trail\\", range, &mut errors), None);
-        assert_eq!(errors.len(), 1);
-        assert!(
-            matches!(&errors[0], ConfigError::InvalidEscape { sequence, .. } if sequence == r"\")
-        );
-    }
 
     #[test]
     fn literal_lines_basic() {

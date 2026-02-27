@@ -24,13 +24,6 @@ source: crates/config/tests/snapshots.rs
 
 ```
 
-## Config Error
-
-```
-missing syntax element at 0..19
-missing syntax element at 20..33
-```
-
 ## JSON
 
 ```json

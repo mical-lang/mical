@@ -8,4 +8,4 @@ This documentation guides you through installing the MICAL tools and understandi
 
 - **[Installation](./installation.md)**: How to get started with the MICAL CLI.
 - **[Language Overview](./overview.md)**: A quick tour of MICAL's syntax and concepts.
-- **[Specification](./specification/README.md)**: Detailed reference documentation.
+- **[Specification](./specification/index.md)**: Detailed reference documentation.

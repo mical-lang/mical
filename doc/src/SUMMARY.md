@@ -3,7 +3,7 @@
 - [Introduction](./introduction.md)
 - [Installation](./installation.md)
 - [Language Overview](./overview.md)
-- [Specification](./specification/README.md)
+- [Specification](./specification/index.md)
   - [Syntax & Structure](./specification/syntax.md)
   - [Keys](./specification/keys.md)
   - [Values](./specification/values.md)

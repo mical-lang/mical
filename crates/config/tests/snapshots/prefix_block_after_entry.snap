@@ -18,9 +18,9 @@ after world
 
 ```json
 {
-  "after": "world",
   "before": "hello",
-  "sectionkey": "value"
+  "sectionkey": "value",
+  "after": "world"
 }
 ```
 

@@ -19,12 +19,12 @@ false value
 
 ```json
 {
-  "+13": "value",
-  "-57": "value",
-  "42": "value",
-  "false": "value",
   "hello": "world",
-  "true": "value"
+  "42": "value",
+  "-57": "value",
+  "+13": "value",
+  "true": "value",
+  "false": "value"
 }
 ```
 

@@ -8,7 +8,8 @@ mod error;
 pub use error::Error;
 
 mod eval;
-pub mod json;
+mod json;
+pub use json::JsonView;
 
 pub struct Config {
     arena: TextArena,

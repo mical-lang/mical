@@ -1,4 +1,4 @@
 {
-  "a{b": "value",
-  "foo{": "value"
+  "foo{": "value",
+  "a{b": "value"
 }

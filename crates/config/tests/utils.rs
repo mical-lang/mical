@@ -1,4 +1,4 @@
-use mical_cli_config::Config;
+use mical_cli_config::{Config, JsonView};
 use mical_cli_syntax::{
     SyntaxNode,
     ast::{AstNode, SourceFile},
@@ -44,7 +44,7 @@ pub fn make_snapshot(name: &str, source: &str) -> String {
     }
 
     h(&mut f, 2, "JSON");
-    let json_str = serde_json::to_string_pretty(&config.to_json()).unwrap();
+    let json_str = serde_json::to_string_pretty(&JsonView(&config)).unwrap();
     code(&mut f, "json", &json_str);
 
     format!("{}vim:ft=markdown", f)
@@ -55,7 +55,7 @@ pub fn assert_json_output(_name: &str, source: &str, expected_json: &str) {
     let syntax = SyntaxNode::new_root(green);
     let source_file = SourceFile::cast(syntax).unwrap();
     let (config, _) = Config::from_source_file(source_file);
-    let actual = serde_json::to_string_pretty(&config.to_json()).unwrap() + "\n";
+    let actual = serde_json::to_string_pretty(&JsonView(&config)).unwrap() + "\n";
     pretty_assertions::assert_eq!(actual, expected_json);
 }
 

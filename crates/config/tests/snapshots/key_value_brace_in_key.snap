@@ -15,8 +15,8 @@ a{b value
 
 ```json
 {
-  "a{b": "value",
-  "foo{": "value"
+  "foo{": "value",
+  "a{b": "value"
 }
 ```
 

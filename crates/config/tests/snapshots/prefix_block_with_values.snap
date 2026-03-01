@@ -20,11 +20,11 @@ block {
 
 ```json
 {
+  "blockstr": "hello world",
+  "blocknum": 42,
   "blockflag": true,
   "blockneg": -1,
-  "blocknum": 42,
-  "blockquoted": "value",
-  "blockstr": "hello world"
+  "blockquoted": "value"
 }
 ```
 

@@ -17,9 +17,9 @@ source: crates/config/tests/snapshots.rs
 
 ```json
 {
+  "key": "value",
   "count": 42,
   "flag": true,
-  "key": "value",
   "neg": -1
 }
 ```

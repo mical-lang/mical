@@ -8,6 +8,9 @@ license.workspace = true
 description = "Internal config evaluator for mical-cli"
 
 [dependencies]
+compact_str = { workspace = true, features = ["serde"] }
+num-bigint.workspace = true
+serde.workspace = true
 serde_json = { workspace = true, features = ["raw_value"] }
 smallvec.workspace = true
 mical-cli-syntax.workspace = true

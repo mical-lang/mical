@@ -1,6 +1,6 @@
 {
+  "key": "value",
   "count": 42,
   "flag": true,
-  "key": "value",
   "neg": -1
 }

@@ -19,8 +19,8 @@ source: crates/config/tests/snapshots.rs
 
 ```json
 {
-  "othername": "hello",
-  "sectionkey": "value"
+  "sectionkey": "value",
+  "othername": "hello"
 }
 ```
 

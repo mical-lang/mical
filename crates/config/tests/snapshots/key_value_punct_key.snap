@@ -19,11 +19,11 @@ source: crates/config/tests/snapshots.rs
 
 ```json
 {
+  "|": "value",
+  ">": "value",
   "+": "value",
   "-": "value",
-  ">": "value",
   "{": "value",
-  "|": "value",
   "}": "value"
 }
 ```

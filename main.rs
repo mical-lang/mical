@@ -3,6 +3,7 @@ use std::path::PathBuf;
 use std::process::ExitCode;
 
 use clap::{Args, Parser, Subcommand};
+use mical_cli_config::{JsonView, Value};
 use mical_cli_syntax::ast::{AstNode as _, SourceFile};
 
 #[derive(Parser)]
@@ -128,49 +129,48 @@ fn cmd_eval(args: EvalArgs) -> ExitCode {
         eprintln!("config error: {err}");
     }
 
-    let json_output = match (&args.query.get, &args.query.prefix) {
+    let output_str = match (&args.query.get, &args.query.prefix) {
         (Some(key), None) => {
-            let values: Vec<_> = config.query(key).map(|v| v.to_json()).collect();
+            let values: Vec<_> = config.query(key).collect();
             match values.len() {
-                0 => serde_json::Value::Null,
-                1 => values.into_iter().next().unwrap(),
-                _ => serde_json::Value::Array(values),
+                0 => serde_json::to_string_pretty(&serde_json::Value::Null),
+                1 => serde_json::to_string_pretty(&JsonView(&values[0])),
+                _ => serde_json::to_string_pretty(&JsonView(values.as_slice())),
             }
         }
         (None, Some(prefix)) => {
-            let mut map = serde_json::Map::new();
-            let mut last_key: Option<String> = None;
-            for (k, v) in config.query_prefix(prefix) {
-                let json_val = v.to_json();
-                match last_key.as_deref() {
-                    Some(prev) if prev == k => {
-                        // Duplicate key — promote to array
-                        let entry = map.get_mut(k).unwrap();
-                        match entry {
-                            serde_json::Value::Array(arr) => arr.push(json_val),
-                            other => {
-                                let prev_val = std::mem::replace(other, serde_json::Value::Null);
-                                *other = serde_json::Value::Array(vec![prev_val, json_val]);
-                            }
+            let entries: Vec<(&str, Value<'_>)> = config.query_prefix(prefix).collect();
+
+            struct PrefixResult<'a>(Vec<(&'a str, Value<'a>)>);
+            impl serde::Serialize for PrefixResult<'_> {
+                fn serialize<S: serde::Serializer>(&self, ser: S) -> Result<S::Ok, S::Error> {
+                    use serde::ser::SerializeMap;
+                    let mut map = ser.serialize_map(None)?;
+                    let mut i = 0;
+                    while i < self.0.len() {
+                        let key = self.0[i].0;
+                        let start = i;
+                        while i < self.0.len() && self.0[i].0 == key {
+                            i += 1;
+                        }
+                        if i - start == 1 {
+                            map.serialize_entry(key, &JsonView(&self.0[start].1))?;
+                        } else {
+                            let vals: Vec<JsonView<&Value<'_>>> =
+                                self.0[start..i].iter().map(|(_, v)| JsonView(v)).collect();
+                            map.serialize_entry(key, &vals)?;
                         }
                     }
-                    _ => {
-                        map.insert(k.to_owned(), json_val);
-                    }
+                    map.end()
                 }
-                last_key = Some(k.to_owned());
             }
-            serde_json::Value::Object(map)
-        }
-        (None, None) => config.to_json(),
-        _ => unreachable!("clap ensures mutual exclusivity"),
-    };
 
-    let output_str = match args.format {
-        OutputFormat::Json => {
-            serde_json::to_string_pretty(&json_output).expect("JSON serialization failed")
+            serde_json::to_string_pretty(&PrefixResult(entries))
         }
-    };
+        (None, None) => serde_json::to_string_pretty(&JsonView(&config)),
+        _ => unreachable!("clap ensures mutual exclusivity"),
+    }
+    .expect("JSON serialization failed");
 
     match args.output_path {
         Some(path) => {

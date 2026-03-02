@@ -1,9 +1,8 @@
-use crate::{Config, Value};
+use crate::{Config, KeyGroups, Value, Values};
 use compact_str::CompactString;
 use num_bigint::BigUint;
 use serde::Serialize;
 use serde::ser::{SerializeMap, SerializeSeq};
-use smallvec::{SmallVec, ToSmallVec};
 
 pub struct JsonView<T>(pub T);
 
@@ -66,25 +65,21 @@ impl Serialize for JsonView<&[Value<'_>]> {
     }
 }
 
-impl Serialize for JsonView<&Config> {
+impl Serialize for JsonView<&Values<'_>> {
     fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
-        let JsonView(config) = self;
-        let mut map = serializer.serialize_map(Some(config.group_order.len()))?;
-        for &(group_start, count) in &config.group_order {
-            let (group_start, count) = (group_start as usize, count as usize);
-            let mut idxs: SmallVec<[u32; 2]> =
-                config.sorted_indices[group_start..(group_start + count)].to_smallvec();
-            idxs.sort_unstable();
-            let key = &config.arena[config.entries[idxs[0] as usize].0];
-            if count == 1 {
+        let KeyGroups { config, lo, hi, .. } = self.0.groups;
+        let groups = KeyGroups::new(config, lo, hi);
+        let mut map = serializer.serialize_map(None)?;
+        for (key, idxs) in groups {
+            if idxs.len() == 1 {
                 let val = config.entries[idxs[0] as usize].1.to_value(&config.arena);
                 map.serialize_entry(key, &JsonView(&val))?;
             } else {
-                struct Values<'a> {
+                struct Array<'a> {
                     config: &'a Config,
                     idxs: &'a [u32],
                 }
-                impl Serialize for Values<'_> {
+                impl Serialize for Array<'_> {
                     fn serialize<S: serde::Serializer>(&self, ser: S) -> Result<S::Ok, S::Error> {
                         let mut seq = ser.serialize_seq(Some(self.idxs.len()))?;
                         for &i in self.idxs {
@@ -95,10 +90,16 @@ impl Serialize for JsonView<&Config> {
                         seq.end()
                     }
                 }
-                map.serialize_entry(key, &Values { config, idxs: &idxs })?;
+                map.serialize_entry(key, &Array { config, idxs: &idxs })?;
             }
         }
         map.end()
+    }
+}
+
+impl Serialize for JsonView<&Config> {
+    fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        JsonView(&self.0.entries()).serialize(serializer)
     }
 }
 

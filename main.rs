@@ -3,7 +3,7 @@ use std::path::PathBuf;
 use std::process::ExitCode;
 
 use clap::{Args, Parser, Subcommand};
-use mical_cli_config::{JsonView, Value};
+use mical_cli_config::JsonView;
 use mical_cli_syntax::ast::{AstNode as _, SourceFile};
 
 #[derive(Parser)]
@@ -139,33 +139,8 @@ fn cmd_eval(args: EvalArgs) -> ExitCode {
             }
         }
         (None, Some(prefix)) => {
-            let entries: Vec<(&str, Value<'_>)> = config.query_prefix(prefix).collect();
-
-            struct PrefixResult<'a>(Vec<(&'a str, Value<'a>)>);
-            impl serde::Serialize for PrefixResult<'_> {
-                fn serialize<S: serde::Serializer>(&self, ser: S) -> Result<S::Ok, S::Error> {
-                    use serde::ser::SerializeMap;
-                    let mut map = ser.serialize_map(None)?;
-                    let mut i = 0;
-                    while i < self.0.len() {
-                        let key = self.0[i].0;
-                        let start = i;
-                        while i < self.0.len() && self.0[i].0 == key {
-                            i += 1;
-                        }
-                        if i - start == 1 {
-                            map.serialize_entry(key, &JsonView(&self.0[start].1))?;
-                        } else {
-                            let vals: Vec<JsonView<&Value<'_>>> =
-                                self.0[start..i].iter().map(|(_, v)| JsonView(v)).collect();
-                            map.serialize_entry(key, &vals)?;
-                        }
-                    }
-                    map.end()
-                }
-            }
-
-            serde_json::to_string_pretty(&PrefixResult(entries))
+            let values = config.query_prefix(prefix);
+            serde_json::to_string_pretty(&JsonView(&values))
         }
         (None, None) => serde_json::to_string_pretty(&JsonView(&config)),
         _ => unreachable!("clap ensures mutual exclusivity"),

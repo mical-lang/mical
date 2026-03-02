@@ -46,6 +46,72 @@ impl ValueRaw {
     }
 }
 
+/// Iterates over groups of entries within [lo, hi) range in first-occurrence order.
+/// Each item is (key, sorted_indices) where sorted_indices contains insertion-ordered entry indices.
+pub(crate) struct KeyGroups<'a> {
+    pub(crate) config: &'a Config,
+    pub(crate) lo: usize,
+    pub(crate) hi: usize,
+    pos: usize,
+}
+
+impl<'a> KeyGroups<'a> {
+    pub(crate) fn new(config: &'a Config, lo: usize, hi: usize) -> Self {
+        KeyGroups { config, lo, hi, pos: 0 }
+    }
+}
+
+impl<'a> Iterator for KeyGroups<'a> {
+    type Item = (&'a str, SmallVec<[u32; 2]>);
+
+    fn next(&mut self) -> Option<Self::Item> {
+        while self.pos < self.config.group_order.len() {
+            let (gs, count) = self.config.group_order[self.pos];
+            self.pos += 1;
+            if (gs as usize) >= self.lo && (gs as usize) < self.hi {
+                let (gs, count) = (gs as usize, count as usize);
+                let mut idxs: SmallVec<[u32; 2]> =
+                    self.config.sorted_indices[gs..(gs + count)].to_smallvec();
+                idxs.sort_unstable();
+                let key = &self.config.arena[self.config.entries[idxs[0] as usize].0];
+                return Some((key, idxs));
+            }
+        }
+        None
+    }
+}
+
+pub struct Values<'a> {
+    groups: KeyGroups<'a>,
+    current_idxs: SmallVec<[u32; 2]>,
+    idx_pos: usize,
+}
+// Most cases have 1 entry per key, use SmallVec to optimize for that case.
+// SmallVec<[u32; 2]> is used because it has the same size as SmallVec<[u32; 1]>.
+const _: () = {
+    assert!(size_of::<SmallVec<[u32; 2]>>() == size_of::<SmallVec<[u32; 1]>>());
+    assert!(size_of::<SmallVec<[u32; 3]>>() > size_of::<SmallVec<[u32; 1]>>());
+};
+
+impl<'a> Iterator for Values<'a> {
+    type Item = (&'a str, Value<'a>);
+
+    fn next(&mut self) -> Option<Self::Item> {
+        loop {
+            if self.idx_pos < self.current_idxs.len() {
+                let i = self.current_idxs[self.idx_pos];
+                self.idx_pos += 1;
+                let config = self.groups.config;
+                let (key_id, raw) = config.entries[i as usize];
+                return Some((&config.arena[key_id], raw.to_value(&config.arena)));
+            }
+            let (_, idxs) = self.groups.next()?;
+            self.current_idxs = idxs;
+            self.idx_pos = 0;
+        }
+    }
+}
+
 impl Config {
     pub fn from_source_file(source_file: ast::SourceFile) -> (Self, Vec<Error>) {
         let eval::Output { arena, entries, errors } = eval::eval_source_file(&source_file);
@@ -130,10 +196,7 @@ impl Config {
     }
 
     /// Return (key, value) pairs whose keys start with `prefix` in insertion order (grouped by first occurrence).
-    pub fn query_prefix<'a>(
-        &'a self,
-        prefix: &str,
-    ) -> impl Iterator<Item = (&'a str, Value<'a>)> + 'a {
+    pub fn query_prefix(&self, prefix: &str) -> Values<'_> {
         let lo = self.sorted_indices.partition_point(|i| {
             let key_id = self.entries[*i as usize].0;
             &self.arena[key_id] < prefix
@@ -143,37 +206,12 @@ impl Config {
             let key = &self.arena[key_id];
             key.starts_with(prefix) || key < prefix
         });
-        self.iter_range(lo, hi)
+        Values { groups: KeyGroups::new(self, lo, hi), current_idxs: SmallVec::new(), idx_pos: 0 }
     }
 
     /// Return all (key, value) pairs in the order they were inserted. (grouped by first occurrence)
-    pub fn entries<'a>(&'a self) -> impl Iterator<Item = (&'a str, Value<'a>)> + 'a {
-        let n = self.sorted_indices.len();
-        self.iter_range(0, n)
-    }
-
-    fn iter_range<'a>(
-        &'a self,
-        lo: usize,
-        hi: usize,
-    ) -> impl Iterator<Item = (&'a str, Value<'a>)> + 'a {
-        let matching =
-            self.group_order.iter().filter(move |&(gs, _)| *gs >= lo as u32 && *gs < hi as u32);
-        matching.into_iter().flat_map(move |(group_start, count)| {
-            let idxs: SmallVec<[u32; 2]> = {
-                const _: () = {
-                    assert!(size_of::<SmallVec<[u32; 2]>>() == size_of::<SmallVec<[u32; 1]>>());
-                    assert!(size_of::<SmallVec<[u32; 3]>>() > size_of::<SmallVec<[u32; 1]>>());
-                };
-                let (group_start, count) = (*group_start as usize, *count as usize);
-                let mut v = self.sorted_indices[group_start..(group_start + count)].to_smallvec();
-                v.sort_unstable(); // insertion order
-                v
-            };
-            idxs.into_iter().map(move |i| {
-                let (key_id, raw) = self.entries[i as usize];
-                (&self.arena[key_id], raw.to_value(&self.arena))
-            })
-        })
+    pub fn entries(&self) -> Values<'_> {
+        let hi = self.sorted_indices.len();
+        Values { groups: KeyGroups::new(self, 0, hi), current_idxs: SmallVec::new(), idx_pos: 0 }
     }
 }

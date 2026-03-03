@@ -1,0 +1,10 @@
+[package]
+name = "mical-cli-formatter"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+repository.workspace = true
+license.workspace = true
+description = "Internal formatter for mical-cli"
+
+[dependencies]

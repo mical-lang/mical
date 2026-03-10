@@ -185,12 +185,12 @@ fn integer_or_word(cursor: &mut Cursor, first_digit: char) -> TokenKind {
         true // first_digit itself is always a valid digit
     };
     match cursor.peek() {
-        Some('\t' | '\n' | ' ') | None => Numeral { radix, is_empty: !has_digits },
+        Some('\t' | '\n' | '\r' | ' ') | None => Numeral { radix, is_empty: !has_digits },
         _ => word(cursor),
     }
 }
 
 fn word(cursor: &mut Cursor) -> TokenKind {
-    cursor.eat_while(|c| !matches!(c, '\t' | '\n' | ' '));
+    cursor.eat_while(|c| !matches!(c, '\t' | '\n' | '\r' | ' '));
     Word
 }

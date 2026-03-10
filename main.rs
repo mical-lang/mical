@@ -80,6 +80,10 @@ struct DevArgs {
     /// Path to the .mical file
     file: PathBuf,
 
+    /// Print the token stream
+    #[arg(long)]
+    token: bool,
+
     /// Print the CST (concrete syntax tree)
     #[arg(long)]
     cst: bool,
@@ -178,19 +182,32 @@ fn cmd_dev(args: DevArgs) -> ExitCode {
         }
     };
 
+    // Default: print CST + AST if no flag is given
+    let print_default = !args.token && !args.cst && !args.ast;
+
+    if args.token {
+        println!("=== Tokens ===");
+        let mut offset: u32 = 0;
+        for token in mical_cli_lexer::tokenize(&source) {
+            let text = &source[offset as usize..(offset + token.len) as usize];
+            println!("  {:?} {:?} @{}..{}", token.kind, text, offset, offset + token.len);
+            offset += token.len;
+        }
+    }
+
     let (green, syntax_errors) = mical_cli_parser::parse(mical_cli_lexer::tokenize(&source));
     let syntax_node = mical_cli_syntax::SyntaxNode::new_root(green);
 
-    // Default: print both if neither flag is given
-    let print_both = !args.cst && !args.ast;
-
-    if args.cst || print_both {
+    if args.cst || print_default {
+        if args.token {
+            println!();
+        }
         println!("=== CST ===");
         print_cst(&syntax_node, 0);
     }
 
-    if args.ast || print_both {
-        if args.cst || print_both {
+    if args.ast || print_default {
+        if args.token || args.cst || print_default {
             println!();
         }
         println!("=== AST ===");

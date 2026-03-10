@@ -690,6 +690,12 @@ fn crlf_basic() {
     utils::assert_snapshot!(snapshot);
 }
 #[test]
+fn crlf_mixed() {
+    let source = include_str!("../../../test-suite/crlf-mixed/input.mical");
+    let snapshot = utils::make_snapshot("crlf-mixed", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
 fn directive() {
     let source = include_str!("../../../test-suite/directive/input.mical");
     let snapshot = utils::make_snapshot("directive", source);

@@ -92,6 +92,26 @@ fn integer_decimal() {
 }
 
 #[test]
+fn integer_ends_with_punctuation() {
+    assert_token!("0{", [Word(2)]);
+    assert_token!("0}", [Word(2)]);
+    assert_token!("0>", [Word(2)]);
+    assert_token!("0-", [Word(2)]);
+    assert_token!("0|", [Word(2)]);
+    assert_token!("0+", [Word(2)]);
+    assert_token!("0#", [Word(2)]);
+}
+
+#[test]
+fn integer_ends_with_wspace() {
+    assert_token!("0 ", [Numeral { 1, radix: Decimal, is_empty: false }, Space(1)]);
+    assert_token!("0\t", [Numeral { 1, radix: Decimal, is_empty: false }, Tab(1)]);
+    assert_token!("0\n", [Numeral { 1, radix: Decimal, is_empty: false }, Newline(1)]);
+    assert_token!("0\r", [Numeral { 1, radix: Decimal, is_empty: false }, Newline(1)]);
+    assert_token!("0\r\n", [Numeral { 1, radix: Decimal, is_empty: false }, Newline(2)]);
+}
+
+#[test]
 fn single_punctuation() {
     assert_token!("{", [OpenBrace(1)]);
     assert_token!("}", [CloseBrace(1)]);
@@ -183,6 +203,15 @@ fn punctuation_middle_word() {
     assert_token!("x#y", [Word(3)]);
     assert_token!("x'y", [Word(3)]);
     assert_token!("x\"y", [Word(3)]);
+}
+
+#[test]
+fn word_stop_by_wspace() {
+    assert_token!("x y", [Word(1), Space(1), Word(1)]);
+    assert_token!("x\ty", [Word(1), Tab(1), Word(1)]);
+    assert_token!("x\ny", [Word(1), Newline(1), Word(1)]);
+    assert_token!("x\ry", [Word(1), Newline(1), Word(1)]);
+    assert_token!("x\r\ny", [Word(1), Newline(2), Word(1)]);
 }
 
 #[test]

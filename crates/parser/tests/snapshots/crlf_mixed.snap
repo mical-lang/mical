@@ -20,8 +20,8 @@ SOURCE_FILE@0..14
     WORD_KEY@0..1
       WORD@0..1 "a"
     SPACE@1..2 " "
-    LINE_STRING@2..3
-      STRING@2..3 "1"
+    INTEGER@2..3
+      NUMERAL@2..3 "1"
     NEWLINE@3..5 "\r\n"
   ENTRY@5..9
     WORD_KEY@5..6
@@ -34,8 +34,8 @@ SOURCE_FILE@0..14
     WORD_KEY@9..10
       WORD@9..10 "c"
     SPACE@10..11 " "
-    LINE_STRING@11..12
-      STRING@11..12 "3"
+    INTEGER@11..12
+      NUMERAL@11..12 "3"
     NEWLINE@12..14 "\r\n"
 ```
 
@@ -49,8 +49,9 @@ SourceFile {
             key: WordKey {
                 word: WORD@0..1 "a",
             },
-            value: LineString {
-                string: STRING@2..3 "1",
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@2..3 "1",
             },
         },
         Entry {
@@ -66,8 +67,9 @@ SourceFile {
             key: WordKey {
                 word: WORD@9..10 "c",
             },
-            value: LineString {
-                string: STRING@11..12 "3",
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@11..12 "3",
             },
         },
     ],

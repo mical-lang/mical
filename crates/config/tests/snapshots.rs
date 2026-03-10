@@ -935,6 +935,14 @@ fn crlf_basic() {
     utils::assert_json_output("crlf-basic", source, expected_json);
 }
 #[test]
+fn crlf_mixed() {
+    let source = include_str!("../../../test-suite/crlf-mixed/input.mical");
+    let expected_json = include_str!("../../../test-suite/crlf-mixed/output.json");
+    let snapshot = utils::make_snapshot("crlf-mixed", source);
+    utils::assert_snapshot!(snapshot);
+    utils::assert_json_output("crlf-mixed", source, expected_json);
+}
+#[test]
 fn directive() {
     let source = include_str!("../../../test-suite/directive/input.mical");
     let expected_json = include_str!("../../../test-suite/directive/output.json");

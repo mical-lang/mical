@@ -715,3 +715,41 @@ impl fmt::Debug for BlockStringHeader {
             .finish()
     }
 }
+
+#[derive(Clone)]
+pub struct Comment(SyntaxNode);
+impl AstNode for Comment {
+    type Language = MicalLanguage;
+    fn can_cast(kind: <Self::Language as rowan::Language>::Kind) -> bool {
+        kind == SyntaxKind::COMMENT
+    }
+    fn cast(node: rowan::SyntaxNode<Self::Language>) -> Option<Self> {
+        if Self::can_cast(node.kind()) {
+            Some(Self(node))
+        } else {
+            None
+        }
+    }
+    fn syntax(&self) -> &rowan::SyntaxNode<Self::Language> {
+        &self.0
+    }
+}
+
+#[derive(Clone)]
+pub struct Error(SyntaxNode);
+impl AstNode for Error {
+    type Language = MicalLanguage;
+    fn can_cast(kind: <Self::Language as rowan::Language>::Kind) -> bool {
+        kind == SyntaxKind::ERROR
+    }
+    fn cast(node: rowan::SyntaxNode<Self::Language>) -> Option<Self> {
+        if Self::can_cast(node.kind()) {
+            Some(Self(node))
+        } else {
+            None
+        }
+    }
+    fn syntax(&self) -> &rowan::SyntaxNode<Self::Language> {
+        &self.0
+    }
+}

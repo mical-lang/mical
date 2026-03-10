@@ -193,6 +193,31 @@ fn ast_rs(grammar: &Grammar) -> String {
             }
         }
     };
+    let special_nodes_code = {
+        let iter = ["Comment", "Error"].iter().map(|name| {
+            let name_ident = format_ident!("{name}");
+            let kind_ident = format_ident!("{}", name.to_case(Case::UpperSnake));
+            quote! {
+                #[derive(Clone)]
+                pub struct #name_ident(SyntaxNode);
+                impl AstNode for #name_ident {
+                    type Language = MicalLanguage;
+                    fn can_cast(kind: <Self::Language as rowan::Language>::Kind) -> bool {
+                        kind == SyntaxKind::#kind_ident
+                    }
+                    fn cast(node: rowan::SyntaxNode<Self::Language>) -> Option<Self> {
+                        if Self::can_cast(node.kind()) {
+                            Some(Self(node))
+                        } else {
+                            None
+                        }
+                    }
+                    fn syntax(&self) -> &rowan::SyntaxNode<Self::Language> { &self.0 }
+                }
+            }
+        });
+        iter.map(|ts| format!("{ts}")).collect::<Vec<_>>().join("\n\n")
+    };
     let ast_nodes_code = {
         let iter = grammar.iter().map(|node| {
             let node = &grammar[node];
@@ -213,7 +238,7 @@ fn ast_rs(grammar: &Grammar) -> String {
         });
         iter.map(|ts| format!("{ts}")).collect::<Vec<_>>().join("\n\n")
     };
-    format!("{use_code}\n\n{support_mod_code}\n\n{ast_nodes_code}")
+    format!("{use_code}\n\n{support_mod_code}\n\n{ast_nodes_code}\n\n{special_nodes_code}")
 }
 
 fn convert_node_to_struct(node: &NodeData, grammar: &Grammar) -> TokenStream {

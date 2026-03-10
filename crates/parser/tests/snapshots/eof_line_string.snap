@@ -1,0 +1,42 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# eof-line-string
+
+## Input
+
+```
+key hello world
+```
+
+## CST
+
+```
+SOURCE_FILE@0..15
+  ENTRY@0..15
+    WORD_KEY@0..3
+      WORD@0..3 "key"
+    SPACE@3..4 " "
+    LINE_STRING@4..15
+      STRING@4..15 "hello world"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..3 "key",
+            },
+            value: LineString {
+                string: STRING@4..15 "hello world",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

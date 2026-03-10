@@ -1,0 +1,79 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# integer-hex-extended
+
+## Input
+
+```
+a 0xDEAD_BEEF
+b 0xAa
+c 0x0
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..27
+  ENTRY@0..14
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    INTEGER@2..13
+      NUMERAL@2..13 "0xDEAD_BEEF"
+    NEWLINE@13..14 "\n"
+  ENTRY@14..21
+    WORD_KEY@14..15
+      WORD@14..15 "b"
+    SPACE@15..16 " "
+    INTEGER@16..20
+      NUMERAL@16..20 "0xAa"
+    NEWLINE@20..21 "\n"
+  ENTRY@21..27
+    WORD_KEY@21..22
+      WORD@21..22 "c"
+    SPACE@22..23 " "
+    INTEGER@23..26
+      NUMERAL@23..26 "0x0"
+    NEWLINE@26..27 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@2..13 "0xDEAD_BEEF",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@14..15 "b",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@16..20 "0xAa",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@21..22 "c",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@23..26 "0x0",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

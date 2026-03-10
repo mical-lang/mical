@@ -1,0 +1,116 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# error-multiple
+
+## Input
+
+```
+	b 2
+k1 v1
+lonely
+k2 "unclosed
+k3 v3
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..37
+  ERROR@0..4
+    TAB@0..1 "\t"
+    WORD@1..2 "b"
+    SPACE@2..3 " "
+    NUMERAL@3..4 "2"
+  NEWLINE@4..5 "\n"
+  ENTRY@5..11
+    WORD_KEY@5..7
+      WORD@5..7 "k1"
+    SPACE@7..8 " "
+    LINE_STRING@8..10
+      STRING@8..10 "v1"
+    NEWLINE@10..11 "\n"
+  ENTRY@11..17
+    WORD_KEY@11..17
+      WORD@11..17 "lonely"
+  NEWLINE@17..18 "\n"
+  ENTRY@18..31
+    WORD_KEY@18..20
+      WORD@18..20 "k2"
+    SPACE@20..21 " "
+    QUOTED_STRING@21..30
+      DOUBLE_QUOTE@21..22 "\""
+      STRING@22..30 "unclosed"
+    NEWLINE@30..31 "\n"
+  ENTRY@31..37
+    WORD_KEY@31..33
+      WORD@31..33 "k3"
+    SPACE@33..34 " "
+    LINE_STRING@34..36
+      STRING@34..36 "v3"
+    NEWLINE@36..37 "\n"
+```
+
+## Syntax Error
+
+```
+[
+    SyntaxError {
+        message: "tab indent is not allowed, skipping this line",
+        range: 0..0,
+    },
+    SyntaxError {
+        message: "missing value for the key",
+        range: 17..17,
+    },
+    SyntaxError {
+        message: "missing closing quote",
+        range: 30..30,
+    },
+]
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@5..7 "k1",
+            },
+            value: LineString {
+                string: STRING@8..10 "v1",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@11..17 "lonely",
+            },
+            value: none,
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@18..20 "k2",
+            },
+            value: QuotedString {
+                open_quote: DOUBLE_QUOTE@21..22 "\"",
+                string: STRING@22..30 "unclosed",
+                close_quote: DOUBLE_QUOTE@21..22 "\"",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@31..33 "k3",
+            },
+            value: LineString {
+                string: STRING@34..36 "v3",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

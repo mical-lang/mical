@@ -1,0 +1,25 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# integer-underscore
+
+## Input
+
+```mical
+a 1_000
+b 1_000_000
+c 1_2_3
+
+```
+
+## JSON
+
+```json
+{
+  "a": 1000,
+  "b": 1000000,
+  "c": 123
+}
+```
+
+vim:ft=markdown

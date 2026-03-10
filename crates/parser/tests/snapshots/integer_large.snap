@@ -1,0 +1,80 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# integer-large
+
+## Input
+
+```
+a 99999999999999999999999999999999999999999999999999
+b -99999999999999999999999999999999999999999999999999
+c 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..152
+  ENTRY@0..53
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    INTEGER@2..52
+      NUMERAL@2..52 "999999999999999999999 ..."
+    NEWLINE@52..53 "\n"
+  ENTRY@53..107
+    WORD_KEY@53..54
+      WORD@53..54 "b"
+    SPACE@54..55 " "
+    INTEGER@55..106
+      MINUS@55..56 "-"
+      NUMERAL@56..106 "999999999999999999999 ..."
+    NEWLINE@106..107 "\n"
+  ENTRY@107..152
+    WORD_KEY@107..108
+      WORD@107..108 "c"
+    SPACE@108..109 " "
+    INTEGER@109..151
+      NUMERAL@109..151 "0xFFFFFFFFFFFFFFFFFFF ..."
+    NEWLINE@151..152 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@2..52 "999999999999999999999 ...",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@53..54 "b",
+            },
+            value: Integer {
+                sign: MINUS@55..56 "-",
+                numeral: NUMERAL@56..106 "999999999999999999999 ...",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@107..108 "c",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@109..151 "0xFFFFFFFFFFFFFFFFFFF ...",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

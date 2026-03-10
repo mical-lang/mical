@@ -1,0 +1,48 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# eof-missing-value
+
+## Input
+
+```
+lonely
+```
+
+## CST
+
+```
+SOURCE_FILE@0..6
+  ENTRY@0..6
+    WORD_KEY@0..6
+      WORD@0..6 "lonely"
+```
+
+## Syntax Error
+
+```
+[
+    SyntaxError {
+        message: "missing value for the key",
+        range: 6..6,
+    },
+]
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..6 "lonely",
+            },
+            value: none,
+        },
+    ],
+}
+```
+
+vim:ft=markdown

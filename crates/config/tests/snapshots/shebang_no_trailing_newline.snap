@@ -1,0 +1,18 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# shebang-no-trailing-newline
+
+## Input
+
+```mical
+#!/usr/bin/env mical
+```
+
+## JSON
+
+```json
+{}
+```
+
+vim:ft=markdown

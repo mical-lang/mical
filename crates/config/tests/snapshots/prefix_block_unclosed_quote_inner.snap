@@ -1,0 +1,33 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# prefix-block-unclosed-quote-inner
+
+## Input
+
+```mical
+s. {
+  "unclosed value
+  b 2
+}
+
+```
+
+## Parser Error
+
+```
+22..22: missing closing quote
+
+22..22: missing value for the key
+
+```
+
+## JSON
+
+```json
+{
+  "s.b": 2
+}
+```
+
+vim:ft=markdown

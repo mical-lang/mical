@@ -1,0 +1,64 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# comment-special-chars
+
+## Input
+
+```
+# { } | > "hello" 'world'
+key value
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..36
+  COMMENT@0..25
+    SHARP@0..1 "#"
+    SPACE@1..2 " "
+    OPEN_BRACE@2..3 "{"
+    SPACE@3..4 " "
+    CLOSE_BRACE@4..5 "}"
+    SPACE@5..6 " "
+    PIPE@6..7 "|"
+    SPACE@7..8 " "
+    GT@8..9 ">"
+    SPACE@9..10 " "
+    DOUBLE_QUOTE@10..11 "\""
+    STRING@11..16 "hello"
+    DOUBLE_QUOTE@16..17 "\""
+    SPACE@17..18 " "
+    SINGLE_QUOTE@18..19 "'"
+    STRING@19..24 "world"
+    SINGLE_QUOTE@24..25 "'"
+  NEWLINE@25..26 "\n"
+  ENTRY@26..36
+    WORD_KEY@26..29
+      WORD@26..29 "key"
+    SPACE@29..30 " "
+    LINE_STRING@30..35
+      STRING@30..35 "value"
+    NEWLINE@35..36 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@26..29 "key",
+            },
+            value: LineString {
+                string: STRING@30..35 "value",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

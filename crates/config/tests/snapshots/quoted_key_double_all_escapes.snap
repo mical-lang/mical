@@ -1,0 +1,31 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# quoted-key-double-all-escapes
+
+## Input
+
+```mical
+"k\\1" v1
+"k\"2" v2
+"k\'3" v3
+"k\n4" v4
+"k\r5" v5
+"k\t6" v6
+
+```
+
+## JSON
+
+```json
+{
+  "k\\1": "v1",
+  "k\"2": "v2",
+  "k'3": "v3",
+  "k\n4": "v4",
+  "k\r5": "v5",
+  "k\t6": "v6"
+}
+```
+
+vim:ft=markdown

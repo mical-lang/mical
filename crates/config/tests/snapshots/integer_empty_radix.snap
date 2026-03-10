@@ -1,0 +1,25 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# integer-empty-radix
+
+## Input
+
+```mical
+a 0b
+b 0x
+c 0o
+
+```
+
+## JSON
+
+```json
+{
+  "a": "0b",
+  "b": "0x",
+  "c": "0o"
+}
+```
+
+vim:ft=markdown

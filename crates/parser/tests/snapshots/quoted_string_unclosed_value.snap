@@ -1,0 +1,74 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# quoted-string-unclosed-value
+
+## Input
+
+```
+a "unclosed
+b value
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..20
+  ENTRY@0..12
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    QUOTED_STRING@2..11
+      DOUBLE_QUOTE@2..3 "\""
+      STRING@3..11 "unclosed"
+    NEWLINE@11..12 "\n"
+  ENTRY@12..20
+    WORD_KEY@12..13
+      WORD@12..13 "b"
+    SPACE@13..14 " "
+    LINE_STRING@14..19
+      STRING@14..19 "value"
+    NEWLINE@19..20 "\n"
+```
+
+## Syntax Error
+
+```
+[
+    SyntaxError {
+        message: "missing closing quote",
+        range: 11..11,
+    },
+]
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: QuotedString {
+                open_quote: DOUBLE_QUOTE@2..3 "\"",
+                string: STRING@3..11 "unclosed",
+                close_quote: DOUBLE_QUOTE@2..3 "\"",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@12..13 "b",
+            },
+            value: LineString {
+                string: STRING@14..19 "value",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

@@ -1,0 +1,80 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# prefix-block-no-indent-body
+
+## Input
+
+```
+s {
+k v
+m 2
+}
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..14
+  PREFIX_BLOCK@0..14
+    WORD_KEY@0..1
+      WORD@0..1 "s"
+    SPACE@1..2 " "
+    OPEN_BRACE@2..3 "{"
+    NEWLINE@3..4 "\n"
+    ENTRY@4..8
+      WORD_KEY@4..5
+        WORD@4..5 "k"
+      SPACE@5..6 " "
+      LINE_STRING@6..7
+        STRING@6..7 "v"
+      NEWLINE@7..8 "\n"
+    ENTRY@8..12
+      WORD_KEY@8..9
+        WORD@8..9 "m"
+      SPACE@9..10 " "
+      INTEGER@10..11
+        NUMERAL@10..11 "2"
+      NEWLINE@11..12 "\n"
+    CLOSE_BRACE@12..13 "}"
+    NEWLINE@13..14 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        PrefixBlock {
+            key: WordKey {
+                word: WORD@0..1 "s",
+            },
+            open_brace: OPEN_BRACE@2..3 "{",
+            items: [
+                Entry {
+                    key: WordKey {
+                        word: WORD@4..5 "k",
+                    },
+                    value: LineString {
+                        string: STRING@6..7 "v",
+                    },
+                },
+                Entry {
+                    key: WordKey {
+                        word: WORD@8..9 "m",
+                    },
+                    value: Integer {
+                        sign: none,
+                        numeral: NUMERAL@10..11 "2",
+                    },
+                },
+            ],
+            close_brace: CLOSE_BRACE@12..13 "}",
+        },
+    ],
+}
+```
+
+vim:ft=markdown

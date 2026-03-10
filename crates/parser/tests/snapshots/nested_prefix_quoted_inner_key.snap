@@ -1,0 +1,86 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# nested-prefix-quoted-inner-key
+
+## Input
+
+```
+s {
+"inner" {
+k v
+}
+}
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..22
+  PREFIX_BLOCK@0..22
+    WORD_KEY@0..1
+      WORD@0..1 "s"
+    SPACE@1..2 " "
+    OPEN_BRACE@2..3 "{"
+    NEWLINE@3..4 "\n"
+    PREFIX_BLOCK@4..20
+      QUOTED_KEY@4..11
+        DOUBLE_QUOTE@4..5 "\""
+        STRING@5..10 "inner"
+        DOUBLE_QUOTE@10..11 "\""
+      SPACE@11..12 " "
+      OPEN_BRACE@12..13 "{"
+      NEWLINE@13..14 "\n"
+      ENTRY@14..18
+        WORD_KEY@14..15
+          WORD@14..15 "k"
+        SPACE@15..16 " "
+        LINE_STRING@16..17
+          STRING@16..17 "v"
+        NEWLINE@17..18 "\n"
+      CLOSE_BRACE@18..19 "}"
+      NEWLINE@19..20 "\n"
+    CLOSE_BRACE@20..21 "}"
+    NEWLINE@21..22 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        PrefixBlock {
+            key: WordKey {
+                word: WORD@0..1 "s",
+            },
+            open_brace: OPEN_BRACE@2..3 "{",
+            items: [
+                PrefixBlock {
+                    key: QuotedKey {
+                        open_quote: DOUBLE_QUOTE@4..5 "\"",
+                        string: STRING@5..10 "inner",
+                        close_quote: DOUBLE_QUOTE@4..5 "\"",
+                    },
+                    open_brace: OPEN_BRACE@12..13 "{",
+                    items: [
+                        Entry {
+                            key: WordKey {
+                                word: WORD@14..15 "k",
+                            },
+                            value: LineString {
+                                string: STRING@16..17 "v",
+                            },
+                        },
+                    ],
+                    close_brace: CLOSE_BRACE@18..19 "}",
+                },
+            ],
+            close_brace: CLOSE_BRACE@20..21 "}",
+        },
+    ],
+}
+```
+
+vim:ft=markdown

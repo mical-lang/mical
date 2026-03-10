@@ -1,0 +1,27 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# prefix-block-empty-key
+
+## Input
+
+```mical
+s {
+  "" value1
+  '' value2
+}
+
+```
+
+## JSON
+
+```json
+{
+  "s": [
+    "value1",
+    "value2"
+  ]
+}
+```
+
+vim:ft=markdown

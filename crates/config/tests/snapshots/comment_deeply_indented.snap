@@ -1,0 +1,22 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# comment-deeply-indented
+
+## Input
+
+```mical
+        # deep comment
+k v
+
+```
+
+## JSON
+
+```json
+{
+  "k": "v"
+}
+```
+
+vim:ft=markdown

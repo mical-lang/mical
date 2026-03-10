@@ -1,0 +1,39 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# file-comment-only
+
+## Input
+
+```
+# comment1
+# comment2
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..22
+  COMMENT@0..10
+    SHARP@0..1 "#"
+    SPACE@1..2 " "
+    WORD@2..10 "comment1"
+  NEWLINE@10..11 "\n"
+  COMMENT@11..21
+    SHARP@11..12 "#"
+    SPACE@12..13 " "
+    WORD@13..21 "comment2"
+  NEWLINE@21..22 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [],
+}
+```
+
+vim:ft=markdown

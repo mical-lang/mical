@@ -1,0 +1,23 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# line-string-backslash-literal
+
+## Input
+
+```mical
+a hello\nworld
+b path\\to
+
+```
+
+## JSON
+
+```json
+{
+  "a": "hello\\nworld",
+  "b": "path\\\\to"
+}
+```
+
+vim:ft=markdown

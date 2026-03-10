@@ -1,0 +1,38 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# error-multiple
+
+## Input
+
+```mical
+	b 2
+k1 v1
+lonely
+k2 "unclosed
+k3 v3
+
+```
+
+## Parser Error
+
+```
+0..0: tab indent is not allowed, skipping this line
+
+17..17: missing value for the key
+
+30..30: missing closing quote
+
+```
+
+## JSON
+
+```json
+{
+  "k1": "v1",
+  "k2": "unclosed",
+  "k3": "v3"
+}
+```
+
+vim:ft=markdown

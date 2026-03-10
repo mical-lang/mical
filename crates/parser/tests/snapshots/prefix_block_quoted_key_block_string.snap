@@ -1,0 +1,107 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# prefix-block-quoted-key-block-string
+
+## Input
+
+```
+s. {
+  "key" |
+    line 1
+    line 2
+  other value
+}
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..53
+  PREFIX_BLOCK@0..53
+    WORD_KEY@0..2
+      WORD@0..2 "s."
+    SPACE@2..3 " "
+    OPEN_BRACE@3..4 "{"
+    NEWLINE@4..5 "\n"
+    SPACE@5..7 "  "
+    ENTRY@7..37
+      QUOTED_KEY@7..12
+        DOUBLE_QUOTE@7..8 "\""
+        STRING@8..11 "key"
+        DOUBLE_QUOTE@11..12 "\""
+      SPACE@12..13 " "
+      BLOCK_STRING@13..36
+        BLOCK_STRING_HEADER@13..15
+          PIPE@13..14 "|"
+          NEWLINE@14..15 "\n"
+        SPACE@15..19 "    "
+        LINE_STRING@19..25
+          STRING@19..25 "line 1"
+        NEWLINE@25..26 "\n"
+        SPACE@26..30 "    "
+        LINE_STRING@30..36
+          STRING@30..36 "line 2"
+      NEWLINE@36..37 "\n"
+    SPACE@37..39 "  "
+    ENTRY@39..51
+      WORD_KEY@39..44
+        WORD@39..44 "other"
+      SPACE@44..45 " "
+      LINE_STRING@45..50
+        STRING@45..50 "value"
+      NEWLINE@50..51 "\n"
+    CLOSE_BRACE@51..52 "}"
+    NEWLINE@52..53 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        PrefixBlock {
+            key: WordKey {
+                word: WORD@0..2 "s.",
+            },
+            open_brace: OPEN_BRACE@3..4 "{",
+            items: [
+                Entry {
+                    key: QuotedKey {
+                        open_quote: DOUBLE_QUOTE@7..8 "\"",
+                        string: STRING@8..11 "key",
+                        close_quote: DOUBLE_QUOTE@7..8 "\"",
+                    },
+                    value: BlockString {
+                        header: BlockStringHeader {
+                            style: PIPE@13..14 "|",
+                            chomp: none,
+                        },
+                        lines: [
+                            LineString {
+                                string: STRING@19..25 "line 1",
+                            },
+                            LineString {
+                                string: STRING@30..36 "line 2",
+                            },
+                        ],
+                    },
+                },
+                Entry {
+                    key: WordKey {
+                        word: WORD@39..44 "other",
+                    },
+                    value: LineString {
+                        string: STRING@45..50 "value",
+                    },
+                },
+            ],
+            close_brace: CLOSE_BRACE@51..52 "}",
+        },
+    ],
+}
+```
+
+vim:ft=markdown

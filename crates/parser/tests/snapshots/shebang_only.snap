@@ -1,0 +1,42 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# shebang-only
+
+## Input
+
+```
+#!/usr/bin/env mical
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..21
+  DIRECTIVE@0..20
+    SHARP@0..1 "#"
+    WORD@1..14 "!/usr/bin/env"
+    LINE_STRING@14..20
+      STRING@14..20 " mical"
+  NEWLINE@20..21 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Directive {
+            sharp: SHARP@0..1 "#",
+            name: WORD@1..14 "!/usr/bin/env",
+            args: LineString {
+                string: STRING@14..20 " mical",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

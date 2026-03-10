@@ -1,0 +1,31 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# prefix-block-missing-value-inner
+
+## Input
+
+```mical
+s. {
+  lonely
+  b 2
+}
+
+```
+
+## Parser Error
+
+```
+13..13: missing value for the key
+
+```
+
+## JSON
+
+```json
+{
+  "s.b": 2
+}
+```
+
+vim:ft=markdown

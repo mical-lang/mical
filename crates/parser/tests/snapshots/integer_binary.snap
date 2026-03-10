@@ -1,0 +1,79 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# integer-binary
+
+## Input
+
+```
+a 0b1010
+b 0b0
+c 0b1111_0000
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..29
+  ENTRY@0..9
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    INTEGER@2..8
+      NUMERAL@2..8 "0b1010"
+    NEWLINE@8..9 "\n"
+  ENTRY@9..15
+    WORD_KEY@9..10
+      WORD@9..10 "b"
+    SPACE@10..11 " "
+    INTEGER@11..14
+      NUMERAL@11..14 "0b0"
+    NEWLINE@14..15 "\n"
+  ENTRY@15..29
+    WORD_KEY@15..16
+      WORD@15..16 "c"
+    SPACE@16..17 " "
+    INTEGER@17..28
+      NUMERAL@17..28 "0b1111_0000"
+    NEWLINE@28..29 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@2..8 "0b1010",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@9..10 "b",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@11..14 "0b0",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@15..16 "c",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@17..28 "0b1111_0000",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

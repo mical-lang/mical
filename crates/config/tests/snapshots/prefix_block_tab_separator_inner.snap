@@ -1,0 +1,32 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# prefix-block-tab-separator-inner
+
+## Input
+
+```mical
+s. {
+  a	1
+  b 2
+}
+
+```
+
+## Parser Error
+
+```
+8..8: tab separating is not allowed
+
+```
+
+## JSON
+
+```json
+{
+  "s.a": 1,
+  "s.b": 2
+}
+```
+
+vim:ft=markdown

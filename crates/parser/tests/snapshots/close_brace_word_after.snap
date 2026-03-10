@@ -1,0 +1,70 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# close-brace-word-after
+
+## Input
+
+```
+s {
+  }value
+}
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..15
+  PREFIX_BLOCK@0..15
+    WORD_KEY@0..1
+      WORD@0..1 "s"
+    SPACE@1..2 " "
+    OPEN_BRACE@2..3 "{"
+    NEWLINE@3..4 "\n"
+    SPACE@4..6 "  "
+    ENTRY@6..12
+      WORD_KEY@6..12
+        WORD@6..12 "}value"
+    NEWLINE@12..13 "\n"
+    CLOSE_BRACE@13..14 "}"
+    NEWLINE@14..15 "\n"
+```
+
+## Syntax Error
+
+```
+[
+    SyntaxError {
+        message: "missing value for the key",
+        range: 12..12,
+    },
+]
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        PrefixBlock {
+            key: WordKey {
+                word: WORD@0..1 "s",
+            },
+            open_brace: OPEN_BRACE@2..3 "{",
+            items: [
+                Entry {
+                    key: WordKey {
+                        word: WORD@6..12 "}value",
+                    },
+                    value: none,
+                },
+            ],
+            close_brace: CLOSE_BRACE@13..14 "}",
+        },
+    ],
+}
+```
+
+vim:ft=markdown

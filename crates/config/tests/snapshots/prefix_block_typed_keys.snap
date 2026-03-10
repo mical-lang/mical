@@ -1,0 +1,27 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# prefix-block-typed-keys
+
+## Input
+
+```mical
+true {
+  a 1
+}
+42 {
+  b 2
+}
+
+```
+
+## JSON
+
+```json
+{
+  "truea": 1,
+  "42b": 2
+}
+```
+
+vim:ft=markdown

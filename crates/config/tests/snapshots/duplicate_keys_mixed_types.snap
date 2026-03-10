@@ -1,0 +1,27 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# duplicate-keys-mixed-types
+
+## Input
+
+```mical
+t web
+t 42
+t true
+
+```
+
+## JSON
+
+```json
+{
+  "t": [
+    "web",
+    42,
+    true
+  ]
+}
+```
+
+vim:ft=markdown

@@ -1,0 +1,31 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# tab-only-line
+
+## Input
+
+```mical
+a 1
+	
+b 2
+
+```
+
+## Parser Error
+
+```
+4..4: tab indent is not allowed, skipping this line
+
+```
+
+## JSON
+
+```json
+{
+  "a": 1,
+  "b": 2
+}
+```
+
+vim:ft=markdown

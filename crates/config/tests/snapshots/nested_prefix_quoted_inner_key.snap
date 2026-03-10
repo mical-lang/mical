@@ -1,0 +1,25 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# nested-prefix-quoted-inner-key
+
+## Input
+
+```mical
+s {
+"inner" {
+k v
+}
+}
+
+```
+
+## JSON
+
+```json
+{
+  "sinnerk": "v"
+}
+```
+
+vim:ft=markdown

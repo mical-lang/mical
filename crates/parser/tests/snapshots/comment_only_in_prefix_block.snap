@@ -1,0 +1,60 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# comment-only-in-prefix-block
+
+## Input
+
+```
+s {
+  # comment1
+  # comment2
+}
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..32
+  PREFIX_BLOCK@0..32
+    WORD_KEY@0..1
+      WORD@0..1 "s"
+    SPACE@1..2 " "
+    OPEN_BRACE@2..3 "{"
+    NEWLINE@3..4 "\n"
+    SPACE@4..6 "  "
+    COMMENT@6..16
+      SHARP@6..7 "#"
+      SPACE@7..8 " "
+      WORD@8..16 "comment1"
+    NEWLINE@16..17 "\n"
+    SPACE@17..19 "  "
+    COMMENT@19..29
+      SHARP@19..20 "#"
+      SPACE@20..21 " "
+      WORD@21..29 "comment2"
+    NEWLINE@29..30 "\n"
+    CLOSE_BRACE@30..31 "}"
+    NEWLINE@31..32 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        PrefixBlock {
+            key: WordKey {
+                word: WORD@0..1 "s",
+            },
+            open_brace: OPEN_BRACE@2..3 "{",
+            items: [],
+            close_brace: CLOSE_BRACE@30..31 "}",
+        },
+    ],
+}
+```
+
+vim:ft=markdown

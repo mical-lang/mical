@@ -1,0 +1,60 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# key-word-dot-prefix
+
+## Input
+
+```
+.key value
+a.b.c value2
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..24
+  ENTRY@0..11
+    WORD_KEY@0..4
+      WORD@0..4 ".key"
+    SPACE@4..5 " "
+    LINE_STRING@5..10
+      STRING@5..10 "value"
+    NEWLINE@10..11 "\n"
+  ENTRY@11..24
+    WORD_KEY@11..16
+      WORD@11..16 "a.b.c"
+    SPACE@16..17 " "
+    LINE_STRING@17..23
+      STRING@17..23 "value2"
+    NEWLINE@23..24 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..4 ".key",
+            },
+            value: LineString {
+                string: STRING@5..10 "value",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@11..16 "a.b.c",
+            },
+            value: LineString {
+                string: STRING@17..23 "value2",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

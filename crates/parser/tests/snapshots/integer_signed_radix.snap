@@ -1,0 +1,100 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# integer-signed-radix
+
+## Input
+
+```
+a +0xFF
+b -0b1010
+c +0o77
+d -0xFF
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..34
+  ENTRY@0..8
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    INTEGER@2..7
+      PLUS@2..3 "+"
+      NUMERAL@3..7 "0xFF"
+    NEWLINE@7..8 "\n"
+  ENTRY@8..18
+    WORD_KEY@8..9
+      WORD@8..9 "b"
+    SPACE@9..10 " "
+    INTEGER@10..17
+      MINUS@10..11 "-"
+      NUMERAL@11..17 "0b1010"
+    NEWLINE@17..18 "\n"
+  ENTRY@18..26
+    WORD_KEY@18..19
+      WORD@18..19 "c"
+    SPACE@19..20 " "
+    INTEGER@20..25
+      PLUS@20..21 "+"
+      NUMERAL@21..25 "0o77"
+    NEWLINE@25..26 "\n"
+  ENTRY@26..34
+    WORD_KEY@26..27
+      WORD@26..27 "d"
+    SPACE@27..28 " "
+    INTEGER@28..33
+      MINUS@28..29 "-"
+      NUMERAL@29..33 "0xFF"
+    NEWLINE@33..34 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: Integer {
+                sign: PLUS@2..3 "+",
+                numeral: NUMERAL@3..7 "0xFF",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@8..9 "b",
+            },
+            value: Integer {
+                sign: MINUS@10..11 "-",
+                numeral: NUMERAL@11..17 "0b1010",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@18..19 "c",
+            },
+            value: Integer {
+                sign: PLUS@20..21 "+",
+                numeral: NUMERAL@21..25 "0o77",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@26..27 "d",
+            },
+            value: Integer {
+                sign: MINUS@28..29 "-",
+                numeral: NUMERAL@29..33 "0xFF",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

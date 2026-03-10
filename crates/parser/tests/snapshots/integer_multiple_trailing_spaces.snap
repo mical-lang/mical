@@ -1,0 +1,65 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# integer-multiple-trailing-spaces
+
+## Input
+
+```
+a 42   
+b -7   
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..16
+  ENTRY@0..8
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    INTEGER@2..4
+      NUMERAL@2..4 "42"
+    SPACE@4..7 "   "
+    NEWLINE@7..8 "\n"
+  ENTRY@8..16
+    WORD_KEY@8..9
+      WORD@8..9 "b"
+    SPACE@9..10 " "
+    INTEGER@10..12
+      MINUS@10..11 "-"
+      NUMERAL@11..12 "7"
+    SPACE@12..15 "   "
+    NEWLINE@15..16 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@2..4 "42",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@8..9 "b",
+            },
+            value: Integer {
+                sign: MINUS@10..11 "-",
+                numeral: NUMERAL@11..12 "7",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

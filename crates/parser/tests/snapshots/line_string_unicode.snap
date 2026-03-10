@@ -1,0 +1,76 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# line-string-unicode
+
+## Input
+
+```
+a Hello 😀🎉
+b 日本語テスト
+c café résumé
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..55
+  ENTRY@0..17
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    LINE_STRING@2..16
+      STRING@2..16 "Hello 😀🎉"
+    NEWLINE@16..17 "\n"
+  ENTRY@17..38
+    WORD_KEY@17..18
+      WORD@17..18 "b"
+    SPACE@18..19 " "
+    LINE_STRING@19..37
+      STRING@19..37 "日本語テスト"
+    NEWLINE@37..38 "\n"
+  ENTRY@38..55
+    WORD_KEY@38..39
+      WORD@38..39 "c"
+    SPACE@39..40 " "
+    LINE_STRING@40..54
+      STRING@40..54 "café résumé"
+    NEWLINE@54..55 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: LineString {
+                string: STRING@2..16 "Hello 😀🎉",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@17..18 "b",
+            },
+            value: LineString {
+                string: STRING@19..37 "日本語テスト",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@38..39 "c",
+            },
+            value: LineString {
+                string: STRING@40..54 "café résumé",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

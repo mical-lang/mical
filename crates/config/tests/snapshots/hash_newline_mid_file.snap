@@ -1,0 +1,22 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# hash-newline-mid-file
+
+## Input
+
+```mical
+#
+k v
+
+```
+
+## JSON
+
+```json
+{
+  "k": "v"
+}
+```
+
+vim:ft=markdown

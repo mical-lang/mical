@@ -1,0 +1,84 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# comment-hash-non-word
+
+## Input
+
+```
+####### multiple hashes
+##double hash
+#123
+#-flag
+#"quoted"
+k v
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..64
+  COMMENT@0..23
+    SHARP@0..1 "#"
+    SHARP@1..2 "#"
+    SHARP@2..3 "#"
+    SHARP@3..4 "#"
+    SHARP@4..5 "#"
+    SHARP@5..6 "#"
+    SHARP@6..7 "#"
+    SPACE@7..8 " "
+    WORD@8..16 "multiple"
+    SPACE@16..17 " "
+    WORD@17..23 "hashes"
+  NEWLINE@23..24 "\n"
+  COMMENT@24..37
+    SHARP@24..25 "#"
+    SHARP@25..26 "#"
+    WORD@26..32 "double"
+    SPACE@32..33 " "
+    WORD@33..37 "hash"
+  NEWLINE@37..38 "\n"
+  COMMENT@38..42
+    SHARP@38..39 "#"
+    NUMERAL@39..42 "123"
+  NEWLINE@42..43 "\n"
+  COMMENT@43..49
+    SHARP@43..44 "#"
+    MINUS@44..45 "-"
+    WORD@45..49 "flag"
+  NEWLINE@49..50 "\n"
+  COMMENT@50..59
+    SHARP@50..51 "#"
+    DOUBLE_QUOTE@51..52 "\""
+    STRING@52..58 "quoted"
+    DOUBLE_QUOTE@58..59 "\""
+  NEWLINE@59..60 "\n"
+  ENTRY@60..64
+    WORD_KEY@60..61
+      WORD@60..61 "k"
+    SPACE@61..62 " "
+    LINE_STRING@62..63
+      STRING@62..63 "v"
+    NEWLINE@63..64 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@60..61 "k",
+            },
+            value: LineString {
+                string: STRING@62..63 "v",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

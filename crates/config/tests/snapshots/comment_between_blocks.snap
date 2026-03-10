@@ -1,0 +1,28 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# comment-between-blocks
+
+## Input
+
+```mical
+a {
+  x 1
+}
+# between
+b {
+  y 2
+}
+
+```
+
+## JSON
+
+```json
+{
+  "ax": 1,
+  "by": 2
+}
+```
+
+vim:ft=markdown

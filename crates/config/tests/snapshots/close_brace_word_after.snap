@@ -1,0 +1,28 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# close-brace-word-after
+
+## Input
+
+```mical
+s {
+  }value
+}
+
+```
+
+## Parser Error
+
+```
+12..12: missing value for the key
+
+```
+
+## JSON
+
+```json
+{}
+```
+
+vim:ft=markdown

@@ -1,0 +1,60 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# crlf-basic
+
+## Input
+
+```
+key value
+foo bar
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..20
+  ENTRY@0..11
+    WORD_KEY@0..3
+      WORD@0..3 "key"
+    SPACE@3..4 " "
+    LINE_STRING@4..9
+      STRING@4..9 "value"
+    NEWLINE@9..11 "\r\n"
+  ENTRY@11..20
+    WORD_KEY@11..14
+      WORD@11..14 "foo"
+    SPACE@14..15 " "
+    LINE_STRING@15..18
+      STRING@15..18 "bar"
+    NEWLINE@18..20 "\r\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..3 "key",
+            },
+            value: LineString {
+                string: STRING@4..9 "value",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@11..14 "foo",
+            },
+            value: LineString {
+                string: STRING@15..18 "bar",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

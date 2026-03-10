@@ -1,0 +1,23 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# key-word-dot-prefix
+
+## Input
+
+```mical
+.key value
+a.b.c value2
+
+```
+
+## JSON
+
+```json
+{
+  ".key": "value",
+  "a.b.c": "value2"
+}
+```
+
+vim:ft=markdown

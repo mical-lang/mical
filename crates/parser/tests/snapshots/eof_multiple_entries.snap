@@ -1,0 +1,60 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# eof-multiple-entries
+
+## Input
+
+```
+a 1
+b 2
+```
+
+## CST
+
+```
+SOURCE_FILE@0..7
+  ENTRY@0..4
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    INTEGER@2..3
+      NUMERAL@2..3 "1"
+    NEWLINE@3..4 "\n"
+  ENTRY@4..7
+    WORD_KEY@4..5
+      WORD@4..5 "b"
+    SPACE@5..6 " "
+    INTEGER@6..7
+      NUMERAL@6..7 "2"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@2..3 "1",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@4..5 "b",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@6..7 "2",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

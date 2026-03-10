@@ -1,0 +1,60 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# line-string-close-brace
+
+## Input
+
+```
+a }not-close
+b } with space
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..28
+  ENTRY@0..13
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    LINE_STRING@2..12
+      STRING@2..12 "}not-close"
+    NEWLINE@12..13 "\n"
+  ENTRY@13..28
+    WORD_KEY@13..14
+      WORD@13..14 "b"
+    SPACE@14..15 " "
+    LINE_STRING@15..27
+      STRING@15..27 "} with space"
+    NEWLINE@27..28 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: LineString {
+                string: STRING@2..12 "}not-close",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@13..14 "b",
+            },
+            value: LineString {
+                string: STRING@15..27 "} with space",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

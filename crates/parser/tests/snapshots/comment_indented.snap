@@ -1,0 +1,53 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# comment-indented
+
+## Input
+
+```
+  # indented comment
+key value
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..31
+  SPACE@0..2 "  "
+  COMMENT@2..20
+    SHARP@2..3 "#"
+    SPACE@3..4 " "
+    WORD@4..12 "indented"
+    SPACE@12..13 " "
+    WORD@13..20 "comment"
+  NEWLINE@20..21 "\n"
+  ENTRY@21..31
+    WORD_KEY@21..24
+      WORD@21..24 "key"
+    SPACE@24..25 " "
+    LINE_STRING@25..30
+      STRING@25..30 "value"
+    NEWLINE@30..31 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@21..24 "key",
+            },
+            value: LineString {
+                string: STRING@25..30 "value",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

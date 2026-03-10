@@ -1,0 +1,25 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# prefix-block-no-indent-body
+
+## Input
+
+```mical
+s {
+k v
+m 2
+}
+
+```
+
+## JSON
+
+```json
+{
+  "sk": "v",
+  "sm": 2
+}
+```
+
+vim:ft=markdown

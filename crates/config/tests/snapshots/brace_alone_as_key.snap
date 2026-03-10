@@ -1,0 +1,29 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# brace-alone-as-key
+
+## Input
+
+```mical
+{
+a v
+
+```
+
+## Parser Error
+
+```
+1..1: missing value for the key
+
+```
+
+## JSON
+
+```json
+{
+  "a": "v"
+}
+```
+
+vim:ft=markdown

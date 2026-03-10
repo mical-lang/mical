@@ -1,0 +1,20 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# eof-line-string
+
+## Input
+
+```mical
+key hello world
+```
+
+## JSON
+
+```json
+{
+  "key": "hello world"
+}
+```
+
+vim:ft=markdown

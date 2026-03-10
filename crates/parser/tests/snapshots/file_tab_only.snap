@@ -1,0 +1,40 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# file-tab-only
+
+## Input
+
+```
+	
+```
+
+## CST
+
+```
+SOURCE_FILE@0..1
+  ERROR@0..1
+    TAB@0..1 "\t"
+```
+
+## Syntax Error
+
+```
+[
+    SyntaxError {
+        message: "tab indent is not allowed, skipping this line",
+        range: 0..0,
+    },
+]
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [],
+}
+```
+
+vim:ft=markdown

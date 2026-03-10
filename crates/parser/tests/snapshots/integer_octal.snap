@@ -1,0 +1,79 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# integer-octal
+
+## Input
+
+```
+a 0o77
+b 0o0
+c 0o777
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..21
+  ENTRY@0..7
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    INTEGER@2..6
+      NUMERAL@2..6 "0o77"
+    NEWLINE@6..7 "\n"
+  ENTRY@7..13
+    WORD_KEY@7..8
+      WORD@7..8 "b"
+    SPACE@8..9 " "
+    INTEGER@9..12
+      NUMERAL@9..12 "0o0"
+    NEWLINE@12..13 "\n"
+  ENTRY@13..21
+    WORD_KEY@13..14
+      WORD@13..14 "c"
+    SPACE@14..15 " "
+    INTEGER@15..20
+      NUMERAL@15..20 "0o777"
+    NEWLINE@20..21 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@2..6 "0o77",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@7..8 "b",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@9..12 "0o0",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@13..14 "c",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@15..20 "0o777",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

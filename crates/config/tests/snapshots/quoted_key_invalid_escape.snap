@@ -1,0 +1,27 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# quoted-key-invalid-escape
+
+## Input
+
+```mical
+"bad\z" value
+
+```
+
+## Config Error
+
+```
+invalid escape sequence '\z' at 4..6
+```
+
+## JSON
+
+```json
+{
+  "badz": "value"
+}
+```
+
+vim:ft=markdown

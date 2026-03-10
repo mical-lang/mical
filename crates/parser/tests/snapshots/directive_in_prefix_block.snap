@@ -1,0 +1,78 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# directive-in-prefix-block
+
+## Input
+
+```
+s {
+#version 1
+  k v
+}
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..23
+  PREFIX_BLOCK@0..23
+    WORD_KEY@0..1
+      WORD@0..1 "s"
+    SPACE@1..2 " "
+    OPEN_BRACE@2..3 "{"
+    NEWLINE@3..4 "\n"
+    DIRECTIVE@4..14
+      SHARP@4..5 "#"
+      WORD@5..12 "version"
+      LINE_STRING@12..14
+        STRING@12..14 " 1"
+    NEWLINE@14..15 "\n"
+    SPACE@15..17 "  "
+    ENTRY@17..21
+      WORD_KEY@17..18
+        WORD@17..18 "k"
+      SPACE@18..19 " "
+      LINE_STRING@19..20
+        STRING@19..20 "v"
+      NEWLINE@20..21 "\n"
+    CLOSE_BRACE@21..22 "}"
+    NEWLINE@22..23 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        PrefixBlock {
+            key: WordKey {
+                word: WORD@0..1 "s",
+            },
+            open_brace: OPEN_BRACE@2..3 "{",
+            items: [
+                Directive {
+                    sharp: SHARP@4..5 "#",
+                    name: WORD@5..12 "version",
+                    args: LineString {
+                        string: STRING@12..14 " 1",
+                    },
+                },
+                Entry {
+                    key: WordKey {
+                        word: WORD@17..18 "k",
+                    },
+                    value: LineString {
+                        string: STRING@19..20 "v",
+                    },
+                },
+            ],
+            close_brace: CLOSE_BRACE@21..22 "}",
+        },
+    ],
+}
+```
+
+vim:ft=markdown

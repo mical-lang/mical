@@ -1,0 +1,48 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# invalid-escape-single-quote
+
+## Input
+
+```
+a 'bad\z'
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..10
+  ENTRY@0..10
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    QUOTED_STRING@2..9
+      SINGLE_QUOTE@2..3 "'"
+      STRING@3..8 "bad\\z"
+      SINGLE_QUOTE@8..9 "'"
+    NEWLINE@9..10 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: QuotedString {
+                open_quote: SINGLE_QUOTE@2..3 "'",
+                string: STRING@3..8 "bad\\z",
+                close_quote: SINGLE_QUOTE@2..3 "'",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

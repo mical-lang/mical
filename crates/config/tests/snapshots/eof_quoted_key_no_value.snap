@@ -1,0 +1,25 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# eof-quoted-key-no-value
+
+## Input
+
+```mical
+"key"
+```
+
+## Parser Error
+
+```
+5..5: missing value for the key
+
+```
+
+## JSON
+
+```json
+{}
+```
+
+vim:ft=markdown

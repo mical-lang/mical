@@ -1,0 +1,25 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# nested-prefix-empty-inner
+
+## Input
+
+```mical
+a {
+  b {
+  }
+  c 1
+}
+
+```
+
+## JSON
+
+```json
+{
+  "ac": 1
+}
+```
+
+vim:ft=markdown

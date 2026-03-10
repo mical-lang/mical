@@ -1,0 +1,60 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# line-string-backslash-literal
+
+## Input
+
+```
+a hello\nworld
+b path\\to
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..26
+  ENTRY@0..15
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    LINE_STRING@2..14
+      STRING@2..14 "hello\\nworld"
+    NEWLINE@14..15 "\n"
+  ENTRY@15..26
+    WORD_KEY@15..16
+      WORD@15..16 "b"
+    SPACE@16..17 " "
+    LINE_STRING@17..25
+      STRING@17..25 "path\\\\to"
+    NEWLINE@25..26 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: LineString {
+                string: STRING@2..14 "hello\\nworld",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@15..16 "b",
+            },
+            value: LineString {
+                string: STRING@17..25 "path\\\\to",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

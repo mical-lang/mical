@@ -1,0 +1,95 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# prefix-block-tab-separator-inner
+
+## Input
+
+```
+s. {
+  a	1
+  b 2
+}
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..19
+  PREFIX_BLOCK@0..19
+    WORD_KEY@0..2
+      WORD@0..2 "s."
+    SPACE@2..3 " "
+    OPEN_BRACE@3..4 "{"
+    NEWLINE@4..5 "\n"
+    SPACE@5..7 "  "
+    ENTRY@7..11
+      WORD_KEY@7..8
+        WORD@7..8 "a"
+      ERROR@8..9
+        TAB@8..9 "\t"
+      INTEGER@9..10
+        NUMERAL@9..10 "1"
+      NEWLINE@10..11 "\n"
+    SPACE@11..13 "  "
+    ENTRY@13..17
+      WORD_KEY@13..14
+        WORD@13..14 "b"
+      SPACE@14..15 " "
+      INTEGER@15..16
+        NUMERAL@15..16 "2"
+      NEWLINE@16..17 "\n"
+    CLOSE_BRACE@17..18 "}"
+    NEWLINE@18..19 "\n"
+```
+
+## Syntax Error
+
+```
+[
+    SyntaxError {
+        message: "tab separating is not allowed",
+        range: 8..8,
+    },
+]
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        PrefixBlock {
+            key: WordKey {
+                word: WORD@0..2 "s.",
+            },
+            open_brace: OPEN_BRACE@3..4 "{",
+            items: [
+                Entry {
+                    key: WordKey {
+                        word: WORD@7..8 "a",
+                    },
+                    value: Integer {
+                        sign: none,
+                        numeral: NUMERAL@9..10 "1",
+                    },
+                },
+                Entry {
+                    key: WordKey {
+                        word: WORD@13..14 "b",
+                    },
+                    value: Integer {
+                        sign: none,
+                        numeral: NUMERAL@15..16 "2",
+                    },
+                },
+            ],
+            close_brace: CLOSE_BRACE@17..18 "}",
+        },
+    ],
+}
+```
+
+vim:ft=markdown

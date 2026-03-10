@@ -1,0 +1,76 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# integer-empty-radix
+
+## Input
+
+```
+a 0b
+b 0x
+c 0o
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..15
+  ENTRY@0..5
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    LINE_STRING@2..4
+      STRING@2..4 "0b"
+    NEWLINE@4..5 "\n"
+  ENTRY@5..10
+    WORD_KEY@5..6
+      WORD@5..6 "b"
+    SPACE@6..7 " "
+    LINE_STRING@7..9
+      STRING@7..9 "0x"
+    NEWLINE@9..10 "\n"
+  ENTRY@10..15
+    WORD_KEY@10..11
+      WORD@10..11 "c"
+    SPACE@11..12 " "
+    LINE_STRING@12..14
+      STRING@12..14 "0o"
+    NEWLINE@14..15 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: LineString {
+                string: STRING@2..4 "0b",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@5..6 "b",
+            },
+            value: LineString {
+                string: STRING@7..9 "0x",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@10..11 "c",
+            },
+            value: LineString {
+                string: STRING@12..14 "0o",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

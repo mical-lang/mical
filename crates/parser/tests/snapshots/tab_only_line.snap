@@ -1,0 +1,77 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# tab-only-line
+
+## Input
+
+```
+a 1
+	
+b 2
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..10
+  ENTRY@0..4
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    INTEGER@2..3
+      NUMERAL@2..3 "1"
+    NEWLINE@3..4 "\n"
+  ERROR@4..5
+    TAB@4..5 "\t"
+  NEWLINE@5..6 "\n"
+  ENTRY@6..10
+    WORD_KEY@6..7
+      WORD@6..7 "b"
+    SPACE@7..8 " "
+    INTEGER@8..9
+      NUMERAL@8..9 "2"
+    NEWLINE@9..10 "\n"
+```
+
+## Syntax Error
+
+```
+[
+    SyntaxError {
+        message: "tab indent is not allowed, skipping this line",
+        range: 4..4,
+    },
+]
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@2..3 "1",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@6..7 "b",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@8..9 "2",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

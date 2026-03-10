@@ -1,0 +1,25 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# line-string-unicode
+
+## Input
+
+```mical
+a Hello 😀🎉
+b 日本語テスト
+c café résumé
+
+```
+
+## JSON
+
+```json
+{
+  "a": "Hello 😀🎉",
+  "b": "日本語テスト",
+  "c": "café résumé"
+}
+```
+
+vim:ft=markdown

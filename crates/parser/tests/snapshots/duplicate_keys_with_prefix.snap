@@ -1,0 +1,80 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# duplicate-keys-with-prefix
+
+## Input
+
+```
+s {
+  k from-block
+}
+sk from-top
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..33
+  PREFIX_BLOCK@0..21
+    WORD_KEY@0..1
+      WORD@0..1 "s"
+    SPACE@1..2 " "
+    OPEN_BRACE@2..3 "{"
+    NEWLINE@3..4 "\n"
+    SPACE@4..6 "  "
+    ENTRY@6..19
+      WORD_KEY@6..7
+        WORD@6..7 "k"
+      SPACE@7..8 " "
+      LINE_STRING@8..18
+        STRING@8..18 "from-block"
+      NEWLINE@18..19 "\n"
+    CLOSE_BRACE@19..20 "}"
+    NEWLINE@20..21 "\n"
+  ENTRY@21..33
+    WORD_KEY@21..23
+      WORD@21..23 "sk"
+    SPACE@23..24 " "
+    LINE_STRING@24..32
+      STRING@24..32 "from-top"
+    NEWLINE@32..33 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        PrefixBlock {
+            key: WordKey {
+                word: WORD@0..1 "s",
+            },
+            open_brace: OPEN_BRACE@2..3 "{",
+            items: [
+                Entry {
+                    key: WordKey {
+                        word: WORD@6..7 "k",
+                    },
+                    value: LineString {
+                        string: STRING@8..18 "from-block",
+                    },
+                },
+            ],
+            close_brace: CLOSE_BRACE@19..20 "}",
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@21..23 "sk",
+            },
+            value: LineString {
+                string: STRING@24..32 "from-top",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

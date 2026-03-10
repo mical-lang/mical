@@ -1,0 +1,76 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# block-string-indicator-fallback
+
+## Input
+
+```
+a |+text
+b >-stuff
+c | not blank
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..33
+  ENTRY@0..9
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    LINE_STRING@2..8
+      STRING@2..8 "|+text"
+    NEWLINE@8..9 "\n"
+  ENTRY@9..19
+    WORD_KEY@9..10
+      WORD@9..10 "b"
+    SPACE@10..11 " "
+    LINE_STRING@11..18
+      STRING@11..18 ">-stuff"
+    NEWLINE@18..19 "\n"
+  ENTRY@19..33
+    WORD_KEY@19..20
+      WORD@19..20 "c"
+    SPACE@20..21 " "
+    LINE_STRING@21..32
+      STRING@21..32 "| not blank"
+    NEWLINE@32..33 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: LineString {
+                string: STRING@2..8 "|+text",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@9..10 "b",
+            },
+            value: LineString {
+                string: STRING@11..18 ">-stuff",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@19..20 "c",
+            },
+            value: LineString {
+                string: STRING@21..32 "| not blank",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

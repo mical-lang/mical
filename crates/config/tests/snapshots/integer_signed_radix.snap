@@ -1,0 +1,27 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# integer-signed-radix
+
+## Input
+
+```mical
+a +0xFF
+b -0b1010
+c +0o77
+d -0xFF
+
+```
+
+## JSON
+
+```json
+{
+  "a": 255,
+  "b": -10,
+  "c": 63,
+  "d": -255
+}
+```
+
+vim:ft=markdown

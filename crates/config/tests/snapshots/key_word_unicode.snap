@@ -1,0 +1,23 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# key-word-unicode
+
+## Input
+
+```mical
+名前 hello
+clé value
+
+```
+
+## JSON
+
+```json
+{
+  "名前": "hello",
+  "clé": "value"
+}
+```
+
+vim:ft=markdown

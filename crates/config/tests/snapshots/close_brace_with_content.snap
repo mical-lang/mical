@@ -1,0 +1,25 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# close-brace-with-content
+
+## Input
+
+```mical
+s {
+  a 1
+  } # comment
+}
+
+```
+
+## JSON
+
+```json
+{
+  "sa": 1,
+  "s}": "# comment"
+}
+```
+
+vim:ft=markdown

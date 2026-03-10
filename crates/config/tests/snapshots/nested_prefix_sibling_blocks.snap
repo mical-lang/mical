@@ -1,0 +1,29 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# nested-prefix-sibling-blocks
+
+## Input
+
+```mical
+s {
+  a {
+    x 1
+  }
+  b {
+    y 2
+  }
+}
+
+```
+
+## JSON
+
+```json
+{
+  "sax": 1,
+  "sby": 2
+}
+```
+
+vim:ft=markdown

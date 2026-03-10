@@ -1,0 +1,27 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# quoted-string-unclosed-at-eof
+
+## Input
+
+```mical
+a "unclosed
+```
+
+## Parser Error
+
+```
+11..11: missing closing quote
+
+```
+
+## JSON
+
+```json
+{
+  "a": "unclosed"
+}
+```
+
+vim:ft=markdown

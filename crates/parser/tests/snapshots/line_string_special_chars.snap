@@ -1,0 +1,76 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# line-string-special-chars
+
+## Input
+
+```
+a { port 80 }
+b |> combined
+c +- signs
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..39
+  ENTRY@0..14
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    LINE_STRING@2..13
+      STRING@2..13 "{ port 80 }"
+    NEWLINE@13..14 "\n"
+  ENTRY@14..28
+    WORD_KEY@14..15
+      WORD@14..15 "b"
+    SPACE@15..16 " "
+    LINE_STRING@16..27
+      STRING@16..27 "|> combined"
+    NEWLINE@27..28 "\n"
+  ENTRY@28..39
+    WORD_KEY@28..29
+      WORD@28..29 "c"
+    SPACE@29..30 " "
+    LINE_STRING@30..38
+      STRING@30..38 "+- signs"
+    NEWLINE@38..39 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: LineString {
+                string: STRING@2..13 "{ port 80 }",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@14..15 "b",
+            },
+            value: LineString {
+                string: STRING@16..27 "|> combined",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@28..29 "c",
+            },
+            value: LineString {
+                string: STRING@30..38 "+- signs",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

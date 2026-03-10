@@ -1,0 +1,1 @@
+close brace followed by word without space

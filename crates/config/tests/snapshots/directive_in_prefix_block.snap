@@ -1,0 +1,24 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# directive-in-prefix-block
+
+## Input
+
+```mical
+s {
+#version 1
+  k v
+}
+
+```
+
+## JSON
+
+```json
+{
+  "sk": "v"
+}
+```
+
+vim:ft=markdown

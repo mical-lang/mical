@@ -1,0 +1,48 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# hash-newline-mid-file
+
+## Input
+
+```
+#
+k v
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..6
+  COMMENT@0..1
+    SHARP@0..1 "#"
+  NEWLINE@1..2 "\n"
+  ENTRY@2..6
+    WORD_KEY@2..3
+      WORD@2..3 "k"
+    SPACE@3..4 " "
+    LINE_STRING@4..5
+      STRING@4..5 "v"
+    NEWLINE@5..6 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@2..3 "k",
+            },
+            value: LineString {
+                string: STRING@4..5 "v",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

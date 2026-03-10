@@ -1,0 +1,56 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# file-directive-only
+
+## Input
+
+```
+#version 1
+#format on
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..22
+  DIRECTIVE@0..10
+    SHARP@0..1 "#"
+    WORD@1..8 "version"
+    LINE_STRING@8..10
+      STRING@8..10 " 1"
+  NEWLINE@10..11 "\n"
+  DIRECTIVE@11..21
+    SHARP@11..12 "#"
+    WORD@12..18 "format"
+    LINE_STRING@18..21
+      STRING@18..21 " on"
+  NEWLINE@21..22 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Directive {
+            sharp: SHARP@0..1 "#",
+            name: WORD@1..8 "version",
+            args: LineString {
+                string: STRING@8..10 " 1",
+            },
+        },
+        Directive {
+            sharp: SHARP@11..12 "#",
+            name: WORD@12..18 "format",
+            args: LineString {
+                string: STRING@18..21 " on",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

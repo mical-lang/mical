@@ -1,0 +1,27 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# duplicate-keys-with-prefix
+
+## Input
+
+```mical
+s {
+  k from-block
+}
+sk from-top
+
+```
+
+## JSON
+
+```json
+{
+  "sk": [
+    "from-block",
+    "from-top"
+  ]
+}
+```
+
+vim:ft=markdown

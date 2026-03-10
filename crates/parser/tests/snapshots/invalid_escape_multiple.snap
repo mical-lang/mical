@@ -1,0 +1,48 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# invalid-escape-multiple
+
+## Input
+
+```
+a "he\xllo\yw"
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..15
+  ENTRY@0..15
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    QUOTED_STRING@2..14
+      DOUBLE_QUOTE@2..3 "\""
+      STRING@3..13 "he\\xllo\\yw"
+      DOUBLE_QUOTE@13..14 "\""
+    NEWLINE@14..15 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: QuotedString {
+                open_quote: DOUBLE_QUOTE@2..3 "\"",
+                string: STRING@3..13 "he\\xllo\\yw",
+                close_quote: DOUBLE_QUOTE@2..3 "\"",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

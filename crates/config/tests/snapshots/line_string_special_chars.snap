@@ -1,0 +1,25 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# line-string-special-chars
+
+## Input
+
+```mical
+a { port 80 }
+b |> combined
+c +- signs
+
+```
+
+## JSON
+
+```json
+{
+  "a": "{ port 80 }",
+  "b": "|> combined",
+  "c": "+- signs"
+}
+```
+
+vim:ft=markdown

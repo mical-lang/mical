@@ -1,0 +1,29 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# duplicate-keys-nested-collision
+
+## Input
+
+```mical
+ab {
+  c 1
+}
+a {
+  bc 2
+}
+
+```
+
+## JSON
+
+```json
+{
+  "abc": [
+    1,
+    2
+  ]
+}
+```
+
+vim:ft=markdown

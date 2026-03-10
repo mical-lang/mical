@@ -1,0 +1,25 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# block-string-indicator-fallback
+
+## Input
+
+```mical
+a |+text
+b >-stuff
+c | not blank
+
+```
+
+## JSON
+
+```json
+{
+  "a": "|+text",
+  "b": ">-stuff",
+  "c": "| not blank"
+}
+```
+
+vim:ft=markdown

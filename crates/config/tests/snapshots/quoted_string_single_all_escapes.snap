@@ -1,0 +1,31 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# quoted-string-single-all-escapes
+
+## Input
+
+```mical
+a '\\'
+b '\"'
+c '\''
+d '\n'
+e '\r'
+f '\t'
+
+```
+
+## JSON
+
+```json
+{
+  "a": "\\",
+  "b": "\"",
+  "c": "'",
+  "d": "\n",
+  "e": "\r",
+  "f": "\t"
+}
+```
+
+vim:ft=markdown

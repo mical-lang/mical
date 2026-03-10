@@ -1,0 +1,28 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# tab-separator
+
+## Input
+
+```mical
+key	value
+
+```
+
+## Parser Error
+
+```
+3..3: tab separating is not allowed
+
+```
+
+## JSON
+
+```json
+{
+  "key": "value"
+}
+```
+
+vim:ft=markdown

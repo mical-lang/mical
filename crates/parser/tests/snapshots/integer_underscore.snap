@@ -1,0 +1,79 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# integer-underscore
+
+## Input
+
+```
+a 1_000
+b 1_000_000
+c 1_2_3
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..28
+  ENTRY@0..8
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    INTEGER@2..7
+      NUMERAL@2..7 "1_000"
+    NEWLINE@7..8 "\n"
+  ENTRY@8..20
+    WORD_KEY@8..9
+      WORD@8..9 "b"
+    SPACE@9..10 " "
+    INTEGER@10..19
+      NUMERAL@10..19 "1_000_000"
+    NEWLINE@19..20 "\n"
+  ENTRY@20..28
+    WORD_KEY@20..21
+      WORD@20..21 "c"
+    SPACE@21..22 " "
+    INTEGER@22..27
+      NUMERAL@22..27 "1_2_3"
+    NEWLINE@27..28 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@2..7 "1_000",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@8..9 "b",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@10..19 "1_000_000",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@20..21 "c",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@22..27 "1_2_3",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

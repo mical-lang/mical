@@ -1,0 +1,77 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# duplicate-keys-mixed-types
+
+## Input
+
+```
+t web
+t 42
+t true
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..18
+  ENTRY@0..6
+    WORD_KEY@0..1
+      WORD@0..1 "t"
+    SPACE@1..2 " "
+    LINE_STRING@2..5
+      STRING@2..5 "web"
+    NEWLINE@5..6 "\n"
+  ENTRY@6..11
+    WORD_KEY@6..7
+      WORD@6..7 "t"
+    SPACE@7..8 " "
+    INTEGER@8..10
+      NUMERAL@8..10 "42"
+    NEWLINE@10..11 "\n"
+  ENTRY@11..18
+    WORD_KEY@11..12
+      WORD@11..12 "t"
+    SPACE@12..13 " "
+    BOOLEAN@13..17
+      TRUE@13..17 "true"
+    NEWLINE@17..18 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "t",
+            },
+            value: LineString {
+                string: STRING@2..5 "web",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@6..7 "t",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@8..10 "42",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@11..12 "t",
+            },
+            value: Boolean {
+                token: TRUE@13..17 "true",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

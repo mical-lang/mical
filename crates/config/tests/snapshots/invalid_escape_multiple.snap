@@ -1,0 +1,28 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# invalid-escape-multiple
+
+## Input
+
+```mical
+a "he\xllo\yw"
+
+```
+
+## Config Error
+
+```
+invalid escape sequence '\x' at 5..7
+invalid escape sequence '\y' at 10..12
+```
+
+## JSON
+
+```json
+{
+  "a": "hexlloyw"
+}
+```
+
+vim:ft=markdown

@@ -1,0 +1,24 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# comment-consecutive
+
+## Input
+
+```mical
+# one
+# two
+# three
+a 1
+
+```
+
+## JSON
+
+```json
+{
+  "a": 1
+}
+```
+
+vim:ft=markdown

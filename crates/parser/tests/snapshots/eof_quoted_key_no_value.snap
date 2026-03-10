@@ -1,0 +1,52 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# eof-quoted-key-no-value
+
+## Input
+
+```
+"key"
+```
+
+## CST
+
+```
+SOURCE_FILE@0..5
+  ENTRY@0..5
+    QUOTED_KEY@0..5
+      DOUBLE_QUOTE@0..1 "\""
+      STRING@1..4 "key"
+      DOUBLE_QUOTE@4..5 "\""
+```
+
+## Syntax Error
+
+```
+[
+    SyntaxError {
+        message: "missing value for the key",
+        range: 5..5,
+    },
+]
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: QuotedKey {
+                open_quote: DOUBLE_QUOTE@0..1 "\"",
+                string: STRING@1..4 "key",
+                close_quote: DOUBLE_QUOTE@0..1 "\"",
+            },
+            value: none,
+        },
+    ],
+}
+```
+
+vim:ft=markdown

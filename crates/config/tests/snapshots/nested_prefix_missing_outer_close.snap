@@ -1,0 +1,31 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# nested-prefix-missing-outer-close
+
+## Input
+
+```mical
+a {
+  b {
+    c 1
+  }
+
+```
+
+## Parser Error
+
+```
+22..22: missing closing '}' for prefix block
+
+```
+
+## JSON
+
+```json
+{
+  "abc": 1
+}
+```
+
+vim:ft=markdown

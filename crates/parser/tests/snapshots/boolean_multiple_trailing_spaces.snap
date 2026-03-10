@@ -1,0 +1,62 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# boolean-multiple-trailing-spaces
+
+## Input
+
+```
+a true   
+b false   
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..21
+  ENTRY@0..10
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    BOOLEAN@2..6
+      TRUE@2..6 "true"
+    SPACE@6..9 "   "
+    NEWLINE@9..10 "\n"
+  ENTRY@10..21
+    WORD_KEY@10..11
+      WORD@10..11 "b"
+    SPACE@11..12 " "
+    BOOLEAN@12..17
+      FALSE@12..17 "false"
+    SPACE@17..20 "   "
+    NEWLINE@20..21 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: Boolean {
+                token: TRUE@2..6 "true",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@10..11 "b",
+            },
+            value: Boolean {
+                token: FALSE@12..17 "false",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

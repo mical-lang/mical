@@ -1,0 +1,21 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# comment-hash-at-eof
+
+## Input
+
+```mical
+key value
+#
+```
+
+## JSON
+
+```json
+{
+  "key": "value"
+}
+```
+
+vim:ft=markdown

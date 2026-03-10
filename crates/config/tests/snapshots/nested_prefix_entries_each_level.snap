@@ -1,0 +1,31 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# nested-prefix-entries-each-level
+
+## Input
+
+```mical
+ a {
+ 1 1
+ b {
+   2 2
+   c {
+  3 3
+  }
+ }
+ }
+
+```
+
+## JSON
+
+```json
+{
+  "a1": 1,
+  "ab2": 2,
+  "abc3": 3
+}
+```
+
+vim:ft=markdown

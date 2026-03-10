@@ -1,0 +1,26 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# comment-hash-non-word
+
+## Input
+
+```mical
+####### multiple hashes
+##double hash
+#123
+#-flag
+#"quoted"
+k v
+
+```
+
+## JSON
+
+```json
+{
+  "k": "v"
+}
+```
+
+vim:ft=markdown

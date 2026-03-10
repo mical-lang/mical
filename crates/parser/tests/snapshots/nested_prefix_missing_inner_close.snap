@@ -1,0 +1,93 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# nested-prefix-missing-inner-close
+
+## Input
+
+```
+a {
+  b {
+    c 1
+}
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..20
+  PREFIX_BLOCK@0..20
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    OPEN_BRACE@2..3 "{"
+    NEWLINE@3..4 "\n"
+    SPACE@4..6 "  "
+    PREFIX_BLOCK@6..20
+      WORD_KEY@6..7
+        WORD@6..7 "b"
+      SPACE@7..8 " "
+      OPEN_BRACE@8..9 "{"
+      NEWLINE@9..10 "\n"
+      SPACE@10..14 "    "
+      ENTRY@14..18
+        WORD_KEY@14..15
+          WORD@14..15 "c"
+        SPACE@15..16 " "
+        INTEGER@16..17
+          NUMERAL@16..17 "1"
+        NEWLINE@17..18 "\n"
+      CLOSE_BRACE@18..19 "}"
+      NEWLINE@19..20 "\n"
+```
+
+## Syntax Error
+
+```
+[
+    SyntaxError {
+        message: "missing closing '}' for prefix block",
+        range: 20..20,
+    },
+]
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        PrefixBlock {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            open_brace: OPEN_BRACE@2..3 "{",
+            items: [
+                PrefixBlock {
+                    key: WordKey {
+                        word: WORD@6..7 "b",
+                    },
+                    open_brace: OPEN_BRACE@8..9 "{",
+                    items: [
+                        Entry {
+                            key: WordKey {
+                                word: WORD@14..15 "c",
+                            },
+                            value: Integer {
+                                sign: none,
+                                numeral: NUMERAL@16..17 "1",
+                            },
+                        },
+                    ],
+                    close_brace: CLOSE_BRACE@18..19 "}",
+                },
+            ],
+            close_brace: none,
+        },
+    ],
+}
+```
+
+vim:ft=markdown

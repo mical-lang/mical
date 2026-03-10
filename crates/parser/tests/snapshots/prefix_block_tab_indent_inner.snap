@@ -1,0 +1,83 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# prefix-block-tab-indent-inner
+
+## Input
+
+```
+s. {
+	a 1
+  b 2
+}
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..18
+  PREFIX_BLOCK@0..18
+    WORD_KEY@0..2
+      WORD@0..2 "s."
+    SPACE@2..3 " "
+    OPEN_BRACE@3..4 "{"
+    NEWLINE@4..5 "\n"
+    ERROR@5..9
+      TAB@5..6 "\t"
+      WORD@6..7 "a"
+      SPACE@7..8 " "
+      NUMERAL@8..9 "1"
+    NEWLINE@9..10 "\n"
+    SPACE@10..12 "  "
+    ENTRY@12..16
+      WORD_KEY@12..13
+        WORD@12..13 "b"
+      SPACE@13..14 " "
+      INTEGER@14..15
+        NUMERAL@14..15 "2"
+      NEWLINE@15..16 "\n"
+    CLOSE_BRACE@16..17 "}"
+    NEWLINE@17..18 "\n"
+```
+
+## Syntax Error
+
+```
+[
+    SyntaxError {
+        message: "tab indent is not allowed, skipping this line",
+        range: 5..5,
+    },
+]
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        PrefixBlock {
+            key: WordKey {
+                word: WORD@0..2 "s.",
+            },
+            open_brace: OPEN_BRACE@3..4 "{",
+            items: [
+                Entry {
+                    key: WordKey {
+                        word: WORD@12..13 "b",
+                    },
+                    value: Integer {
+                        sign: none,
+                        numeral: NUMERAL@14..15 "2",
+                    },
+                },
+            ],
+            close_brace: CLOSE_BRACE@16..17 "}",
+        },
+    ],
+}
+```
+
+vim:ft=markdown

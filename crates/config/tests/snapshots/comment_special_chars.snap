@@ -1,0 +1,22 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# comment-special-chars
+
+## Input
+
+```mical
+# { } | > "hello" 'world'
+key value
+
+```
+
+## JSON
+
+```json
+{
+  "key": "value"
+}
+```
+
+vim:ft=markdown

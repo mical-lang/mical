@@ -1,0 +1,82 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# close-brace-with-content
+
+## Input
+
+```
+s {
+  a 1
+  } # comment
+}
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..26
+  PREFIX_BLOCK@0..26
+    WORD_KEY@0..1
+      WORD@0..1 "s"
+    SPACE@1..2 " "
+    OPEN_BRACE@2..3 "{"
+    NEWLINE@3..4 "\n"
+    SPACE@4..6 "  "
+    ENTRY@6..10
+      WORD_KEY@6..7
+        WORD@6..7 "a"
+      SPACE@7..8 " "
+      INTEGER@8..9
+        NUMERAL@8..9 "1"
+      NEWLINE@9..10 "\n"
+    SPACE@10..12 "  "
+    ENTRY@12..24
+      WORD_KEY@12..13
+        WORD@12..13 "}"
+      SPACE@13..14 " "
+      LINE_STRING@14..23
+        STRING@14..23 "# comment"
+      NEWLINE@23..24 "\n"
+    CLOSE_BRACE@24..25 "}"
+    NEWLINE@25..26 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        PrefixBlock {
+            key: WordKey {
+                word: WORD@0..1 "s",
+            },
+            open_brace: OPEN_BRACE@2..3 "{",
+            items: [
+                Entry {
+                    key: WordKey {
+                        word: WORD@6..7 "a",
+                    },
+                    value: Integer {
+                        sign: none,
+                        numeral: NUMERAL@8..9 "1",
+                    },
+                },
+                Entry {
+                    key: WordKey {
+                        word: WORD@12..13 "}",
+                    },
+                    value: LineString {
+                        string: STRING@14..23 "# comment",
+                    },
+                },
+            ],
+            close_brace: CLOSE_BRACE@24..25 "}",
+        },
+    ],
+}
+```
+
+vim:ft=markdown

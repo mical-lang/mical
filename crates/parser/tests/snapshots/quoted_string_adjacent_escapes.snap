@@ -1,0 +1,88 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# quoted-string-adjacent-escapes
+
+## Input
+
+```
+a "\\\\"
+b "\n\t"
+c "\\\""
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..27
+  ENTRY@0..9
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    QUOTED_STRING@2..8
+      DOUBLE_QUOTE@2..3 "\""
+      STRING@3..7 "\\\\\\\\"
+      DOUBLE_QUOTE@7..8 "\""
+    NEWLINE@8..9 "\n"
+  ENTRY@9..18
+    WORD_KEY@9..10
+      WORD@9..10 "b"
+    SPACE@10..11 " "
+    QUOTED_STRING@11..17
+      DOUBLE_QUOTE@11..12 "\""
+      STRING@12..16 "\\n\\t"
+      DOUBLE_QUOTE@16..17 "\""
+    NEWLINE@17..18 "\n"
+  ENTRY@18..27
+    WORD_KEY@18..19
+      WORD@18..19 "c"
+    SPACE@19..20 " "
+    QUOTED_STRING@20..26
+      DOUBLE_QUOTE@20..21 "\""
+      STRING@21..25 "\\\\\\\""
+      DOUBLE_QUOTE@25..26 "\""
+    NEWLINE@26..27 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: QuotedString {
+                open_quote: DOUBLE_QUOTE@2..3 "\"",
+                string: STRING@3..7 "\\\\\\\\",
+                close_quote: DOUBLE_QUOTE@2..3 "\"",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@9..10 "b",
+            },
+            value: QuotedString {
+                open_quote: DOUBLE_QUOTE@11..12 "\"",
+                string: STRING@12..16 "\\n\\t",
+                close_quote: DOUBLE_QUOTE@11..12 "\"",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@18..19 "c",
+            },
+            value: QuotedString {
+                open_quote: DOUBLE_QUOTE@20..21 "\"",
+                string: STRING@21..25 "\\\\\\\"",
+                close_quote: DOUBLE_QUOTE@20..21 "\"",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

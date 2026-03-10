@@ -1,0 +1,65 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# close-brace-deeply-indented
+
+## Input
+
+```
+s {
+  k v
+            }
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..24
+  PREFIX_BLOCK@0..24
+    WORD_KEY@0..1
+      WORD@0..1 "s"
+    SPACE@1..2 " "
+    OPEN_BRACE@2..3 "{"
+    NEWLINE@3..4 "\n"
+    SPACE@4..6 "  "
+    ENTRY@6..10
+      WORD_KEY@6..7
+        WORD@6..7 "k"
+      SPACE@7..8 " "
+      LINE_STRING@8..9
+        STRING@8..9 "v"
+      NEWLINE@9..10 "\n"
+    SPACE@10..22 "            "
+    CLOSE_BRACE@22..23 "}"
+    NEWLINE@23..24 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        PrefixBlock {
+            key: WordKey {
+                word: WORD@0..1 "s",
+            },
+            open_brace: OPEN_BRACE@2..3 "{",
+            items: [
+                Entry {
+                    key: WordKey {
+                        word: WORD@6..7 "k",
+                    },
+                    value: LineString {
+                        string: STRING@8..9 "v",
+                    },
+                },
+            ],
+            close_brace: CLOSE_BRACE@22..23 "}",
+        },
+    ],
+}
+```
+
+vim:ft=markdown

@@ -1,0 +1,40 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# directive-at-eof
+
+## Input
+
+```
+#version 1.0
+```
+
+## CST
+
+```
+SOURCE_FILE@0..12
+  DIRECTIVE@0..12
+    SHARP@0..1 "#"
+    WORD@1..8 "version"
+    LINE_STRING@8..12
+      STRING@8..12 " 1.0"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Directive {
+            sharp: SHARP@0..1 "#",
+            name: WORD@1..8 "version",
+            args: LineString {
+                string: STRING@8..12 " 1.0",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

@@ -1,0 +1,60 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# key-word-unicode
+
+## Input
+
+```
+名前 hello
+clé value
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..24
+  ENTRY@0..13
+    WORD_KEY@0..6
+      WORD@0..6 "名前"
+    SPACE@6..7 " "
+    LINE_STRING@7..12
+      STRING@7..12 "hello"
+    NEWLINE@12..13 "\n"
+  ENTRY@13..24
+    WORD_KEY@13..17
+      WORD@13..17 "clé"
+    SPACE@17..18 " "
+    LINE_STRING@18..23
+      STRING@18..23 "value"
+    NEWLINE@23..24 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..6 "名前",
+            },
+            value: LineString {
+                string: STRING@7..12 "hello",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@13..17 "clé",
+            },
+            value: LineString {
+                string: STRING@18..23 "value",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

@@ -1,0 +1,145 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# nested-prefix-entries-each-level
+
+## Input
+
+```
+ a {
+ 1 1
+ b {
+   2 2
+   c {
+  3 3
+  }
+ }
+ }
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..45
+  SPACE@0..1 " "
+  PREFIX_BLOCK@1..45
+    WORD_KEY@1..2
+      WORD@1..2 "a"
+    SPACE@2..3 " "
+    OPEN_BRACE@3..4 "{"
+    NEWLINE@4..5 "\n"
+    SPACE@5..6 " "
+    ENTRY@6..10
+      WORD_KEY@6..7
+        WORD@6..7 "1"
+      SPACE@7..8 " "
+      INTEGER@8..9
+        NUMERAL@8..9 "1"
+      NEWLINE@9..10 "\n"
+    SPACE@10..11 " "
+    PREFIX_BLOCK@11..42
+      WORD_KEY@11..12
+        WORD@11..12 "b"
+      SPACE@12..13 " "
+      OPEN_BRACE@13..14 "{"
+      NEWLINE@14..15 "\n"
+      SPACE@15..18 "   "
+      ENTRY@18..22
+        WORD_KEY@18..19
+          WORD@18..19 "2"
+        SPACE@19..20 " "
+        INTEGER@20..21
+          NUMERAL@20..21 "2"
+        NEWLINE@21..22 "\n"
+      SPACE@22..25 "   "
+      PREFIX_BLOCK@25..39
+        WORD_KEY@25..26
+          WORD@25..26 "c"
+        SPACE@26..27 " "
+        OPEN_BRACE@27..28 "{"
+        NEWLINE@28..29 "\n"
+        SPACE@29..31 "  "
+        ENTRY@31..35
+          WORD_KEY@31..32
+            WORD@31..32 "3"
+          SPACE@32..33 " "
+          INTEGER@33..34
+            NUMERAL@33..34 "3"
+          NEWLINE@34..35 "\n"
+        SPACE@35..37 "  "
+        CLOSE_BRACE@37..38 "}"
+        NEWLINE@38..39 "\n"
+      SPACE@39..40 " "
+      CLOSE_BRACE@40..41 "}"
+      NEWLINE@41..42 "\n"
+    SPACE@42..43 " "
+    CLOSE_BRACE@43..44 "}"
+    NEWLINE@44..45 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        PrefixBlock {
+            key: WordKey {
+                word: WORD@1..2 "a",
+            },
+            open_brace: OPEN_BRACE@3..4 "{",
+            items: [
+                Entry {
+                    key: WordKey {
+                        word: WORD@6..7 "1",
+                    },
+                    value: Integer {
+                        sign: none,
+                        numeral: NUMERAL@8..9 "1",
+                    },
+                },
+                PrefixBlock {
+                    key: WordKey {
+                        word: WORD@11..12 "b",
+                    },
+                    open_brace: OPEN_BRACE@13..14 "{",
+                    items: [
+                        Entry {
+                            key: WordKey {
+                                word: WORD@18..19 "2",
+                            },
+                            value: Integer {
+                                sign: none,
+                                numeral: NUMERAL@20..21 "2",
+                            },
+                        },
+                        PrefixBlock {
+                            key: WordKey {
+                                word: WORD@25..26 "c",
+                            },
+                            open_brace: OPEN_BRACE@27..28 "{",
+                            items: [
+                                Entry {
+                                    key: WordKey {
+                                        word: WORD@31..32 "3",
+                                    },
+                                    value: Integer {
+                                        sign: none,
+                                        numeral: NUMERAL@33..34 "3",
+                                    },
+                                },
+                            ],
+                            close_brace: CLOSE_BRACE@37..38 "}",
+                        },
+                    ],
+                    close_brace: CLOSE_BRACE@40..41 "}",
+                },
+            ],
+            close_brace: CLOSE_BRACE@43..44 "}",
+        },
+    ],
+}
+```
+
+vim:ft=markdown

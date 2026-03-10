@@ -1,0 +1,81 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# prefix-block-duplicate-keys
+
+## Input
+
+```
+item. {
+  tag a
+  tag b
+}
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..26
+  PREFIX_BLOCK@0..26
+    WORD_KEY@0..5
+      WORD@0..5 "item."
+    SPACE@5..6 " "
+    OPEN_BRACE@6..7 "{"
+    NEWLINE@7..8 "\n"
+    SPACE@8..10 "  "
+    ENTRY@10..16
+      WORD_KEY@10..13
+        WORD@10..13 "tag"
+      SPACE@13..14 " "
+      LINE_STRING@14..15
+        STRING@14..15 "a"
+      NEWLINE@15..16 "\n"
+    SPACE@16..18 "  "
+    ENTRY@18..24
+      WORD_KEY@18..21
+        WORD@18..21 "tag"
+      SPACE@21..22 " "
+      LINE_STRING@22..23
+        STRING@22..23 "b"
+      NEWLINE@23..24 "\n"
+    CLOSE_BRACE@24..25 "}"
+    NEWLINE@25..26 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        PrefixBlock {
+            key: WordKey {
+                word: WORD@0..5 "item.",
+            },
+            open_brace: OPEN_BRACE@6..7 "{",
+            items: [
+                Entry {
+                    key: WordKey {
+                        word: WORD@10..13 "tag",
+                    },
+                    value: LineString {
+                        string: STRING@14..15 "a",
+                    },
+                },
+                Entry {
+                    key: WordKey {
+                        word: WORD@18..21 "tag",
+                    },
+                    value: LineString {
+                        string: STRING@22..23 "b",
+                    },
+                },
+            ],
+            close_brace: CLOSE_BRACE@24..25 "}",
+        },
+    ],
+}
+```
+
+vim:ft=markdown

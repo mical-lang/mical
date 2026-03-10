@@ -1,0 +1,148 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# quoted-key-single-all-escapes
+
+## Input
+
+```
+'k\\1' v1
+'k\"2' v2
+'k\'3' v3
+'k\n4' v4
+'k\r5' v5
+'k\t6' v6
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..60
+  ENTRY@0..10
+    QUOTED_KEY@0..6
+      SINGLE_QUOTE@0..1 "'"
+      STRING@1..5 "k\\\\1"
+      SINGLE_QUOTE@5..6 "'"
+    SPACE@6..7 " "
+    LINE_STRING@7..9
+      STRING@7..9 "v1"
+    NEWLINE@9..10 "\n"
+  ENTRY@10..20
+    QUOTED_KEY@10..16
+      SINGLE_QUOTE@10..11 "'"
+      STRING@11..15 "k\\\"2"
+      SINGLE_QUOTE@15..16 "'"
+    SPACE@16..17 " "
+    LINE_STRING@17..19
+      STRING@17..19 "v2"
+    NEWLINE@19..20 "\n"
+  ENTRY@20..30
+    QUOTED_KEY@20..26
+      SINGLE_QUOTE@20..21 "'"
+      STRING@21..25 "k\\'3"
+      SINGLE_QUOTE@25..26 "'"
+    SPACE@26..27 " "
+    LINE_STRING@27..29
+      STRING@27..29 "v3"
+    NEWLINE@29..30 "\n"
+  ENTRY@30..40
+    QUOTED_KEY@30..36
+      SINGLE_QUOTE@30..31 "'"
+      STRING@31..35 "k\\n4"
+      SINGLE_QUOTE@35..36 "'"
+    SPACE@36..37 " "
+    LINE_STRING@37..39
+      STRING@37..39 "v4"
+    NEWLINE@39..40 "\n"
+  ENTRY@40..50
+    QUOTED_KEY@40..46
+      SINGLE_QUOTE@40..41 "'"
+      STRING@41..45 "k\\r5"
+      SINGLE_QUOTE@45..46 "'"
+    SPACE@46..47 " "
+    LINE_STRING@47..49
+      STRING@47..49 "v5"
+    NEWLINE@49..50 "\n"
+  ENTRY@50..60
+    QUOTED_KEY@50..56
+      SINGLE_QUOTE@50..51 "'"
+      STRING@51..55 "k\\t6"
+      SINGLE_QUOTE@55..56 "'"
+    SPACE@56..57 " "
+    LINE_STRING@57..59
+      STRING@57..59 "v6"
+    NEWLINE@59..60 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: QuotedKey {
+                open_quote: SINGLE_QUOTE@0..1 "'",
+                string: STRING@1..5 "k\\\\1",
+                close_quote: SINGLE_QUOTE@0..1 "'",
+            },
+            value: LineString {
+                string: STRING@7..9 "v1",
+            },
+        },
+        Entry {
+            key: QuotedKey {
+                open_quote: SINGLE_QUOTE@10..11 "'",
+                string: STRING@11..15 "k\\\"2",
+                close_quote: SINGLE_QUOTE@10..11 "'",
+            },
+            value: LineString {
+                string: STRING@17..19 "v2",
+            },
+        },
+        Entry {
+            key: QuotedKey {
+                open_quote: SINGLE_QUOTE@20..21 "'",
+                string: STRING@21..25 "k\\'3",
+                close_quote: SINGLE_QUOTE@20..21 "'",
+            },
+            value: LineString {
+                string: STRING@27..29 "v3",
+            },
+        },
+        Entry {
+            key: QuotedKey {
+                open_quote: SINGLE_QUOTE@30..31 "'",
+                string: STRING@31..35 "k\\n4",
+                close_quote: SINGLE_QUOTE@30..31 "'",
+            },
+            value: LineString {
+                string: STRING@37..39 "v4",
+            },
+        },
+        Entry {
+            key: QuotedKey {
+                open_quote: SINGLE_QUOTE@40..41 "'",
+                string: STRING@41..45 "k\\r5",
+                close_quote: SINGLE_QUOTE@40..41 "'",
+            },
+            value: LineString {
+                string: STRING@47..49 "v5",
+            },
+        },
+        Entry {
+            key: QuotedKey {
+                open_quote: SINGLE_QUOTE@50..51 "'",
+                string: STRING@51..55 "k\\t6",
+                close_quote: SINGLE_QUOTE@50..51 "'",
+            },
+            value: LineString {
+                string: STRING@57..59 "v6",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

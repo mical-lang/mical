@@ -1,0 +1,48 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# quoted-key-invalid-escape
+
+## Input
+
+```
+"bad\z" value
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..14
+  ENTRY@0..14
+    QUOTED_KEY@0..7
+      DOUBLE_QUOTE@0..1 "\""
+      STRING@1..6 "bad\\z"
+      DOUBLE_QUOTE@6..7 "\""
+    SPACE@7..8 " "
+    LINE_STRING@8..13
+      STRING@8..13 "value"
+    NEWLINE@13..14 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: QuotedKey {
+                open_quote: DOUBLE_QUOTE@0..1 "\"",
+                string: STRING@1..6 "bad\\z",
+                close_quote: DOUBLE_QUOTE@0..1 "\"",
+            },
+            value: LineString {
+                string: STRING@8..13 "value",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

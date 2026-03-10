@@ -1,0 +1,68 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# blank-lines-between-entries
+
+## Input
+
+```
+a 1
+
+
+
+b 2
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..11
+  ENTRY@0..4
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    INTEGER@2..3
+      NUMERAL@2..3 "1"
+    NEWLINE@3..4 "\n"
+  NEWLINE@4..5 "\n"
+  NEWLINE@5..6 "\n"
+  NEWLINE@6..7 "\n"
+  ENTRY@7..11
+    WORD_KEY@7..8
+      WORD@7..8 "b"
+    SPACE@8..9 " "
+    INTEGER@9..10
+      NUMERAL@9..10 "2"
+    NEWLINE@10..11 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@2..3 "1",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@7..8 "b",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@9..10 "2",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

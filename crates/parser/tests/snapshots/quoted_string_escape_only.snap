@@ -1,0 +1,48 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# quoted-string-escape-only
+
+## Input
+
+```
+a "\n\t\\"
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..11
+  ENTRY@0..11
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    QUOTED_STRING@2..10
+      DOUBLE_QUOTE@2..3 "\""
+      STRING@3..9 "\\n\\t\\\\"
+      DOUBLE_QUOTE@9..10 "\""
+    NEWLINE@10..11 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: QuotedString {
+                open_quote: DOUBLE_QUOTE@2..3 "\"",
+                string: STRING@3..9 "\\n\\t\\\\",
+                close_quote: DOUBLE_QUOTE@2..3 "\"",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

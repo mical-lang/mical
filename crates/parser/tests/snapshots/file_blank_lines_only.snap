@@ -1,0 +1,37 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# file-blank-lines-only
+
+## Input
+
+```
+
+
+
+
+
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..5
+  NEWLINE@0..1 "\n"
+  NEWLINE@1..2 "\n"
+  NEWLINE@2..3 "\n"
+  NEWLINE@3..4 "\n"
+  NEWLINE@4..5 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [],
+}
+```
+
+vim:ft=markdown

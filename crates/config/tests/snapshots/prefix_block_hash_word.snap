@@ -1,0 +1,24 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# prefix-block-hash-word
+
+## Input
+
+```mical
+s {
+  #format off
+  key value
+}
+
+```
+
+## JSON
+
+```json
+{
+  "skey": "value"
+}
+```
+
+vim:ft=markdown

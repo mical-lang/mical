@@ -1,0 +1,88 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# prefix-block-missing-value-inner
+
+## Input
+
+```
+s. {
+  lonely
+  b 2
+}
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..22
+  PREFIX_BLOCK@0..22
+    WORD_KEY@0..2
+      WORD@0..2 "s."
+    SPACE@2..3 " "
+    OPEN_BRACE@3..4 "{"
+    NEWLINE@4..5 "\n"
+    SPACE@5..7 "  "
+    ENTRY@7..13
+      WORD_KEY@7..13
+        WORD@7..13 "lonely"
+    NEWLINE@13..14 "\n"
+    SPACE@14..16 "  "
+    ENTRY@16..20
+      WORD_KEY@16..17
+        WORD@16..17 "b"
+      SPACE@17..18 " "
+      INTEGER@18..19
+        NUMERAL@18..19 "2"
+      NEWLINE@19..20 "\n"
+    CLOSE_BRACE@20..21 "}"
+    NEWLINE@21..22 "\n"
+```
+
+## Syntax Error
+
+```
+[
+    SyntaxError {
+        message: "missing value for the key",
+        range: 13..13,
+    },
+]
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        PrefixBlock {
+            key: WordKey {
+                word: WORD@0..2 "s.",
+            },
+            open_brace: OPEN_BRACE@3..4 "{",
+            items: [
+                Entry {
+                    key: WordKey {
+                        word: WORD@7..13 "lonely",
+                    },
+                    value: none,
+                },
+                Entry {
+                    key: WordKey {
+                        word: WORD@16..17 "b",
+                    },
+                    value: Integer {
+                        sign: none,
+                        numeral: NUMERAL@18..19 "2",
+                    },
+                },
+            ],
+            close_brace: CLOSE_BRACE@20..21 "}",
+        },
+    ],
+}
+```
+
+vim:ft=markdown

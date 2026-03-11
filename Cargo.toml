@@ -22,11 +22,11 @@ serde = "1.0.228"
 serde_json = "1.0.149"
 num-bigint = "0.4.6"
 smallvec = "1.15.1"
-mical-cli-config = { path = "./crates/config", version = "0.0.3-dev" }
-mical-cli-formatter = { path = "./crates/formatter", version = "0.0.3-dev" }
-mical-cli-lexer = { path = "./crates/lexer", version = "0.0.3-dev" }
-mical-cli-parser = { path = "./crates/parser", version = "0.0.3-dev" }
-mical-cli-syntax = { path = "./crates/syntax", version = "0.0.3-dev" }
+mical-cli-config = { path = "./crates/config", version = "=0.0.3-dev" }
+mical-cli-formatter = { path = "./crates/formatter", version = "=0.0.3-dev" }
+mical-cli-lexer = { path = "./crates/lexer", version = "=0.0.3-dev" }
+mical-cli-parser = { path = "./crates/parser", version = "=0.0.3-dev" }
+mical-cli-syntax = { path = "./crates/syntax", version = "=0.0.3-dev" }
 
 [package]
 name = "mical-cli"

@@ -1,0 +1,71 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# whitespace-only-lines-consecutive
+
+## Input
+
+```
+a 1
+ 
+  
+   
+b 2
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..17
+  ENTRY@0..4
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    INTEGER@2..3
+      NUMERAL@2..3 "1"
+    NEWLINE@3..4 "\n"
+  SPACE@4..5 " "
+  NEWLINE@5..6 "\n"
+  SPACE@6..8 "  "
+  NEWLINE@8..9 "\n"
+  SPACE@9..12 "   "
+  NEWLINE@12..13 "\n"
+  ENTRY@13..17
+    WORD_KEY@13..14
+      WORD@13..14 "b"
+    SPACE@14..15 " "
+    INTEGER@15..16
+      NUMERAL@15..16 "2"
+    NEWLINE@16..17 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@2..3 "1",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@13..14 "b",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@15..16 "2",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

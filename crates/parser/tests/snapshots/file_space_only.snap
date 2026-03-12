@@ -1,0 +1,28 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# file-space-only
+
+## Input
+
+```
+ 
+```
+
+## CST
+
+```
+SOURCE_FILE@0..1
+  SPACE@0..1 " "
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [],
+}
+```
+
+vim:ft=markdown

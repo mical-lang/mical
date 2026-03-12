@@ -36,6 +36,11 @@ pub(super) fn item(p: &mut Parser) {
         return;
     }
 
+    if p.at(T!['\n']) || p.at_eof() {
+        // whiltespace only line
+        return;
+    }
+
     entry_or_prefix_block(p, indent_level);
 }
 

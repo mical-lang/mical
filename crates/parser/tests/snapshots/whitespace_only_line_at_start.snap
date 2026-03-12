@@ -1,0 +1,47 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# whitespace-only-line-at-start
+
+## Input
+
+```
+   
+key value
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..14
+  SPACE@0..3 "   "
+  NEWLINE@3..4 "\n"
+  ENTRY@4..14
+    WORD_KEY@4..7
+      WORD@4..7 "key"
+    SPACE@7..8 " "
+    LINE_STRING@8..13
+      STRING@8..13 "value"
+    NEWLINE@13..14 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@4..7 "key",
+            },
+            value: LineString {
+                string: STRING@8..13 "value",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

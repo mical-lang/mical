@@ -1,0 +1,26 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# whitespace-only-lines-consecutive
+
+## Input
+
+```mical
+a 1
+ 
+  
+   
+b 2
+
+```
+
+## JSON
+
+```json
+{
+  "a": 1,
+  "b": 2
+}
+```
+
+vim:ft=markdown

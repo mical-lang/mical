@@ -1,0 +1,22 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# whitespace-only-line-at-start
+
+## Input
+
+```mical
+   
+key value
+
+```
+
+## JSON
+
+```json
+{
+  "key": "value"
+}
+```
+
+vim:ft=markdown

@@ -1,0 +1,26 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# whitespace-only-line-in-prefix-block
+
+## Input
+
+```mical
+s {
+  a 1
+  
+  b 2
+}
+
+```
+
+## JSON
+
+```json
+{
+  "sa": 1,
+  "sb": 2
+}
+```
+
+vim:ft=markdown

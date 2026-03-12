@@ -1095,6 +1095,22 @@ fn file_newline() {
     utils::assert_json_output("file-newline", source, expected_json);
 }
 #[test]
+fn file_space_only() {
+    let source = include_str!("../../../test-suite/file-space-only/input.mical");
+    let expected_json = include_str!("../../../test-suite/file-space-only/output.json");
+    let snapshot = utils::make_snapshot("file-space-only", source);
+    utils::assert_snapshot!(snapshot);
+    utils::assert_json_output("file-space-only", source, expected_json);
+}
+#[test]
+fn file_spaces_only() {
+    let source = include_str!("../../../test-suite/file-spaces-only/input.mical");
+    let expected_json = include_str!("../../../test-suite/file-spaces-only/output.json");
+    let snapshot = utils::make_snapshot("file-spaces-only", source);
+    utils::assert_snapshot!(snapshot);
+    utils::assert_json_output("file-spaces-only", source, expected_json);
+}
+#[test]
 fn file_tab_only() {
     let source = include_str!("../../../test-suite/file-tab-only/input.mical");
     let expected_json = include_str!("../../../test-suite/file-tab-only/output.json");
@@ -1933,4 +1949,44 @@ fn typed_values() {
     let snapshot = utils::make_snapshot("typed-values", source);
     utils::assert_snapshot!(snapshot);
     utils::assert_json_output("typed-values", source, expected_json);
+}
+#[test]
+fn whitespace_only_line() {
+    let source = include_str!("../../../test-suite/whitespace-only-line/input.mical");
+    let expected_json = include_str!("../../../test-suite/whitespace-only-line/output.json");
+    let snapshot = utils::make_snapshot("whitespace-only-line", source);
+    utils::assert_snapshot!(snapshot);
+    utils::assert_json_output("whitespace-only-line", source, expected_json);
+}
+#[test]
+fn whitespace_only_line_at_eof() {
+    let source = include_str!("../../../test-suite/whitespace-only-line-at-eof/input.mical");
+    let expected_json = include_str!("../../../test-suite/whitespace-only-line-at-eof/output.json");
+    let snapshot = utils::make_snapshot("whitespace-only-line-at-eof", source);
+    utils::assert_snapshot!(snapshot);
+    utils::assert_json_output("whitespace-only-line-at-eof", source, expected_json);
+}
+#[test]
+fn whitespace_only_line_at_start() {
+    let source = include_str!("../../../test-suite/whitespace-only-line-at-start/input.mical");
+    let expected_json = include_str!("../../../test-suite/whitespace-only-line-at-start/output.json");
+    let snapshot = utils::make_snapshot("whitespace-only-line-at-start", source);
+    utils::assert_snapshot!(snapshot);
+    utils::assert_json_output("whitespace-only-line-at-start", source, expected_json);
+}
+#[test]
+fn whitespace_only_line_in_prefix_block() {
+    let source = include_str!("../../../test-suite/whitespace-only-line-in-prefix-block/input.mical");
+    let expected_json = include_str!("../../../test-suite/whitespace-only-line-in-prefix-block/output.json");
+    let snapshot = utils::make_snapshot("whitespace-only-line-in-prefix-block", source);
+    utils::assert_snapshot!(snapshot);
+    utils::assert_json_output("whitespace-only-line-in-prefix-block", source, expected_json);
+}
+#[test]
+fn whitespace_only_lines_consecutive() {
+    let source = include_str!("../../../test-suite/whitespace-only-lines-consecutive/input.mical");
+    let expected_json = include_str!("../../../test-suite/whitespace-only-lines-consecutive/output.json");
+    let snapshot = utils::make_snapshot("whitespace-only-lines-consecutive", source);
+    utils::assert_snapshot!(snapshot);
+    utils::assert_json_output("whitespace-only-lines-consecutive", source, expected_json);
 }

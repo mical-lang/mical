@@ -810,6 +810,18 @@ fn file_newline() {
     utils::assert_snapshot!(snapshot);
 }
 #[test]
+fn file_space_only() {
+    let source = include_str!("../../../test-suite/file-space-only/input.mical");
+    let snapshot = utils::make_snapshot("file-space-only", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn file_spaces_only() {
+    let source = include_str!("../../../test-suite/file-spaces-only/input.mical");
+    let snapshot = utils::make_snapshot("file-spaces-only", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
 fn file_tab_only() {
     let source = include_str!("../../../test-suite/file-tab-only/input.mical");
     let snapshot = utils::make_snapshot("file-tab-only", source);
@@ -1437,5 +1449,35 @@ fn tab_separator() {
 fn typed_values() {
     let source = include_str!("../../../test-suite/typed-values/input.mical");
     let snapshot = utils::make_snapshot("typed-values", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn whitespace_only_line() {
+    let source = include_str!("../../../test-suite/whitespace-only-line/input.mical");
+    let snapshot = utils::make_snapshot("whitespace-only-line", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn whitespace_only_line_at_eof() {
+    let source = include_str!("../../../test-suite/whitespace-only-line-at-eof/input.mical");
+    let snapshot = utils::make_snapshot("whitespace-only-line-at-eof", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn whitespace_only_line_at_start() {
+    let source = include_str!("../../../test-suite/whitespace-only-line-at-start/input.mical");
+    let snapshot = utils::make_snapshot("whitespace-only-line-at-start", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn whitespace_only_line_in_prefix_block() {
+    let source = include_str!("../../../test-suite/whitespace-only-line-in-prefix-block/input.mical");
+    let snapshot = utils::make_snapshot("whitespace-only-line-in-prefix-block", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
+fn whitespace_only_lines_consecutive() {
+    let source = include_str!("../../../test-suite/whitespace-only-lines-consecutive/input.mical");
+    let snapshot = utils::make_snapshot("whitespace-only-lines-consecutive", source);
     utils::assert_snapshot!(snapshot);
 }

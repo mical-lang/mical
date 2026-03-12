@@ -1,0 +1,63 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# whitespace-only-line
+
+## Input
+
+```
+key value
+  
+foo bar
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..21
+  ENTRY@0..10
+    WORD_KEY@0..3
+      WORD@0..3 "key"
+    SPACE@3..4 " "
+    LINE_STRING@4..9
+      STRING@4..9 "value"
+    NEWLINE@9..10 "\n"
+  SPACE@10..12 "  "
+  NEWLINE@12..13 "\n"
+  ENTRY@13..21
+    WORD_KEY@13..16
+      WORD@13..16 "foo"
+    SPACE@16..17 " "
+    LINE_STRING@17..20
+      STRING@17..20 "bar"
+    NEWLINE@20..21 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..3 "key",
+            },
+            value: LineString {
+                string: STRING@4..9 "value",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@13..16 "foo",
+            },
+            value: LineString {
+                string: STRING@17..20 "bar",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

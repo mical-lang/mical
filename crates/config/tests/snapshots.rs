@@ -1727,6 +1727,14 @@ fn prefix_block_no_indent_body() {
     utils::assert_json_output("prefix-block-no-indent-body", source, expected_json);
 }
 #[test]
+fn prefix_block_open_at_eof() {
+    let source = include_str!("../../../test-suite/prefix-block-open-at-eof/input.mical");
+    let expected_json = include_str!("../../../test-suite/prefix-block-open-at-eof/output.json");
+    let snapshot = utils::make_snapshot("prefix-block-open-at-eof", source);
+    utils::assert_snapshot!(snapshot);
+    utils::assert_json_output("prefix-block-open-at-eof", source, expected_json);
+}
+#[test]
 fn prefix_block_quoted_key() {
     let source = include_str!("../../../test-suite/prefix-block-quoted-key/input.mical");
     let expected_json = include_str!("../../../test-suite/prefix-block-quoted-key/output.json");

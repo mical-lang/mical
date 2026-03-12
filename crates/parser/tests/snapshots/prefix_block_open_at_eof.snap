@@ -1,0 +1,52 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# prefix-block-open-at-eof
+
+## Input
+
+```
+key {
+```
+
+## CST
+
+```
+SOURCE_FILE@0..5
+  PREFIX_BLOCK@0..5
+    WORD_KEY@0..3
+      WORD@0..3 "key"
+    SPACE@3..4 " "
+    OPEN_BRACE@4..5 "{"
+```
+
+## Syntax Error
+
+```
+[
+    SyntaxError {
+        message: "missing closing '}' for prefix block",
+        range: 5..5,
+    },
+]
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        PrefixBlock {
+            key: WordKey {
+                word: WORD@0..3 "key",
+            },
+            open_brace: OPEN_BRACE@4..5 "{",
+            items: [],
+            close_brace: none,
+        },
+    ],
+}
+```
+
+vim:ft=markdown

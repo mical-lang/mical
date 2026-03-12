@@ -1284,6 +1284,12 @@ fn prefix_block_no_indent_body() {
     utils::assert_snapshot!(snapshot);
 }
 #[test]
+fn prefix_block_open_at_eof() {
+    let source = include_str!("../../../test-suite/prefix-block-open-at-eof/input.mical");
+    let snapshot = utils::make_snapshot("prefix-block-open-at-eof", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
 fn prefix_block_quoted_key() {
     let source = include_str!("../../../test-suite/prefix-block-quoted-key/input.mical");
     let snapshot = utils::make_snapshot("prefix-block-quoted-key", source);

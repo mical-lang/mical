@@ -115,7 +115,6 @@ fn prefix_block(p: &mut Parser, m: Marker) {
 
     p.bump(T!['{']);
     p.eat(T![' ']);
-    p.bump(T!['\n']);
 
     loop {
         while p.eat(T!['\n']) {}

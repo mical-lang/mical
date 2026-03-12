@@ -1,0 +1,25 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# prefix-block-open-at-eof
+
+## Input
+
+```mical
+key {
+```
+
+## Parser Error
+
+```
+5..5: missing closing '}' for prefix block
+
+```
+
+## JSON
+
+```json
+{}
+```
+
+vim:ft=markdown

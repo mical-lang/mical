@@ -184,11 +184,28 @@ impl Eval for ast::Integer {
     type Output = Option<TextId>;
 
     fn eval(&self, ctx: &mut Context) -> Self::Output {
+        let numeral = self.numeral()?;
+        let text = numeral.text();
+        let valid = match text.as_bytes() {
+            [b'0', b'b', ..] => text[2..].bytes().all(|b| matches!(b, b'0' | b'1' | b'_')),
+            [b'0', b'o', ..] => text[2..].bytes().all(|b| matches!(b, b'0'..=b'7' | b'_')),
+            [b'0', b'x', ..] => text[2..]
+                .bytes()
+                .all(|b| matches!(b, b'0'..=b'9' | b'a'..=b'f' | b'A'..=b'F' | b'_')),
+            _ => true,
+        };
+        if !valid {
+            ctx.errors.push(Error::InvalidRadixDigits {
+                range: numeral.text_range(),
+                text: text.to_string(),
+            });
+            return None;
+        }
         let buf = ctx.temporary_string.get();
         if let Some(sign) = self.sign() {
             buf.push_str(sign.text());
         }
-        buf.push_str(self.numeral()?.text());
+        buf.push_str(text);
         Some(ctx.arena.alloc(buf))
     }
 }

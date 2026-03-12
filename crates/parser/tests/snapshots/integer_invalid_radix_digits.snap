@@ -1,0 +1,78 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# integer-invalid-radix-digits
+
+## Input
+
+```
+a 0b2
+b 0o8
+c 0xG
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..18
+  ENTRY@0..6
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    INTEGER@2..5
+      NUMERAL@2..5 "0b2"
+    NEWLINE@5..6 "\n"
+  ENTRY@6..12
+    WORD_KEY@6..7
+      WORD@6..7 "b"
+    SPACE@7..8 " "
+    INTEGER@8..11
+      NUMERAL@8..11 "0o8"
+    NEWLINE@11..12 "\n"
+  ENTRY@12..18
+    WORD_KEY@12..13
+      WORD@12..13 "c"
+    SPACE@13..14 " "
+    LINE_STRING@14..17
+      STRING@14..17 "0xG"
+    NEWLINE@17..18 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    shebang: none,
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@2..5 "0b2",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@6..7 "b",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@8..11 "0o8",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@12..13 "c",
+            },
+            value: LineString {
+                string: STRING@14..17 "0xG",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

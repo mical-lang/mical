@@ -1159,6 +1159,14 @@ fn integer_hex_extended() {
     utils::assert_json_output("integer-hex-extended", source, expected_json);
 }
 #[test]
+fn integer_invalid_radix_digits() {
+    let source = include_str!("../../../test-suite/integer-invalid-radix-digits/input.mical");
+    let expected_json = include_str!("../../../test-suite/integer-invalid-radix-digits/output.json");
+    let snapshot = utils::make_snapshot("integer-invalid-radix-digits", source);
+    utils::assert_snapshot!(snapshot);
+    utils::assert_json_output("integer-invalid-radix-digits", source, expected_json);
+}
+#[test]
 fn integer_large() {
     let source = include_str!("../../../test-suite/integer-large/input.mical");
     let expected_json = include_str!("../../../test-suite/integer-large/output.json");

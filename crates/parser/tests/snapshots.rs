@@ -858,6 +858,12 @@ fn integer_hex_extended() {
     utils::assert_snapshot!(snapshot);
 }
 #[test]
+fn integer_invalid_radix_digits() {
+    let source = include_str!("../../../test-suite/integer-invalid-radix-digits/input.mical");
+    let snapshot = utils::make_snapshot("integer-invalid-radix-digits", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
 fn integer_large() {
     let source = include_str!("../../../test-suite/integer-large/input.mical");
     let snapshot = utils::make_snapshot("integer-large", source);

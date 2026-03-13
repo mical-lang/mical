@@ -103,6 +103,12 @@ fn entry_or_prefix_block(p: &mut Parser, indent_level: u32) {
         m.complete(p, ERROR);
     }
 
+    if p.at(T!['\n']) || p.at_eof() {
+        p.error("missing value for the key");
+        m.complete(p, ENTRY);
+        return;
+    }
+
     if p.at(T!['{']) && is_rest_of_line_blank(p, 1) {
         prefix_block(p, m);
     } else {

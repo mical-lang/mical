@@ -1056,6 +1056,12 @@ fn key_value_sign_integer_at_eof() {
     utils::assert_snapshot!(snapshot);
 }
 #[test]
+fn key_value_space_no_value() {
+    let source = include_str!("../../../test-suite/key-value-space-no-value/input.mical");
+    let snapshot = utils::make_snapshot("key-value-space-no-value", source);
+    utils::assert_snapshot!(snapshot);
+}
+#[test]
 fn key_value_trailing_space() {
     let source = include_str!("../../../test-suite/key-value-trailing-space/input.mical");
     let snapshot = utils::make_snapshot("key-value-trailing-space", source);

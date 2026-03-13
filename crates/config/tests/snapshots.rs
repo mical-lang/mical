@@ -1423,6 +1423,14 @@ fn key_value_sign_integer_at_eof() {
     utils::assert_json_output("key-value-sign-integer-at-eof", source, expected_json);
 }
 #[test]
+fn key_value_space_no_value() {
+    let source = include_str!("../../../test-suite/key-value-space-no-value/input.mical");
+    let expected_json = include_str!("../../../test-suite/key-value-space-no-value/output.json");
+    let snapshot = utils::make_snapshot("key-value-space-no-value", source);
+    utils::assert_snapshot!(snapshot);
+    utils::assert_json_output("key-value-space-no-value", source, expected_json);
+}
+#[test]
 fn key_value_trailing_space() {
     let source = include_str!("../../../test-suite/key-value-trailing-space/input.mical");
     let expected_json = include_str!("../../../test-suite/key-value-trailing-space/output.json");

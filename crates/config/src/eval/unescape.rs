@@ -17,7 +17,7 @@ pub(super) fn unescape(
         let Some(c) = chars.next() else {
             let start = offset + result.len() as u32;
             let range = TextRange::at(start.into(), 1.into());
-            errors.push(Error::EmptyExpace { range });
+            errors.push(Error::EmptyEscape { range });
             continue;
         };
         result.push(match c {
@@ -87,14 +87,14 @@ mod tests {
         assert_eq!(result, "");
         assert_eq!(errors.len(), 1);
         assert!(
-            matches!(&errors[0], Error::EmptyExpace { range } if *range == TextRange::at(0.into(), 1.into()))
+            matches!(&errors[0], Error::EmptyEscape { range } if *range == TextRange::at(0.into(), 1.into()))
         );
 
         let (result, errors) = unescape2(r"empty\");
         assert_eq!(result, "empty");
         assert_eq!(errors.len(), 1);
         assert!(
-            matches!(&errors[0], Error::EmptyExpace { range } if *range == TextRange::at(5.into(), 1.into()))
+            matches!(&errors[0], Error::EmptyEscape { range } if *range == TextRange::at(5.into(), 1.into()))
         );
     }
 }

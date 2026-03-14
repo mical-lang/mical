@@ -62,7 +62,7 @@ impl<'a> KeyGroups<'a> {
 }
 
 impl<'a> Iterator for KeyGroups<'a> {
-    type Item = (&'a str, SmallVec<[u32; 2]>);
+    type Item = (&'a str, SmallVec<[u32; 4]>);
 
     fn next(&mut self) -> Option<Self::Item> {
         while self.pos < self.config.group_order.len() {
@@ -70,8 +70,7 @@ impl<'a> Iterator for KeyGroups<'a> {
             self.pos += 1;
             if (gs as usize) >= self.lo && (gs as usize) < self.hi {
                 let (gs, count) = (gs as usize, count as usize);
-                let mut idxs: SmallVec<[u32; 2]> =
-                    self.config.sorted_indices[gs..(gs + count)].to_smallvec();
+                let mut idxs = self.config.sorted_indices[gs..(gs + count)].to_smallvec();
                 idxs.sort_unstable();
                 let key = &self.config.arena[self.config.entries[idxs[0] as usize].0];
                 return Some((key, idxs));
@@ -83,14 +82,14 @@ impl<'a> Iterator for KeyGroups<'a> {
 
 pub struct Values<'a> {
     groups: KeyGroups<'a>,
-    current_idxs: SmallVec<[u32; 2]>,
+    current_idxs: SmallVec<[u32; 4]>,
     idx_pos: usize,
 }
 // Most cases have 1 entry per key, use SmallVec to optimize for that case.
-// SmallVec<[u32; 2]> is used because it has the same size as SmallVec<[u32; 1]>.
+// SmallVec<[u32; 4]> is used because it has the same size as SmallVec<[u32; 1]>.
 const _: () = {
-    assert!(size_of::<SmallVec<[u32; 2]>>() == size_of::<SmallVec<[u32; 1]>>());
-    assert!(size_of::<SmallVec<[u32; 3]>>() > size_of::<SmallVec<[u32; 1]>>());
+    assert!(size_of::<SmallVec<[u32; 4]>>() == size_of::<SmallVec<[u32; 1]>>());
+    assert!(size_of::<SmallVec<[u32; 5]>>() > size_of::<SmallVec<[u32; 1]>>());
 };
 
 impl<'a> Iterator for Values<'a> {
@@ -180,10 +179,10 @@ impl Config {
             let key_id = self.entries[*i as usize].0;
             &self.arena[key_id] <= key
         }) + lo;
-        let idxs: SmallVec<[u32; 2]> = {
+        let idxs: SmallVec<[u32; 4]> = {
             const _: () = {
-                assert!(size_of::<SmallVec<[u32; 2]>>() == size_of::<SmallVec<[u32; 1]>>());
-                assert!(size_of::<SmallVec<[u32; 3]>>() > size_of::<SmallVec<[u32; 1]>>());
+                assert!(size_of::<SmallVec<[u32; 4]>>() == size_of::<SmallVec<[u32; 1]>>());
+                assert!(size_of::<SmallVec<[u32; 5]>>() > size_of::<SmallVec<[u32; 1]>>());
             };
             let mut v = self.sorted_indices[lo..hi].to_smallvec();
             v.sort_unstable(); // insertion order

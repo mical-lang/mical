@@ -6,80 +6,113 @@ Prefix blocks group entries under a common key prefix. They are a syntactic conv
 
 A prefix block consists of:
 
-1. A [key](./keys.md) (word key or quoted key).
-2. A space separator.
-3. An opening brace `{`.
-4. The rest of the line after `{` must be blank (only optional whitespace followed by a newline or EOF). If `{` is followed by non-whitespace content on the same line, the entire thing is parsed as a regular entry with a [Line String](./values.md#line-string) value — not as a block.
-5. A body of items (entries, nested prefix blocks, comments, directives).
-6. A closing brace `}` on its own line, optionally preceded and followed by whitespace.
+1. A [key](./keys.md) (word key or quoted key) alone on its line — the **opener**. After [comment stripping](./syntax.md#comments), nothing but the key may remain on the line.
+2. A body of items (entries, nested prefix blocks, block strings), each indented **deeper** than the opener's key.
 
 ```mical
-section {
-  key value
+server.
+  host localhost
+  port 8080
+```
+
+```json
+{
+  "server.host": "localhost",
+  "server.port": 8080
 }
 ```
 
-### Opening brace recognition
+### Opener recognition
 
-The `{` is recognized as a block opener only when it is the sole non-whitespace character remaining on the line after the key separator. If anything else follows on the same line, the `{` is part of the value.
+A key alone on a line is recognized as a block opener when the next item line — skipping blank lines and comment-only lines — is indented deeper than the key:
 
 ```mical
-a { port 80 }
+server.
+  # comment lines do not affect recognition
+  host localhost
 ```
 
-This is an entry with key `a` and Line String value `"{ port 80 }"`.
+If the next item line is **not** deeper (same indentation, shallower, or EOF), the key is not an opener and the parse error "missing value for the key" is produced (see [Keys](./keys.md#key-without-a-value)):
 
 ```mical
-a {not a block
+lonely
+next 1
 ```
 
-This is an entry with key `a` and Line String value `"{not a block"`.
+There is no syntax for an empty block: a prefix block always contains at least one item. (A prefix block contributes no output of its own, so an empty block would produce nothing anyway.)
+
+An inline comment after the key does not prevent opener recognition:
 
 ```mical
-a {
-  key value
+server. # the web server
+  host localhost
+```
+
+## Body Indentation
+
+The first item of the body determines the **body indent** \\( I_{body} \\), which must be strictly greater than the opener key's indentation \\( I_{key} \\). Every subsequent item of the body must be indented at exactly \\( I_{body} \\).
+
+The amount of indentation is free (any number of spaces ≥ 1 deeper than the opener) and is chosen independently for each block.
+
+An item line ends the block when its indentation is \\( \le I_{key} \\). The indentation of such a line must match the body indent of one of the enclosing blocks (or column 0 for the top level); otherwise the parse error "indentation does not match any enclosing block" is produced.
+
+```mical
+a.
+  b.
+    c 1
+x 2
+```
+
+The line `x 2` at column 0 closes both `b.` and `a.`.
+
+```json
+{
+  "a.b.c": 1,
+  "x": 2
 }
 ```
 
-This is a prefix block because `{` is followed only by a newline.
-
-A `{` with trailing spaces before the newline is also recognized:
-
 ```mical
-section {··
-  key value
-}
+a.
+    x 1
+  y 2
 ```
 
-(where `··` represents spaces) — this is still a prefix block.
+The line `y 2` has indentation 2, which matches neither the body indent of `a.` (4) nor the top level (0) — this is a parse error.
 
-### Closing brace recognition
-
-The closing `}` is recognized when it appears on a line by itself (optionally surrounded by whitespace). Specifically, the parser checks whether the line consists of optional leading spaces, a `}`, and then only whitespace until the newline or EOF.
-
-If `}` appears on a line with other content, it is treated as a regular key, not as a closing brace:
+A line indented deeper than \\( I_{body} \\), where the preceding item is not a block opener (and not a block string header), is also a parse error: "unexpected indentation".
 
 ```mical
-section {
-  } value
-}
+a 1
+  b 2
 ```
 
-Here `} value` is an entry within the block (key `}`, value `"value"`), and the standalone `}` on the last line closes the block.
+`a 1` is an entry, not an opener, so the indented `b 2` is a parse error.
 
-### Missing closing brace
+Blank lines and comment-only lines may appear at any indentation and never open or close a block:
 
-If EOF is reached before a closing `}` is found, the error "missing closing '}' for prefix block" is produced. The block is still included in the AST with a missing close brace.
+```mical
+server.
+  host localhost
+# a comment at column 0 does not close the block
+  port 8080
+```
+
+```json
+{
+  "server.host": "localhost",
+  "server.port": 8080
+}
+```
 
 ## Prefix Concatenation
 
 During evaluation, the key of the prefix block is prepended to each key inside the block. No separator character (such as `.`) is automatically inserted. The concatenation is a simple string join.
 
 ```mical
-server {
+server
   .host localhost
   .port 8080
-}
 ```
 
 The inner keys are `.host` and `.port`. Prepending `server` yields `server.host` and `server.port`.
@@ -91,12 +124,19 @@ The inner keys are `.host` and `.port`. Prepending `server` yields `server.host`
 }
 ```
 
-If the inner keys do not start with `.`, the prefix is joined directly:
+Equivalently, the dot can be written on the opener instead:
 
 ```mical
-http_ {
+server.
+  host localhost
+  port 8080
+```
+
+If neither side provides a separator, the prefix is joined directly:
+
+```mical
+http_
   port 80
-}
 ```
 
 ```json
@@ -107,14 +147,12 @@ This is equivalent to writing `http_port 80` at the top level.
 
 ## Nesting
 
-Prefix blocks can be nested. The prefixes accumulate from the outermost block inward.
+Prefix blocks can be nested: an opener inside a block body introduces a deeper body. The prefixes accumulate from the outermost block inward.
 
 ```mical
-outer {
-  inner {
+outer
+  inner
     key value
-  }
-}
 ```
 
 The key `key` is inside `inner`, which is inside `outer`. The accumulated key is `outerinnerkey`.
@@ -126,15 +164,31 @@ The key `key` is inside `inner`, which is inside `outer`. The accumulated key is
 To get dotted keys, include the dots explicitly:
 
 ```mical
-a. {
-  b. {
+a.
+  b.
     c value
-  }
-}
 ```
 
 ```json
 { "a.b.c": "value" }
+```
+
+Entries and nested blocks can be mixed freely within a body:
+
+```mical
+server.
+  host localhost
+  tls.
+    cert /etc/ssl/cert.pem
+  port 8080
+```
+
+```json
+{
+  "server.host": "localhost",
+  "server.tls.cert": "/etc/ssl/cert.pem",
+  "server.port": 8080
+}
 ```
 
 ## Blocks With Various Value Types
@@ -142,32 +196,26 @@ a. {
 Entries inside prefix blocks support all value types — Line Strings, Integers, Booleans, Quoted Strings, and [Block Strings](./block_strings.md).
 
 ```mical
-block {
+block.
   str hello world
   num 42
   flag true
   neg -1
   quoted "value"
-}
+  text |
+    multi
+    line
 ```
 
 ```json
 {
-  "blockstr": "hello world",
-  "blocknum": 42,
-  "blockflag": true,
-  "blockneg": -1,
-  "blockquoted": "value"
+  "block.str": "hello world",
+  "block.num": 42,
+  "block.flag": true,
+  "block.neg": -1,
+  "block.quoted": "value",
+  "block.text": "multi\nline\n"
 }
 ```
 
-## Empty Blocks
-
-A prefix block with no entries is valid:
-
-```mical
-empty {
-}
-```
-
-This produces no key-value entries in the output.
+For block strings inside a prefix block, the parent indentation \\( I_{parent} \\) is the indentation of the entry's key within the body — see [Nested Block Strings](./block_strings.md#nested-block-strings).

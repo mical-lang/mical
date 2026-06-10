@@ -9,10 +9,9 @@ host    localhost
 port    8080
 enabled true
 
-server. {
+server.
   timeout 30
   retries 3
-}
 ```
 
 ```sh

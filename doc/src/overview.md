@@ -1,7 +1,7 @@
 # Language Overview
 
 MICAL is a line-oriented configuration language designed for flat structures and readability.
-A MICAL file is a sequence of key-value entries. Scope nesting is defined by braces `{ }`, not by indentation.
+A MICAL file is a sequence of key-value entries. Scope nesting is expressed by indentation, but the output remains logically flat.
 
 ## Key-Value Entries
 
@@ -71,28 +71,29 @@ Note that `10 items` is a Line String (not integer) and `true story` is a Line S
 
 ## Comments
 
-Lines starting with `#` followed by a space (or nothing) are comments. There are no inline comments.
+A `#` at the start of a line, or preceded by a space, starts a comment that runs to the end of the line. A `#` without a preceding space is part of the value.
 
 ```mical
 # This is a comment
-key value # this is NOT a comment, it is part of the value
+key value # this is an inline comment
+url https://example.com/page#section
 ```
 
 ```json
 {
-  "key": "value # this is NOT a comment, it is part of the value"
+  "key": "value",
+  "url": "https://example.com/page#section"
 }
 ```
 
 ## Prefix Blocks
 
-Blocks group entries under a common key prefix. **They do not create nested objects and do not insert any separator (such as `.`).**
+Blocks group entries under a common key prefix. A key alone on its line, followed by more-indented entries, opens a block. **Blocks do not create nested objects and do not insert any separator (such as `.`).**
 
 ```mical
-server {
-    .host localhost
-    .port 8080
-}
+server.
+  host localhost
+  port 8080
 ```
 
 ```json
@@ -105,28 +106,15 @@ server {
 Since no separator is inserted, omitting the `.` changes the result:
 
 ```mical
-http_ {
-    port 80
-}
+http_
+  port 80
 ```
 
 This produces the key `http_port`, equivalent to writing `http_port 80`.
 
-A `{` is only recognized as starting a block when it is the last non-whitespace character on the line. Otherwise it is part of the value.
-
-```mical
-data { port 80 }
-```
-
-```json
-{
-  "data": "{ port 80 }"
-}
-```
-
 ## Block Strings
 
-Multi-line string values use the `|` (literal) or `>` (folded) header. Indentation of the first content line defines the base indent, which is stripped.
+Multi-line string values use the `|` (literal) or `>` (folded) header. Indentation of the line immediately after the header defines the base indent, which is stripped from each line.
 
 ```mical
 description |
@@ -140,4 +128,4 @@ description |
 }
 ```
 
-Chomping indicators (`+` keep, `-` strip, default clip) control trailing newlines. See [Block Strings](./specification/block_strings.md) for the full algorithm.
+An explicit indentation indicator (`|2`) fixes the base indent when the first line should itself start with spaces. Chomping indicators (`+` keep, `-` strip, default clip) control trailing newlines. See [Block Strings](./specification/block_strings.md) for the full algorithm.

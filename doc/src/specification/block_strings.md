@@ -7,73 +7,130 @@ Block strings are multi-line string values. They provide control over indentatio
 A block string begins with a header on the same line as the key:
 
 ```
-key <style>[chomp]
+key <style>[indent][chomp]
     content line 1
     content line 2
 ```
 
-The header consists of:
+The header consists of, in this fixed order:
 
 - **Style indicator** (required): `|` for literal style, `>` for folded style.
+- **Indentation indicator** (optional): a single digit `1`–`9`. See [Explicit Indentation](#explicit-indentation).
 - **Chomping indicator** (optional): `+` (keep), `-` (strip), or omitted (clip).
 
-After the style and optional chomping indicator, only whitespace (trailing spaces) and a newline (or EOF) may appear. If any other content follows on the same line, **the value is not a block string** and falls back to a [Line String](./values.md#line-string):
+After the header, only whitespace and an optional [inline comment](./syntax.md#comments) may appear before the newline (or EOF). If any other content follows on the same line, **the value is not a block string** and falls back to a [Line String](./values.md#line-string):
 
 ```mical
 a |not block
 b >not fold
 c |+not block
 d |abc
-e > text after
+e |-2
+f | # comment
 ```
 
-All five values above are Line Strings: `"|not block"`, `">not fold"`, `"|+not block"`, `"|abc"`, `"> text after"`.
+Values `a` through `e` are Line Strings: `"|not block"`, `">not fold"`, `"|+not block"`, `"|abc"`, `"|-2"` (the indicators are out of order: indentation must come before chomping). Value `f` **is** a block string, because the comment is stripped before the header is interpreted.
 
-## Base Indent Detection
+## Base Indent
 
-The body of a block string starts on the line after the header. The parser scans forward to find the **first line with content** (skipping empty lines and whitespace-only lines). The indentation of that first content line (number of leading spaces) is the **base indent**, denoted \\( I_{base} \\).
+The body of a block string consists of the lines after the header. Content lines are identified by their indentation relative to a **base indent**, denoted \\( I_{base} \\), which is stripped from each content line.
 
-Let \\( I_{parent} \\) denote the indentation level of the entry's key (the number of leading spaces on the key's line).
+Let \\( I_{parent} \\) denote the indentation level of the entry's key (the number of leading spaces on the key's line). \\( I_{base} \\) is determined in one of two ways:
 
-\\( I_{base} \\) must satisfy \\( I_{base} > I_{parent} \\). If the first content line has \\( I_{base} \le I_{parent} \\), the block string has no content lines (the body is empty) and parsing stops.
+### Automatic Detection
 
-If no content line exists (only empty lines or EOF follow the header), the block string has an empty body.
+When no indentation indicator is given, \\( I_{base} \\) is inferred from **the line immediately after the header**. There is no scanning or skipping:
 
-### Example
+- If that line is completely empty (no characters before the newline), inference is impossible and the parse error "cannot infer base indent from an empty line" is produced.
+- Otherwise, \\( I_{base} \\) is the number of leading spaces on that line. A **whitespace-only line is treated as content** for this purpose: all of its spaces count as leading spaces, and the line itself becomes an empty line within the block.
+
+\\( I_{base} \\) must satisfy \\( I_{base} > I_{parent} \\). If the line has \\( I_{base} \le I_{parent} \\), the block string has no content lines (the body is empty) and that line belongs to the outer scope. If EOF immediately follows the header, the body is empty.
 
 ```mical
 key |
     content starts here
 ```
 
-`key` is at indentation 0, so \\( I_{parent} = 0 \\). The first content line has 4 leading spaces, so \\( I_{base} = 4 \\).
+`key` is at indentation 0, so \\( I_{parent} = 0 \\). The next line has 4 leading spaces, so \\( I_{base} = 4 \\).
+
+An empty line immediately after the header is an error:
+
+```mical
+key |
+
+  content
+```
+
+This produces the error "cannot infer base indent from an empty line". To start a block string with empty lines, use the [explicit indentation indicator](#explicit-indentation) — no inference takes place:
+
+```mical
+key |2
+
+  content
+```
+
+```json
+{ "key": "\ncontent\n" }
+```
+
+A whitespace-only line in inference position sets \\( I_{base} \\) by its space count, which may then make the following lines under-indented:
+
+```mical
+key |
+···
+··a
+```
+
+(where `·` represents a space) The whitespace-only line has 3 spaces, so \\( I_{base} = 3 \\). The line `··a` then has content at \\( I_L = 2 < I_{base} \\), producing the error "block string line has insufficient indentation".
+
+### Explicit Indentation
+
+When the indentation indicator \\( n \\) is given, the base indent is fixed relative to the key's indentation:
+
+\\[ I_{base} = I_{parent} + n \\]
+
+This is required when the first content line should itself start with spaces, which automatic detection cannot distinguish from indentation:
+
+```mical
+key |2
+      indented first line
+  second line
+```
+
+\\( I_{parent} = 0 \\), so \\( I_{base} = 2 \\). The first line has 6 leading spaces; stripping 2 leaves `"    indented first line"`. The second line strips to `"second line"`.
+
+```json
+{ "key": "    indented first line\nsecond line\n" }
+```
 
 ## Line Classification
 
-After determining \\( I_{base} \\), the parser processes each subsequent line. Let \\( I_L \\) be the number of leading spaces on line \\( L \\).
+After determining \\( I_{base} \\), the parser processes each subsequent line. Let \\( I_L \\) be the number of leading spaces on line \\( L \\). The cases below are checked in order; the first match applies.
 
-1. **Content line** (\\( I_L \ge I_{base} \\)): The first \\( I_{base} \\) spaces are stripped. The remaining characters (including any extra spaces beyond \\( I_{base} \\)) become the line's content.
+1. **Blank line** (empty or spaces only; see [Whitespace](./syntax.md#whitespace)): treated as an empty line within the block, regardless of how many spaces it contains.
 
-2. **Block termination** (\\( I_L \le I_{parent} \\)): The block ends. This line belongs to the outer scope and is not part of the block string.
+2. **Content line** (\\( I_L \ge I_{base} \\)): The first \\( I_{base} \\) spaces are stripped. The remaining characters (including any extra spaces beyond \\( I_{base} \\)) become the line's content.
 
-3. **Whitespace-only line** (\\( I_{parent} < I_L < I_{base} \\) and no non-space content after the spaces): treated as an empty line within the block.
+3. **Block termination** (\\( I_L \le I_{parent} \\)): The block ends. This line belongs to the outer scope and is not part of the block string.
 
-4. **Insufficient indentation error** (\\( I_{parent} < I_L < I_{base} \\) and the line has non-space content): produces the error "block string line has insufficient indentation".
+4. **Insufficient indentation error** (\\( I_{parent} < I_L < I_{base} \\)): produces the error "block string line has insufficient indentation".
 
-5. **Completely empty line** (no characters before the newline): treated as an empty line within the block.
+Tabs have no special role in this classification: \\( I_L \\) counts leading **spaces** only, and the general [tab rule](./syntax.md#whitespace) does not apply within the body. A tab on a content line — even immediately after the base indent — is literal content. A line whose leading spaces stop short of \\( I_{base} \\) because of a tab falls under case 3 or 4 like any other line.
 
-6. **Non-space at column 0**: The block ends (equivalent to case 2 with \\( I_L = 0 \\)).
+The block also ends at EOF. Blank lines never terminate the block: trailing empty lines before the terminating line (or EOF) belong to the block, and the [chomping indicator](#chomping-indicators) decides how they appear in the output.
 
-7. **Tab encountered**: Because tab indentation is globally forbidden, a tab at the start of a line terminates the block and produces an error.
+Comments are never recognized within the block — `#` is a literal character on every line of the body:
 
-### Continuation condition
+```mical
+key |
+  line 1
+  # not a comment
+  line 2 # also not a comment
+```
 
-After processing a content line or an empty line, the parser checks whether the block continues by peeking at the next line:
-
-- If the next line is empty (newline immediately), the block continues.
-- If the next line starts with spaces and has \\( I_L > I_{parent} \\), the block continues (this covers both content lines and error lines).
-- If the next line starts with non-space content at column 0, or has \\( I_L \le I_{parent} \\), the block ends.
-- If EOF follows, the block ends.
+```json
+{ "key": "line 1\n# not a comment\nline 2 # also not a comment\n" }
+```
 
 ## Indentation Stripping Example
 
@@ -83,7 +140,7 @@ foo |
    b
 ```
 
-\\( I_{parent} = 0 \\), \\( I_{base} = 2 \\) (first content line `  a` has 2 spaces).
+\\( I_{parent} = 0 \\), \\( I_{base} = 2 \\) (the line after the header, `  a`, has 2 leading spaces).
 
 - Line `  a`: \\( I_L = 2 \ge 2 \\). Strip 2 spaces → content `"a"`.
 - Line `   b`: \\( I_L = 3 \ge 2 \\). Strip 2 spaces → content `" b"` (the extra space is preserved).
@@ -95,42 +152,37 @@ Result (literal style, default chomp): `"a\n b\n"`.
 When a block string appears inside a [prefix block](./prefix_blocks.md), \\( I_{parent} \\) is the indentation of the entry's key within the prefix block.
 
 ```mical
-section {
+section.
   desc |
     block line
   other value
-}
 ```
 
-Here `desc` is at indentation 2, so \\( I_{parent} = 2 \\). The first content line `    block line` has \\( I_{base} = 4 \\). The line `  other value` has \\( I_L = 2 = I_{parent} \\), so the block ends and `other value` is a separate entry.
+Here `desc` is at indentation 2, so \\( I_{parent} = 2 \\). The line after the header, `    block line`, has 4 leading spaces, so \\( I_{base} = 4 \\). The line `  other value` has \\( I_L = 2 = I_{parent} \\), so the block ends and `other value` is a separate entry within `section.`.
 
 ## Empty Lines Within a Block
 
-Empty lines (containing only a newline, or only spaces followed by a newline) within the block are preserved as empty lines in the output. Even whitespace-only lines with fewer spaces than \\( I_{base} \\) (but more than \\( I_{parent} \\)) are treated as empty lines, not errors.
+After \\( I_{base} \\) has been determined, empty lines (containing only a newline) and whitespace-only lines (containing only spaces followed by a newline) within the block are preserved as empty lines in the output. The number of spaces on a whitespace-only line is irrelevant — it is an empty line whether it has fewer or more spaces than \\( I_{base} \\).
 
 ```mical
 foo |
-
   a
+
+  b
 ```
 
-The completely empty line before `··a` is an empty line in the output (where `·` represents a space). Result: `"\na\n"`.
+The completely empty line between `a` and `b` is an empty line in the output. Result: `"a\n\nb\n"`.
 
 ```mical
 foo |
-·
 ··a
+·····
+··b
 ```
 
-The line with a single space (`·`, \\( I_L = 1 \\), which satisfies \\( 0 < 1 < 2 \\) and is whitespace-only) is also treated as an empty line. Result: `"\na\n"`.
+(where `·` represents a space) The line with five spaces is whitespace-only and treated as an empty line. Result: `"a\n\nb\n"`.
 
-```mical
-foo |
-···
-··a
-```
-
-The line with three spaces (`···`, \\( I_L = 3 \\)) satisfies \\( I_L \ge I_{base} = 2 \\). After stripping \\( I_{base} \\) spaces, one space remains, but the line is still whitespace-only (the remaining space is followed by a newline). This is treated as an empty line. Result: `"\na\n"`.
+Note that the line **immediately after the header** is special when automatic detection is used: it participates in [base indent inference](#automatic-detection), so it must not be completely empty.
 
 ## Styles
 

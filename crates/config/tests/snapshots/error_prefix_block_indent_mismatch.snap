@@ -1,0 +1,31 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# error-prefix-block-indent-mismatch
+
+## Input
+
+```mical
+a.
+    x 1
+  y 2
+
+```
+
+## Parser Error
+
+```
+11..13: indentation does not match any enclosing block
+
+```
+
+## JSON
+
+```json
+{
+  "a.x": 1,
+  "y": 2
+}
+```
+
+vim:ft=markdown

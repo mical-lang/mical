@@ -1,0 +1,25 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# block-string-gen-folded-i2-clip-simple-dedent
+
+## Input
+
+```mical
+key >2
+  a
+  b
+end marker
+
+```
+
+## JSON
+
+```json
+{
+  "key": "a b\n",
+  "end": "marker"
+}
+```
+
+vim:ft=markdown

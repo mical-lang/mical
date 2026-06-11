@@ -1,0 +1,22 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# prefix-block-opener-inline-comment
+
+## Input
+
+```mical
+server. # the web server
+  host localhost
+
+```
+
+## JSON
+
+```json
+{
+  "server.host": "localhost"
+}
+```
+
+vim:ft=markdown

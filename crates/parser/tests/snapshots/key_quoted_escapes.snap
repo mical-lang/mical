@@ -1,0 +1,87 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# key-quoted-escapes
+
+## Input
+
+```
+"a\"b" v1
+'c\'d' v2
+"e\\f" v3
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..30
+  ENTRY@0..10
+    QUOTED_KEY@0..6
+      DOUBLE_QUOTE@0..1 "\""
+      STRING@1..5 "a\\\"b"
+      DOUBLE_QUOTE@5..6 "\""
+    SPACE@6..7 " "
+    LINE_STRING@7..9
+      STRING@7..9 "v1"
+    NEWLINE@9..10 "\n"
+  ENTRY@10..20
+    QUOTED_KEY@10..16
+      SINGLE_QUOTE@10..11 "'"
+      STRING@11..15 "c\\'d"
+      SINGLE_QUOTE@15..16 "'"
+    SPACE@16..17 " "
+    LINE_STRING@17..19
+      STRING@17..19 "v2"
+    NEWLINE@19..20 "\n"
+  ENTRY@20..30
+    QUOTED_KEY@20..26
+      DOUBLE_QUOTE@20..21 "\""
+      STRING@21..25 "e\\\\f"
+      DOUBLE_QUOTE@25..26 "\""
+    SPACE@26..27 " "
+    LINE_STRING@27..29
+      STRING@27..29 "v3"
+    NEWLINE@29..30 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    items: [
+        Entry {
+            key: QuotedKey {
+                open_quote: DOUBLE_QUOTE@0..1 "\"",
+                string: STRING@1..5 "a\\\"b",
+                close_quote: DOUBLE_QUOTE@0..1 "\"",
+            },
+            value: LineString {
+                string: STRING@7..9 "v1",
+            },
+        },
+        Entry {
+            key: QuotedKey {
+                open_quote: SINGLE_QUOTE@10..11 "'",
+                string: STRING@11..15 "c\\'d",
+                close_quote: SINGLE_QUOTE@10..11 "'",
+            },
+            value: LineString {
+                string: STRING@17..19 "v2",
+            },
+        },
+        Entry {
+            key: QuotedKey {
+                open_quote: DOUBLE_QUOTE@20..21 "\"",
+                string: STRING@21..25 "e\\\\f",
+                close_quote: DOUBLE_QUOTE@20..21 "\"",
+            },
+            value: LineString {
+                string: STRING@27..29 "v3",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

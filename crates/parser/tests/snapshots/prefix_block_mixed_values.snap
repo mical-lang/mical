@@ -1,0 +1,171 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# prefix-block-mixed-values
+
+## Input
+
+```
+block.
+  str hello world
+  num 42
+  flag true
+  neg -1
+  quoted "value"
+  text |
+    multi
+    line
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..100
+  PREFIX_BLOCK@0..100
+    WORD_KEY@0..6
+      WORD@0..6 "block."
+    NEWLINE@6..7 "\n"
+    SPACE@7..9 "  "
+    ENTRY@9..25
+      WORD_KEY@9..12
+        WORD@9..12 "str"
+      SPACE@12..13 " "
+      LINE_STRING@13..24
+        STRING@13..24 "hello world"
+      NEWLINE@24..25 "\n"
+    SPACE@25..27 "  "
+    ENTRY@27..34
+      WORD_KEY@27..30
+        WORD@27..30 "num"
+      SPACE@30..31 " "
+      INTEGER@31..33
+        NUMERAL@31..33 "42"
+      NEWLINE@33..34 "\n"
+    SPACE@34..36 "  "
+    ENTRY@36..46
+      WORD_KEY@36..40
+        WORD@36..40 "flag"
+      SPACE@40..41 " "
+      BOOLEAN@41..45
+        TRUE@41..45 "true"
+      NEWLINE@45..46 "\n"
+    SPACE@46..48 "  "
+    ENTRY@48..55
+      WORD_KEY@48..51
+        WORD@48..51 "neg"
+      SPACE@51..52 " "
+      INTEGER@52..54
+        MINUS@52..53 "-"
+        NUMERAL@53..54 "1"
+      NEWLINE@54..55 "\n"
+    SPACE@55..57 "  "
+    ENTRY@57..72
+      WORD_KEY@57..63
+        WORD@57..63 "quoted"
+      SPACE@63..64 " "
+      QUOTED_STRING@64..71
+        DOUBLE_QUOTE@64..65 "\""
+        STRING@65..70 "value"
+        DOUBLE_QUOTE@70..71 "\""
+      NEWLINE@71..72 "\n"
+    SPACE@72..74 "  "
+    ENTRY@74..100
+      WORD_KEY@74..78
+        WORD@74..78 "text"
+      SPACE@78..79 " "
+      BLOCK_STRING@79..100
+        BLOCK_STRING_HEADER@79..81
+          PIPE@79..80 "|"
+          NEWLINE@80..81 "\n"
+        SPACE@81..85 "    "
+        LINE_STRING@85..90
+          STRING@85..90 "multi"
+        NEWLINE@90..91 "\n"
+        SPACE@91..95 "    "
+        LINE_STRING@95..99
+          STRING@95..99 "line"
+        NEWLINE@99..100 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    items: [
+        PrefixBlock {
+            key: WordKey {
+                word: WORD@0..6 "block.",
+            },
+            items: [
+                Entry {
+                    key: WordKey {
+                        word: WORD@9..12 "str",
+                    },
+                    value: LineString {
+                        string: STRING@13..24 "hello world",
+                    },
+                },
+                Entry {
+                    key: WordKey {
+                        word: WORD@27..30 "num",
+                    },
+                    value: Integer {
+                        sign: none,
+                        numeral: NUMERAL@31..33 "42",
+                    },
+                },
+                Entry {
+                    key: WordKey {
+                        word: WORD@36..40 "flag",
+                    },
+                    value: Boolean {
+                        token: TRUE@41..45 "true",
+                    },
+                },
+                Entry {
+                    key: WordKey {
+                        word: WORD@48..51 "neg",
+                    },
+                    value: Integer {
+                        sign: MINUS@52..53 "-",
+                        numeral: NUMERAL@53..54 "1",
+                    },
+                },
+                Entry {
+                    key: WordKey {
+                        word: WORD@57..63 "quoted",
+                    },
+                    value: QuotedString {
+                        open_quote: DOUBLE_QUOTE@64..65 "\"",
+                        string: STRING@65..70 "value",
+                        close_quote: DOUBLE_QUOTE@64..65 "\"",
+                    },
+                },
+                Entry {
+                    key: WordKey {
+                        word: WORD@74..78 "text",
+                    },
+                    value: BlockString {
+                        header: BlockStringHeader {
+                            style: PIPE@79..80 "|",
+                            indent: none,
+                            chomp: none,
+                        },
+                        lines: [
+                            LineString {
+                                string: STRING@85..90 "multi",
+                            },
+                            LineString {
+                                string: STRING@95..99 "line",
+                            },
+                        ],
+                    },
+                },
+            ],
+        },
+    ],
+}
+```
+
+vim:ft=markdown

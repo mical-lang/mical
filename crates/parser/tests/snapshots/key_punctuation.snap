@@ -1,0 +1,91 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# key-punctuation
+
+## Input
+
+```
+a#b     value
+can't   value
+.dot    value
+-       value
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..56
+  ENTRY@0..14
+    WORD_KEY@0..3
+      WORD@0..3 "a#b"
+    SPACE@3..8 "     "
+    LINE_STRING@8..13
+      STRING@8..13 "value"
+    NEWLINE@13..14 "\n"
+  ENTRY@14..28
+    WORD_KEY@14..19
+      WORD@14..19 "can't"
+    SPACE@19..22 "   "
+    LINE_STRING@22..27
+      STRING@22..27 "value"
+    NEWLINE@27..28 "\n"
+  ENTRY@28..42
+    WORD_KEY@28..32
+      WORD@28..32 ".dot"
+    SPACE@32..36 "    "
+    LINE_STRING@36..41
+      STRING@36..41 "value"
+    NEWLINE@41..42 "\n"
+  ENTRY@42..56
+    WORD_KEY@42..43
+      WORD@42..43 "-"
+    SPACE@43..50 "       "
+    LINE_STRING@50..55
+      STRING@50..55 "value"
+    NEWLINE@55..56 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..3 "a#b",
+            },
+            value: LineString {
+                string: STRING@8..13 "value",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@14..19 "can't",
+            },
+            value: LineString {
+                string: STRING@22..27 "value",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@28..32 ".dot",
+            },
+            value: LineString {
+                string: STRING@36..41 "value",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@42..43 "-",
+            },
+            value: LineString {
+                string: STRING@50..55 "value",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

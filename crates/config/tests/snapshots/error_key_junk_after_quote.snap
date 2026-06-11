@@ -1,0 +1,28 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# error-key-junk-after-quote
+
+## Input
+
+```mical
+"quoted"ppp value
+
+```
+
+## Parser Error
+
+```
+8..11: unexpected token after quoted key
+
+```
+
+## JSON
+
+```json
+{
+  "quoted": "value"
+}
+```
+
+vim:ft=markdown

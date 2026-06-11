@@ -1,0 +1,21 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# value-line-string-midquote-comment
+
+## Input
+
+```mical
+a value "x # y" tail
+
+```
+
+## JSON
+
+```json
+{
+  "a": "value \"x"
+}
+```
+
+vim:ft=markdown

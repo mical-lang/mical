@@ -1,0 +1,74 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# block-string-comment-literal-body
+
+## Input
+
+```
+key |
+  line 1
+  # not a comment
+  line 2 # also not a comment
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..63
+  ENTRY@0..63
+    WORD_KEY@0..3
+      WORD@0..3 "key"
+    SPACE@3..4 " "
+    BLOCK_STRING@4..63
+      BLOCK_STRING_HEADER@4..6
+        PIPE@4..5 "|"
+        NEWLINE@5..6 "\n"
+      SPACE@6..8 "  "
+      LINE_STRING@8..14
+        STRING@8..14 "line 1"
+      NEWLINE@14..15 "\n"
+      SPACE@15..17 "  "
+      LINE_STRING@17..32
+        STRING@17..32 "# not a comment"
+      NEWLINE@32..33 "\n"
+      SPACE@33..35 "  "
+      LINE_STRING@35..62
+        STRING@35..62 "line 2 # also not a c ..."
+      NEWLINE@62..63 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..3 "key",
+            },
+            value: BlockString {
+                header: BlockStringHeader {
+                    style: PIPE@4..5 "|",
+                    indent: none,
+                    chomp: none,
+                },
+                lines: [
+                    LineString {
+                        string: STRING@8..14 "line 1",
+                    },
+                    LineString {
+                        string: STRING@17..32 "# not a comment",
+                    },
+                    LineString {
+                        string: STRING@35..62 "line 2 # also not a c ...",
+                    },
+                ],
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

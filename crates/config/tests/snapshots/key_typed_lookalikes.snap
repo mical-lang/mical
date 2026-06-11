@@ -1,0 +1,33 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# key-typed-lookalikes
+
+## Input
+
+```mical
+hello     world
+42        value
+-57       value
++13       value
+true      value
+false     value
+server.port 8080
+
+```
+
+## JSON
+
+```json
+{
+  "hello": "world",
+  "42": "value",
+  "-57": "value",
+  "+13": "value",
+  "true": "value",
+  "false": "value",
+  "server.port": 8080
+}
+```
+
+vim:ft=markdown

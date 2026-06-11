@@ -1,0 +1,21 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# block-string-eof-end
+
+## Input
+
+```mical
+key |
+  content
+```
+
+## JSON
+
+```json
+{
+  "key": "content\n"
+}
+```
+
+vim:ft=markdown

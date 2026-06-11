@@ -1,0 +1,66 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# block-string-gen-literal-clip-tab-content-eof
+
+## Input
+
+```
+key |
+  x	y
+  	z
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..17
+  ENTRY@0..17
+    WORD_KEY@0..3
+      WORD@0..3 "key"
+    SPACE@3..4 " "
+    BLOCK_STRING@4..17
+      BLOCK_STRING_HEADER@4..6
+        PIPE@4..5 "|"
+        NEWLINE@5..6 "\n"
+      SPACE@6..8 "  "
+      LINE_STRING@8..11
+        STRING@8..11 "x\ty"
+      NEWLINE@11..12 "\n"
+      SPACE@12..14 "  "
+      LINE_STRING@14..16
+        STRING@14..16 "\tz"
+      NEWLINE@16..17 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..3 "key",
+            },
+            value: BlockString {
+                header: BlockStringHeader {
+                    style: PIPE@4..5 "|",
+                    indent: none,
+                    chomp: none,
+                },
+                lines: [
+                    LineString {
+                        string: STRING@8..11 "x\ty",
+                    },
+                    LineString {
+                        string: STRING@14..16 "\tz",
+                    },
+                ],
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

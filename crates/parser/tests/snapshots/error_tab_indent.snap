@@ -1,0 +1,59 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# error-tab-indent
+
+## Input
+
+```
+	key value
+a 1
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..15
+  ERROR@0..11
+    STRING@0..10 "\tkey value"
+    NEWLINE@10..11 "\n"
+  ENTRY@11..15
+    WORD_KEY@11..12
+      WORD@11..12 "a"
+    SPACE@12..13 " "
+    INTEGER@13..14
+      NUMERAL@13..14 "1"
+    NEWLINE@14..15 "\n"
+```
+
+## Syntax Error
+
+```
+[
+    SyntaxError {
+        message: "tab is not allowed in indentation",
+        range: 0..1,
+    },
+]
+```
+
+## AST
+
+```
+SourceFile {
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@11..12 "a",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@13..14 "1",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

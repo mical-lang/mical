@@ -1,0 +1,140 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# key-typed-lookalikes
+
+## Input
+
+```
+hello     world
+42        value
+-57       value
++13       value
+true      value
+false     value
+server.port 8080
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..113
+  ENTRY@0..16
+    WORD_KEY@0..5
+      WORD@0..5 "hello"
+    SPACE@5..10 "     "
+    LINE_STRING@10..15
+      STRING@10..15 "world"
+    NEWLINE@15..16 "\n"
+  ENTRY@16..32
+    WORD_KEY@16..18
+      WORD@16..18 "42"
+    SPACE@18..26 "        "
+    LINE_STRING@26..31
+      STRING@26..31 "value"
+    NEWLINE@31..32 "\n"
+  ENTRY@32..48
+    WORD_KEY@32..35
+      WORD@32..35 "-57"
+    SPACE@35..42 "       "
+    LINE_STRING@42..47
+      STRING@42..47 "value"
+    NEWLINE@47..48 "\n"
+  ENTRY@48..64
+    WORD_KEY@48..51
+      WORD@48..51 "+13"
+    SPACE@51..58 "       "
+    LINE_STRING@58..63
+      STRING@58..63 "value"
+    NEWLINE@63..64 "\n"
+  ENTRY@64..80
+    WORD_KEY@64..68
+      WORD@64..68 "true"
+    SPACE@68..74 "      "
+    LINE_STRING@74..79
+      STRING@74..79 "value"
+    NEWLINE@79..80 "\n"
+  ENTRY@80..96
+    WORD_KEY@80..85
+      WORD@80..85 "false"
+    SPACE@85..90 "     "
+    LINE_STRING@90..95
+      STRING@90..95 "value"
+    NEWLINE@95..96 "\n"
+  ENTRY@96..113
+    WORD_KEY@96..107
+      WORD@96..107 "server.port"
+    SPACE@107..108 " "
+    INTEGER@108..112
+      NUMERAL@108..112 "8080"
+    NEWLINE@112..113 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..5 "hello",
+            },
+            value: LineString {
+                string: STRING@10..15 "world",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@16..18 "42",
+            },
+            value: LineString {
+                string: STRING@26..31 "value",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@32..35 "-57",
+            },
+            value: LineString {
+                string: STRING@42..47 "value",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@48..51 "+13",
+            },
+            value: LineString {
+                string: STRING@58..63 "value",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@64..68 "true",
+            },
+            value: LineString {
+                string: STRING@74..79 "value",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@80..85 "false",
+            },
+            value: LineString {
+                string: STRING@90..95 "value",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@96..107 "server.port",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@108..112 "8080",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

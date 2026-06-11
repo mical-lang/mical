@@ -1,0 +1,4 @@
+server.
+  host localhost
+# a comment at column 0 does not close the block
+  port 8080

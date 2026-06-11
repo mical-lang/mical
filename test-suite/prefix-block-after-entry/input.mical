@@ -1,5 +1,0 @@
-before hello
-section {
-  key value
-}
-after world

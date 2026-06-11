@@ -1,0 +1,182 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# value-integer-radixes
+
+## Input
+
+```
+a 0
+b 42
+c +1
+d -1
+e 0xFF
+f 0b1010
+g 0o777
+h 1_000
+i 0xDEAD_BEEF
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..65
+  ENTRY@0..4
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    INTEGER@2..3
+      NUMERAL@2..3 "0"
+    NEWLINE@3..4 "\n"
+  ENTRY@4..9
+    WORD_KEY@4..5
+      WORD@4..5 "b"
+    SPACE@5..6 " "
+    INTEGER@6..8
+      NUMERAL@6..8 "42"
+    NEWLINE@8..9 "\n"
+  ENTRY@9..14
+    WORD_KEY@9..10
+      WORD@9..10 "c"
+    SPACE@10..11 " "
+    INTEGER@11..13
+      PLUS@11..12 "+"
+      NUMERAL@12..13 "1"
+    NEWLINE@13..14 "\n"
+  ENTRY@14..19
+    WORD_KEY@14..15
+      WORD@14..15 "d"
+    SPACE@15..16 " "
+    INTEGER@16..18
+      MINUS@16..17 "-"
+      NUMERAL@17..18 "1"
+    NEWLINE@18..19 "\n"
+  ENTRY@19..26
+    WORD_KEY@19..20
+      WORD@19..20 "e"
+    SPACE@20..21 " "
+    INTEGER@21..25
+      NUMERAL@21..25 "0xFF"
+    NEWLINE@25..26 "\n"
+  ENTRY@26..35
+    WORD_KEY@26..27
+      WORD@26..27 "f"
+    SPACE@27..28 " "
+    INTEGER@28..34
+      NUMERAL@28..34 "0b1010"
+    NEWLINE@34..35 "\n"
+  ENTRY@35..43
+    WORD_KEY@35..36
+      WORD@35..36 "g"
+    SPACE@36..37 " "
+    INTEGER@37..42
+      NUMERAL@37..42 "0o777"
+    NEWLINE@42..43 "\n"
+  ENTRY@43..51
+    WORD_KEY@43..44
+      WORD@43..44 "h"
+    SPACE@44..45 " "
+    INTEGER@45..50
+      NUMERAL@45..50 "1_000"
+    NEWLINE@50..51 "\n"
+  ENTRY@51..65
+    WORD_KEY@51..52
+      WORD@51..52 "i"
+    SPACE@52..53 " "
+    INTEGER@53..64
+      NUMERAL@53..64 "0xDEAD_BEEF"
+    NEWLINE@64..65 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@2..3 "0",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@4..5 "b",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@6..8 "42",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@9..10 "c",
+            },
+            value: Integer {
+                sign: PLUS@11..12 "+",
+                numeral: NUMERAL@12..13 "1",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@14..15 "d",
+            },
+            value: Integer {
+                sign: MINUS@16..17 "-",
+                numeral: NUMERAL@17..18 "1",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@19..20 "e",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@21..25 "0xFF",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@26..27 "f",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@28..34 "0b1010",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@35..36 "g",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@37..42 "0o777",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@43..44 "h",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@45..50 "1_000",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@51..52 "i",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@53..64 "0xDEAD_BEEF",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

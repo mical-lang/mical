@@ -1,0 +1,25 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# trailing-spaces-stripped
+
+## Input
+
+```mical
+a hello 
+b true  
+c 42 
+
+```
+
+## JSON
+
+```json
+{
+  "a": "hello",
+  "b": true,
+  "c": 42
+}
+```
+
+vim:ft=markdown

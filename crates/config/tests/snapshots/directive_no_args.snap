@@ -1,0 +1,22 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# directive-no-args
+
+## Input
+
+```mical
+#strict
+a 1
+
+```
+
+## JSON
+
+```json
+{
+  "a": 1
+}
+```
+
+vim:ft=markdown

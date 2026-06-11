@@ -1,0 +1,46 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# comment-full-line
+
+## Input
+
+```
+# This is a full-line comment
+key value
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..40
+  COMMENT@0..29 "# This is a full-line ..."
+  NEWLINE@29..30 "\n"
+  ENTRY@30..40
+    WORD_KEY@30..33
+      WORD@30..33 "key"
+    SPACE@33..34 " "
+    LINE_STRING@34..39
+      STRING@34..39 "value"
+    NEWLINE@39..40 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@30..33 "key",
+            },
+            value: LineString {
+                string: STRING@34..39 "value",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

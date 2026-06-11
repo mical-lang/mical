@@ -1,0 +1,91 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# block-string-gen-literal-keep-extra-indent-dedent
+
+## Input
+
+```
+key |+
+  a
+    b
+  c
+end marker
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..32
+  ENTRY@0..21
+    WORD_KEY@0..3
+      WORD@0..3 "key"
+    SPACE@3..4 " "
+    BLOCK_STRING@4..21
+      BLOCK_STRING_HEADER@4..7
+        PIPE@4..5 "|"
+        PLUS@5..6 "+"
+        NEWLINE@6..7 "\n"
+      SPACE@7..9 "  "
+      LINE_STRING@9..10
+        STRING@9..10 "a"
+      NEWLINE@10..11 "\n"
+      SPACE@11..13 "  "
+      LINE_STRING@13..16
+        STRING@13..16 "  b"
+      NEWLINE@16..17 "\n"
+      SPACE@17..19 "  "
+      LINE_STRING@19..20
+        STRING@19..20 "c"
+      NEWLINE@20..21 "\n"
+  ENTRY@21..32
+    WORD_KEY@21..24
+      WORD@21..24 "end"
+    SPACE@24..25 " "
+    LINE_STRING@25..31
+      STRING@25..31 "marker"
+    NEWLINE@31..32 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..3 "key",
+            },
+            value: BlockString {
+                header: BlockStringHeader {
+                    style: PIPE@4..5 "|",
+                    indent: none,
+                    chomp: PLUS@5..6 "+",
+                },
+                lines: [
+                    LineString {
+                        string: STRING@9..10 "a",
+                    },
+                    LineString {
+                        string: STRING@13..16 "  b",
+                    },
+                    LineString {
+                        string: STRING@19..20 "c",
+                    },
+                ],
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@21..24 "end",
+            },
+            value: LineString {
+                string: STRING@25..31 "marker",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

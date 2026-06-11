@@ -1,1 +1,0 @@
-bare open brace at key position with missing value

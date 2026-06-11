@@ -1,0 +1,67 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# block-string-explicit-indent
+
+## Input
+
+```
+key |2
+      indented first line
+  second line
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..47
+  ENTRY@0..47
+    WORD_KEY@0..3
+      WORD@0..3 "key"
+    SPACE@3..4 " "
+    BLOCK_STRING@4..47
+      BLOCK_STRING_HEADER@4..7
+        PIPE@4..5 "|"
+        NUMERAL@5..6 "2"
+        NEWLINE@6..7 "\n"
+      SPACE@7..9 "  "
+      LINE_STRING@9..32
+        STRING@9..32 "    indented first line"
+      NEWLINE@32..33 "\n"
+      SPACE@33..35 "  "
+      LINE_STRING@35..46
+        STRING@35..46 "second line"
+      NEWLINE@46..47 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..3 "key",
+            },
+            value: BlockString {
+                header: BlockStringHeader {
+                    style: PIPE@4..5 "|",
+                    indent: NUMERAL@5..6 "2",
+                    chomp: none,
+                },
+                lines: [
+                    LineString {
+                        string: STRING@9..32 "    indented first line",
+                    },
+                    LineString {
+                        string: STRING@35..46 "second line",
+                    },
+                ],
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

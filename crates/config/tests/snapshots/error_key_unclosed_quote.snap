@@ -1,0 +1,26 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# error-key-unclosed-quote
+
+## Input
+
+```mical
+"unterminated value
+
+```
+
+## Parser Error
+
+```
+0..19: missing closing quote
+
+```
+
+## JSON
+
+```json
+{}
+```
+
+vim:ft=markdown

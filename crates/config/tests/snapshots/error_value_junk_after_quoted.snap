@@ -1,0 +1,30 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# error-value-junk-after-quoted
+
+## Input
+
+```mical
+a "value" extra
+b "ok" # comment
+
+```
+
+## Parser Error
+
+```
+10..15: unexpected token after value
+
+```
+
+## JSON
+
+```json
+{
+  "a": "value",
+  "b": "ok"
+}
+```
+
+vim:ft=markdown

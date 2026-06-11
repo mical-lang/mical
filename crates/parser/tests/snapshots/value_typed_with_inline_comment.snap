@@ -1,0 +1,62 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# value-typed-with-inline-comment
+
+## Input
+
+```
+a 42 # count
+b true # enabled
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..30
+  ENTRY@0..13
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    INTEGER@2..4
+      NUMERAL@2..4 "42"
+    COMMENT@4..12 " # count"
+    NEWLINE@12..13 "\n"
+  ENTRY@13..30
+    WORD_KEY@13..14
+      WORD@13..14 "b"
+    SPACE@14..15 " "
+    BOOLEAN@15..19
+      TRUE@15..19 "true"
+    COMMENT@19..29 " # enabled"
+    NEWLINE@29..30 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@2..4 "42",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@13..14 "b",
+            },
+            value: Boolean {
+                token: TRUE@15..19 "true",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

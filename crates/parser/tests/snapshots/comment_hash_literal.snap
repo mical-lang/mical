@@ -1,0 +1,59 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# comment-hash-literal
+
+## Input
+
+```
+path /tmp/file#1
+key  val#ue
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..29
+  ENTRY@0..17
+    WORD_KEY@0..4
+      WORD@0..4 "path"
+    SPACE@4..5 " "
+    LINE_STRING@5..16
+      STRING@5..16 "/tmp/file#1"
+    NEWLINE@16..17 "\n"
+  ENTRY@17..29
+    WORD_KEY@17..20
+      WORD@17..20 "key"
+    SPACE@20..22 "  "
+    LINE_STRING@22..28
+      STRING@22..28 "val#ue"
+    NEWLINE@28..29 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..4 "path",
+            },
+            value: LineString {
+                string: STRING@5..16 "/tmp/file#1",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@17..20 "key",
+            },
+            value: LineString {
+                string: STRING@22..28 "val#ue",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

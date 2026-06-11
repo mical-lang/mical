@@ -1,0 +1,77 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# prefix-block-col0-comment-inside
+
+## Input
+
+```
+server.
+  host localhost
+# a comment at column 0 does not close the block
+  port 8080
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..86
+  PREFIX_BLOCK@0..86
+    WORD_KEY@0..7
+      WORD@0..7 "server."
+    NEWLINE@7..8 "\n"
+    SPACE@8..10 "  "
+    ENTRY@10..25
+      WORD_KEY@10..14
+        WORD@10..14 "host"
+      SPACE@14..15 " "
+      LINE_STRING@15..24
+        STRING@15..24 "localhost"
+      NEWLINE@24..25 "\n"
+    COMMENT@25..73 "# a comment at column ..."
+    NEWLINE@73..74 "\n"
+    SPACE@74..76 "  "
+    ENTRY@76..86
+      WORD_KEY@76..80
+        WORD@76..80 "port"
+      SPACE@80..81 " "
+      INTEGER@81..85
+        NUMERAL@81..85 "8080"
+      NEWLINE@85..86 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    items: [
+        PrefixBlock {
+            key: WordKey {
+                word: WORD@0..7 "server.",
+            },
+            items: [
+                Entry {
+                    key: WordKey {
+                        word: WORD@10..14 "host",
+                    },
+                    value: LineString {
+                        string: STRING@15..24 "localhost",
+                    },
+                },
+                Entry {
+                    key: WordKey {
+                        word: WORD@76..80 "port",
+                    },
+                    value: Integer {
+                        sign: none,
+                        numeral: NUMERAL@81..85 "8080",
+                    },
+                },
+            ],
+        },
+    ],
+}
+```
+
+vim:ft=markdown

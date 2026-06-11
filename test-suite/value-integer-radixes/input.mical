@@ -1,0 +1,9 @@
+a 0
+b 42
+c +1
+d -1
+e 0xFF
+f 0b1010
+g 0o777
+h 1_000
+i 0xDEAD_BEEF

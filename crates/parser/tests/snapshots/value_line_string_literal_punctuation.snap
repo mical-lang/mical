@@ -1,0 +1,75 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# value-line-string-literal-punctuation
+
+## Input
+
+```
+a value "quoted" text
+b [1, 2, 3]
+path /usr/local/bin
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..54
+  ENTRY@0..22
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    LINE_STRING@2..21
+      STRING@2..21 "value \"quoted\" text"
+    NEWLINE@21..22 "\n"
+  ENTRY@22..34
+    WORD_KEY@22..23
+      WORD@22..23 "b"
+    SPACE@23..24 " "
+    LINE_STRING@24..33
+      STRING@24..33 "[1, 2, 3]"
+    NEWLINE@33..34 "\n"
+  ENTRY@34..54
+    WORD_KEY@34..38
+      WORD@34..38 "path"
+    SPACE@38..39 " "
+    LINE_STRING@39..53
+      STRING@39..53 "/usr/local/bin"
+    NEWLINE@53..54 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: LineString {
+                string: STRING@2..21 "value \"quoted\" text",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@22..23 "b",
+            },
+            value: LineString {
+                string: STRING@24..33 "[1, 2, 3]",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@34..38 "path",
+            },
+            value: LineString {
+                string: STRING@39..53 "/usr/local/bin",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

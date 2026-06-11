@@ -1,0 +1,59 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# block-string-header-comment
+
+## Input
+
+```
+f | # comment
+  content
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..24
+  ENTRY@0..24
+    WORD_KEY@0..1
+      WORD@0..1 "f"
+    SPACE@1..2 " "
+    BLOCK_STRING@2..24
+      BLOCK_STRING_HEADER@2..14
+        PIPE@2..3 "|"
+        COMMENT@3..13 " # comment"
+        NEWLINE@13..14 "\n"
+      SPACE@14..16 "  "
+      LINE_STRING@16..23
+        STRING@16..23 "content"
+      NEWLINE@23..24 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "f",
+            },
+            value: BlockString {
+                header: BlockStringHeader {
+                    style: PIPE@2..3 "|",
+                    indent: none,
+                    chomp: none,
+                },
+                lines: [
+                    LineString {
+                        string: STRING@16..23 "content",
+                    },
+                ],
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

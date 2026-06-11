@@ -1,0 +1,25 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# prefix-block-directive-closes-block
+
+## Input
+
+```mical
+outer.
+  a 1
+#dir args
+b 2
+
+```
+
+## JSON
+
+```json
+{
+  "outer.a": 1,
+  "b": 2
+}
+```
+
+vim:ft=markdown

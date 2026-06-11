@@ -1,0 +1,91 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# value-integer-fallback
+
+## Input
+
+```
+a 42 items
+b -10 trailing
+c + 1
+d +
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..36
+  ENTRY@0..11
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    LINE_STRING@2..10
+      STRING@2..10 "42 items"
+    NEWLINE@10..11 "\n"
+  ENTRY@11..26
+    WORD_KEY@11..12
+      WORD@11..12 "b"
+    SPACE@12..13 " "
+    LINE_STRING@13..25
+      STRING@13..25 "-10 trailing"
+    NEWLINE@25..26 "\n"
+  ENTRY@26..32
+    WORD_KEY@26..27
+      WORD@26..27 "c"
+    SPACE@27..28 " "
+    LINE_STRING@28..31
+      STRING@28..31 "+ 1"
+    NEWLINE@31..32 "\n"
+  ENTRY@32..36
+    WORD_KEY@32..33
+      WORD@32..33 "d"
+    SPACE@33..34 " "
+    LINE_STRING@34..35
+      STRING@34..35 "+"
+    NEWLINE@35..36 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: LineString {
+                string: STRING@2..10 "42 items",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@11..12 "b",
+            },
+            value: LineString {
+                string: STRING@13..25 "-10 trailing",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@26..27 "c",
+            },
+            value: LineString {
+                string: STRING@28..31 "+ 1",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@32..33 "d",
+            },
+            value: LineString {
+                string: STRING@34..35 "+",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

@@ -1,0 +1,92 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# basic-entries
+
+## Input
+
+```
+key value
+name hello world
+port 8080
+flag true
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..47
+  ENTRY@0..10
+    WORD_KEY@0..3
+      WORD@0..3 "key"
+    SPACE@3..4 " "
+    LINE_STRING@4..9
+      STRING@4..9 "value"
+    NEWLINE@9..10 "\n"
+  ENTRY@10..27
+    WORD_KEY@10..14
+      WORD@10..14 "name"
+    SPACE@14..15 " "
+    LINE_STRING@15..26
+      STRING@15..26 "hello world"
+    NEWLINE@26..27 "\n"
+  ENTRY@27..37
+    WORD_KEY@27..31
+      WORD@27..31 "port"
+    SPACE@31..32 " "
+    INTEGER@32..36
+      NUMERAL@32..36 "8080"
+    NEWLINE@36..37 "\n"
+  ENTRY@37..47
+    WORD_KEY@37..41
+      WORD@37..41 "flag"
+    SPACE@41..42 " "
+    BOOLEAN@42..46
+      TRUE@42..46 "true"
+    NEWLINE@46..47 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..3 "key",
+            },
+            value: LineString {
+                string: STRING@4..9 "value",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@10..14 "name",
+            },
+            value: LineString {
+                string: STRING@15..26 "hello world",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@27..31 "port",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@32..36 "8080",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@37..41 "flag",
+            },
+            value: Boolean {
+                token: TRUE@42..46 "true",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

@@ -1,0 +1,25 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# key-quoted-escapes
+
+## Input
+
+```mical
+"a\"b" v1
+'c\'d' v2
+"e\\f" v3
+
+```
+
+## JSON
+
+```json
+{
+  "a\"b": "v1",
+  "c'd": "v2",
+  "e\\f": "v3"
+}
+```
+
+vim:ft=markdown

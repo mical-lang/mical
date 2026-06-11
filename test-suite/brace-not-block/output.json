@@ -1,5 +1,0 @@
-{
-  "a": "{not a block",
-  "b": "{ also not",
-  "cd": "}not_close value"
-}

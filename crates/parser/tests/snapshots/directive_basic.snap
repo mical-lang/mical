@@ -1,0 +1,73 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# directive-basic
+
+## Input
+
+```
+#include path/to/file
+#schema https://example.com/schema.json
+key value
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..72
+  DIRECTIVE@0..22
+    SHARP@0..1 "#"
+    WORD@1..8 "include"
+    SPACE@8..9 " "
+    LINE_STRING@9..21
+      STRING@9..21 "path/to/file"
+    NEWLINE@21..22 "\n"
+  DIRECTIVE@22..62
+    SHARP@22..23 "#"
+    WORD@23..29 "schema"
+    SPACE@29..30 " "
+    LINE_STRING@30..61
+      STRING@30..61 "https://example.com/s ..."
+    NEWLINE@61..62 "\n"
+  ENTRY@62..72
+    WORD_KEY@62..65
+      WORD@62..65 "key"
+    SPACE@65..66 " "
+    LINE_STRING@66..71
+      STRING@66..71 "value"
+    NEWLINE@71..72 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    items: [
+        Directive {
+            sharp: SHARP@0..1 "#",
+            name: WORD@1..8 "include",
+            args: LineString {
+                string: STRING@9..21 "path/to/file",
+            },
+        },
+        Directive {
+            sharp: SHARP@22..23 "#",
+            name: WORD@23..29 "schema",
+            args: LineString {
+                string: STRING@30..61 "https://example.com/s ...",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@62..65 "key",
+            },
+            value: LineString {
+                string: STRING@66..71 "value",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

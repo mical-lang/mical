@@ -1,9 +1,0 @@
-{
-  "name": "hello world # not comment",
-  "count": 42,
-  "flag": true,
-  "negative": -10,
-  "sectiondesc": "block line\n",
-  "sectioninnerkey": "value",
-  "after_block": "done"
-}

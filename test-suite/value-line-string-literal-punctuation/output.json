@@ -1,0 +1,5 @@
+{
+  "a": "value \"quoted\" text",
+  "b": "[1, 2, 3]",
+  "path": "/usr/local/bin"
+}

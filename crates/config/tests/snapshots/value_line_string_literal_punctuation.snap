@@ -1,0 +1,25 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# value-line-string-literal-punctuation
+
+## Input
+
+```mical
+a value "quoted" text
+b [1, 2, 3]
+path /usr/local/bin
+
+```
+
+## JSON
+
+```json
+{
+  "a": "value \"quoted\" text",
+  "b": "[1, 2, 3]",
+  "path": "/usr/local/bin"
+}
+```
+
+vim:ft=markdown

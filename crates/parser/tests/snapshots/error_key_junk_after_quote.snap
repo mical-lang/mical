@@ -1,0 +1,60 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# error-key-junk-after-quote
+
+## Input
+
+```
+"quoted"ppp value
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..18
+  ENTRY@0..18
+    QUOTED_KEY@0..11
+      DOUBLE_QUOTE@0..1 "\""
+      STRING@1..7 "quoted"
+      DOUBLE_QUOTE@7..8 "\""
+      ERROR@8..11
+        STRING@8..11 "ppp"
+    SPACE@11..12 " "
+    LINE_STRING@12..17
+      STRING@12..17 "value"
+    NEWLINE@17..18 "\n"
+```
+
+## Syntax Error
+
+```
+[
+    SyntaxError {
+        message: "unexpected token after quoted key",
+        range: 8..11,
+    },
+]
+```
+
+## AST
+
+```
+SourceFile {
+    items: [
+        Entry {
+            key: QuotedKey {
+                open_quote: DOUBLE_QUOTE@0..1 "\"",
+                string: STRING@1..7 "quoted",
+                close_quote: DOUBLE_QUOTE@0..1 "\"",
+            },
+            value: LineString {
+                string: STRING@12..17 "value",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

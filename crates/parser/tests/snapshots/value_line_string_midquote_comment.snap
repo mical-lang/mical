@@ -1,0 +1,44 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# value-line-string-midquote-comment
+
+## Input
+
+```
+a value "x # y" tail
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..21
+  ENTRY@0..21
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    LINE_STRING@2..10
+      STRING@2..10 "value \"x"
+    COMMENT@10..20 " # y\" tail"
+    NEWLINE@20..21 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: LineString {
+                string: STRING@2..10 "value \"x",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

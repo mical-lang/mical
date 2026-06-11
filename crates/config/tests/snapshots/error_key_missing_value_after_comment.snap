@@ -1,0 +1,29 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# error-key-missing-value-after-comment
+
+## Input
+
+```mical
+key # comment
+next 1
+
+```
+
+## Parser Error
+
+```
+4..4: missing value for the key
+
+```
+
+## JSON
+
+```json
+{
+  "next": 1
+}
+```
+
+vim:ft=markdown

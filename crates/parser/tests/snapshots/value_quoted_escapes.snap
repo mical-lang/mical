@@ -1,0 +1,147 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# value-quoted-escapes
+
+## Input
+
+```
+a "h\"i"
+b 'sin\'gle'
+c "back\\slash"
+d "tab\there"
+e "line\nbreak"
+f "cr\rreturn"
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..83
+  ENTRY@0..9
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    QUOTED_STRING@2..8
+      DOUBLE_QUOTE@2..3 "\""
+      STRING@3..7 "h\\\"i"
+      DOUBLE_QUOTE@7..8 "\""
+    NEWLINE@8..9 "\n"
+  ENTRY@9..22
+    WORD_KEY@9..10
+      WORD@9..10 "b"
+    SPACE@10..11 " "
+    QUOTED_STRING@11..21
+      SINGLE_QUOTE@11..12 "'"
+      STRING@12..20 "sin\\'gle"
+      SINGLE_QUOTE@20..21 "'"
+    NEWLINE@21..22 "\n"
+  ENTRY@22..38
+    WORD_KEY@22..23
+      WORD@22..23 "c"
+    SPACE@23..24 " "
+    QUOTED_STRING@24..37
+      DOUBLE_QUOTE@24..25 "\""
+      STRING@25..36 "back\\\\slash"
+      DOUBLE_QUOTE@36..37 "\""
+    NEWLINE@37..38 "\n"
+  ENTRY@38..52
+    WORD_KEY@38..39
+      WORD@38..39 "d"
+    SPACE@39..40 " "
+    QUOTED_STRING@40..51
+      DOUBLE_QUOTE@40..41 "\""
+      STRING@41..50 "tab\\there"
+      DOUBLE_QUOTE@50..51 "\""
+    NEWLINE@51..52 "\n"
+  ENTRY@52..68
+    WORD_KEY@52..53
+      WORD@52..53 "e"
+    SPACE@53..54 " "
+    QUOTED_STRING@54..67
+      DOUBLE_QUOTE@54..55 "\""
+      STRING@55..66 "line\\nbreak"
+      DOUBLE_QUOTE@66..67 "\""
+    NEWLINE@67..68 "\n"
+  ENTRY@68..83
+    WORD_KEY@68..69
+      WORD@68..69 "f"
+    SPACE@69..70 " "
+    QUOTED_STRING@70..82
+      DOUBLE_QUOTE@70..71 "\""
+      STRING@71..81 "cr\\rreturn"
+      DOUBLE_QUOTE@81..82 "\""
+    NEWLINE@82..83 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: QuotedString {
+                open_quote: DOUBLE_QUOTE@2..3 "\"",
+                string: STRING@3..7 "h\\\"i",
+                close_quote: DOUBLE_QUOTE@2..3 "\"",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@9..10 "b",
+            },
+            value: QuotedString {
+                open_quote: SINGLE_QUOTE@11..12 "'",
+                string: STRING@12..20 "sin\\'gle",
+                close_quote: SINGLE_QUOTE@11..12 "'",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@22..23 "c",
+            },
+            value: QuotedString {
+                open_quote: DOUBLE_QUOTE@24..25 "\"",
+                string: STRING@25..36 "back\\\\slash",
+                close_quote: DOUBLE_QUOTE@24..25 "\"",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@38..39 "d",
+            },
+            value: QuotedString {
+                open_quote: DOUBLE_QUOTE@40..41 "\"",
+                string: STRING@41..50 "tab\\there",
+                close_quote: DOUBLE_QUOTE@40..41 "\"",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@52..53 "e",
+            },
+            value: QuotedString {
+                open_quote: DOUBLE_QUOTE@54..55 "\"",
+                string: STRING@55..66 "line\\nbreak",
+                close_quote: DOUBLE_QUOTE@54..55 "\"",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@68..69 "f",
+            },
+            value: QuotedString {
+                open_quote: DOUBLE_QUOTE@70..71 "\"",
+                string: STRING@71..81 "cr\\rreturn",
+                close_quote: DOUBLE_QUOTE@70..71 "\"",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

@@ -1,0 +1,6 @@
+{
+  "key": "value",
+  "name": "hello world",
+  "port": 8080,
+  "flag": true
+}

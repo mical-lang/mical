@@ -1,0 +1,58 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# prefix-block-opener-inline-comment
+
+## Input
+
+```
+server. # the web server
+  host localhost
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..42
+  PREFIX_BLOCK@0..42
+    WORD_KEY@0..7
+      WORD@0..7 "server."
+    SPACE@7..8 " "
+    COMMENT@8..24 "# the web server"
+    NEWLINE@24..25 "\n"
+    SPACE@25..27 "  "
+    ENTRY@27..42
+      WORD_KEY@27..31
+        WORD@27..31 "host"
+      SPACE@31..32 " "
+      LINE_STRING@32..41
+        STRING@32..41 "localhost"
+      NEWLINE@41..42 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    items: [
+        PrefixBlock {
+            key: WordKey {
+                word: WORD@0..7 "server.",
+            },
+            items: [
+                Entry {
+                    key: WordKey {
+                        word: WORD@27..31 "host",
+                    },
+                    value: LineString {
+                        string: STRING@32..41 "localhost",
+                    },
+                },
+            ],
+        },
+    ],
+}
+```
+
+vim:ft=markdown

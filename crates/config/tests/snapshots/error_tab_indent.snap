@@ -1,0 +1,29 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# error-tab-indent
+
+## Input
+
+```mical
+	key value
+a 1
+
+```
+
+## Parser Error
+
+```
+0..1: tab is not allowed in indentation
+
+```
+
+## JSON
+
+```json
+{
+  "a": 1
+}
+```
+
+vim:ft=markdown

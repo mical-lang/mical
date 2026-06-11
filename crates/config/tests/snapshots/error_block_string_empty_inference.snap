@@ -1,0 +1,34 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# error-block-string-empty-inference
+
+## Input
+
+```mical
+key |
+
+  content
+
+```
+
+## Parser Error
+
+```
+6..6: cannot infer base indent from an empty line
+
+7..9: unexpected indentation
+
+16..16: missing value for the key
+
+```
+
+## JSON
+
+```json
+{
+  "key": ""
+}
+```
+
+vim:ft=markdown

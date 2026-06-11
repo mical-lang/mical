@@ -1,0 +1,54 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# directive-no-args
+
+## Input
+
+```
+#strict
+a 1
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..12
+  DIRECTIVE@0..8
+    SHARP@0..1 "#"
+    WORD@1..7 "strict"
+    NEWLINE@7..8 "\n"
+  ENTRY@8..12
+    WORD_KEY@8..9
+      WORD@8..9 "a"
+    SPACE@9..10 " "
+    INTEGER@10..11
+      NUMERAL@10..11 "1"
+    NEWLINE@11..12 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    items: [
+        Directive {
+            sharp: SHARP@0..1 "#",
+            name: WORD@1..7 "strict",
+            args: none,
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@8..9 "a",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@10..11 "1",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

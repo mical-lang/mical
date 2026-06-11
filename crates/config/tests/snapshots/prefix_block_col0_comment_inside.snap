@@ -1,0 +1,25 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# prefix-block-col0-comment-inside
+
+## Input
+
+```mical
+server.
+  host localhost
+# a comment at column 0 does not close the block
+  port 8080
+
+```
+
+## JSON
+
+```json
+{
+  "server.host": "localhost",
+  "server.port": 8080
+}
+```
+
+vim:ft=markdown

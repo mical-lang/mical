@@ -1,0 +1,27 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# value-integer-fallback
+
+## Input
+
+```mical
+a 42 items
+b -10 trailing
+c + 1
+d +
+
+```
+
+## JSON
+
+```json
+{
+  "a": "42 items",
+  "b": "-10 trailing",
+  "c": "+ 1",
+  "d": "+"
+}
+```
+
+vim:ft=markdown

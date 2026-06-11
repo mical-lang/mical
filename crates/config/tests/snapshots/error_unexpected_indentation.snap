@@ -1,0 +1,30 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# error-unexpected-indentation
+
+## Input
+
+```mical
+a 1
+  b 2
+
+```
+
+## Parser Error
+
+```
+4..6: unexpected indentation
+
+```
+
+## JSON
+
+```json
+{
+  "a": 1,
+  "b": 2
+}
+```
+
+vim:ft=markdown

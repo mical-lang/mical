@@ -1,0 +1,26 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# block-string-gen-folded-strip-trailing-empty-dedent
+
+## Input
+
+```mical
+key >-
+  a
+
+
+end marker
+
+```
+
+## JSON
+
+```json
+{
+  "key": "a",
+  "end": "marker"
+}
+```
+
+vim:ft=markdown

@@ -1,0 +1,9 @@
+block.
+  str hello world
+  num 42
+  flag true
+  neg -1
+  quoted "value"
+  text |
+    multi
+    line

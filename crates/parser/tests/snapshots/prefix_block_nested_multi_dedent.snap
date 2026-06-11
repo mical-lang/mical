@@ -1,0 +1,87 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# prefix-block-nested-multi-dedent
+
+## Input
+
+```
+a.
+  b.
+    c 1
+x 2
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..20
+  PREFIX_BLOCK@0..16
+    WORD_KEY@0..2
+      WORD@0..2 "a."
+    NEWLINE@2..3 "\n"
+    SPACE@3..5 "  "
+    PREFIX_BLOCK@5..16
+      WORD_KEY@5..7
+        WORD@5..7 "b."
+      NEWLINE@7..8 "\n"
+      SPACE@8..12 "    "
+      ENTRY@12..16
+        WORD_KEY@12..13
+          WORD@12..13 "c"
+        SPACE@13..14 " "
+        INTEGER@14..15
+          NUMERAL@14..15 "1"
+        NEWLINE@15..16 "\n"
+  ENTRY@16..20
+    WORD_KEY@16..17
+      WORD@16..17 "x"
+    SPACE@17..18 " "
+    INTEGER@18..19
+      NUMERAL@18..19 "2"
+    NEWLINE@19..20 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    items: [
+        PrefixBlock {
+            key: WordKey {
+                word: WORD@0..2 "a.",
+            },
+            items: [
+                PrefixBlock {
+                    key: WordKey {
+                        word: WORD@5..7 "b.",
+                    },
+                    items: [
+                        Entry {
+                            key: WordKey {
+                                word: WORD@12..13 "c",
+                            },
+                            value: Integer {
+                                sign: none,
+                                numeral: NUMERAL@14..15 "1",
+                            },
+                        },
+                    ],
+                },
+            ],
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@16..17 "x",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@18..19 "2",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

@@ -1,0 +1,90 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# block-string-gen-literal-strip-wsln-dedent
+
+## Input
+
+```
+key |-
+  a
+    
+  b
+end marker
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..31
+  ENTRY@0..20
+    WORD_KEY@0..3
+      WORD@0..3 "key"
+    SPACE@3..4 " "
+    BLOCK_STRING@4..20
+      BLOCK_STRING_HEADER@4..7
+        PIPE@4..5 "|"
+        MINUS@5..6 "-"
+        NEWLINE@6..7 "\n"
+      SPACE@7..9 "  "
+      LINE_STRING@9..10
+        STRING@9..10 "a"
+      NEWLINE@10..11 "\n"
+      SPACE@11..15 "    "
+      LINE_STRING@15..15
+      NEWLINE@15..16 "\n"
+      SPACE@16..18 "  "
+      LINE_STRING@18..19
+        STRING@18..19 "b"
+      NEWLINE@19..20 "\n"
+  ENTRY@20..31
+    WORD_KEY@20..23
+      WORD@20..23 "end"
+    SPACE@23..24 " "
+    LINE_STRING@24..30
+      STRING@24..30 "marker"
+    NEWLINE@30..31 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..3 "key",
+            },
+            value: BlockString {
+                header: BlockStringHeader {
+                    style: PIPE@4..5 "|",
+                    indent: none,
+                    chomp: MINUS@5..6 "-",
+                },
+                lines: [
+                    LineString {
+                        string: STRING@9..10 "a",
+                    },
+                    LineString {
+                        string: none,
+                    },
+                    LineString {
+                        string: STRING@18..19 "b",
+                    },
+                ],
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@20..23 "end",
+            },
+            value: LineString {
+                string: STRING@24..30 "marker",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

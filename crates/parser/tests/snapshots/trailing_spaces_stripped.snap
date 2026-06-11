@@ -1,0 +1,79 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# trailing-spaces-stripped
+
+## Input
+
+```
+a hello 
+b true  
+c 42 
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..24
+  ENTRY@0..9
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    LINE_STRING@2..7
+      STRING@2..7 "hello"
+    SPACE@7..8 " "
+    NEWLINE@8..9 "\n"
+  ENTRY@9..18
+    WORD_KEY@9..10
+      WORD@9..10 "b"
+    SPACE@10..11 " "
+    BOOLEAN@11..15
+      TRUE@11..15 "true"
+    SPACE@15..17 "  "
+    NEWLINE@17..18 "\n"
+  ENTRY@18..24
+    WORD_KEY@18..19
+      WORD@18..19 "c"
+    SPACE@19..20 " "
+    INTEGER@20..22
+      NUMERAL@20..22 "42"
+    SPACE@22..23 " "
+    NEWLINE@23..24 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: LineString {
+                string: STRING@2..7 "hello",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@9..10 "b",
+            },
+            value: Boolean {
+                token: TRUE@11..15 "true",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@18..19 "c",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@20..22 "42",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

@@ -1,0 +1,8 @@
+{
+  "block.str": "hello world",
+  "block.num": 42,
+  "block.flag": true,
+  "block.neg": -1,
+  "block.quoted": "value",
+  "block.text": "multi\nline\n"
+}

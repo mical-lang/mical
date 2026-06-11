@@ -1,0 +1,86 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# error-prefix-block-indent-mismatch
+
+## Input
+
+```
+a.
+    x 1
+  y 2
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..17
+  PREFIX_BLOCK@0..11
+    WORD_KEY@0..2
+      WORD@0..2 "a."
+    NEWLINE@2..3 "\n"
+    SPACE@3..7 "    "
+    ENTRY@7..11
+      WORD_KEY@7..8
+        WORD@7..8 "x"
+      SPACE@8..9 " "
+      INTEGER@9..10
+        NUMERAL@9..10 "1"
+      NEWLINE@10..11 "\n"
+  SPACE@11..13 "  "
+  ENTRY@13..17
+    WORD_KEY@13..14
+      WORD@13..14 "y"
+    SPACE@14..15 " "
+    INTEGER@15..16
+      NUMERAL@15..16 "2"
+    NEWLINE@16..17 "\n"
+```
+
+## Syntax Error
+
+```
+[
+    SyntaxError {
+        message: "indentation does not match any enclosing block",
+        range: 11..13,
+    },
+]
+```
+
+## AST
+
+```
+SourceFile {
+    items: [
+        PrefixBlock {
+            key: WordKey {
+                word: WORD@0..2 "a.",
+            },
+            items: [
+                Entry {
+                    key: WordKey {
+                        word: WORD@7..8 "x",
+                    },
+                    value: Integer {
+                        sign: none,
+                        numeral: NUMERAL@9..10 "1",
+                    },
+                },
+            ],
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@13..14 "y",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@15..16 "2",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

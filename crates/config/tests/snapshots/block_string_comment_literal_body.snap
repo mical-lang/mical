@@ -1,0 +1,24 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# block-string-comment-literal-body
+
+## Input
+
+```mical
+key |
+  line 1
+  # not a comment
+  line 2 # also not a comment
+
+```
+
+## JSON
+
+```json
+{
+  "key": "line 1\n# not a comment\nline 2 # also not a comment\n"
+}
+```
+
+vim:ft=markdown

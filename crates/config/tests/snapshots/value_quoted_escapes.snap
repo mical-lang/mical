@@ -1,0 +1,31 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# value-quoted-escapes
+
+## Input
+
+```mical
+a "h\"i"
+b 'sin\'gle'
+c "back\\slash"
+d "tab\there"
+e "line\nbreak"
+f "cr\rreturn"
+
+```
+
+## JSON
+
+```json
+{
+  "a": "h\"i",
+  "b": "sin'gle",
+  "c": "back\\slash",
+  "d": "tab\there",
+  "e": "line\nbreak",
+  "f": "cr\rreturn"
+}
+```
+
+vim:ft=markdown

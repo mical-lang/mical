@@ -1,0 +1,27 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# basic-entries
+
+## Input
+
+```mical
+key value
+name hello world
+port 8080
+flag true
+
+```
+
+## JSON
+
+```json
+{
+  "key": "value",
+  "name": "hello world",
+  "port": 8080,
+  "flag": true
+}
+```
+
+vim:ft=markdown

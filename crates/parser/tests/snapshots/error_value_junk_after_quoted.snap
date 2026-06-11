@@ -1,0 +1,82 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# error-value-junk-after-quoted
+
+## Input
+
+```
+a "value" extra
+b "ok" # comment
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..33
+  ENTRY@0..16
+    WORD_KEY@0..1
+      WORD@0..1 "a"
+    SPACE@1..2 " "
+    QUOTED_STRING@2..9
+      DOUBLE_QUOTE@2..3 "\""
+      STRING@3..8 "value"
+      DOUBLE_QUOTE@8..9 "\""
+    SPACE@9..10 " "
+    ERROR@10..15
+      STRING@10..15 "extra"
+    NEWLINE@15..16 "\n"
+  ENTRY@16..33
+    WORD_KEY@16..17
+      WORD@16..17 "b"
+    SPACE@17..18 " "
+    QUOTED_STRING@18..22
+      DOUBLE_QUOTE@18..19 "\""
+      STRING@19..21 "ok"
+      DOUBLE_QUOTE@21..22 "\""
+    COMMENT@22..32 " # comment"
+    NEWLINE@32..33 "\n"
+```
+
+## Syntax Error
+
+```
+[
+    SyntaxError {
+        message: "unexpected token after value",
+        range: 10..15,
+    },
+]
+```
+
+## AST
+
+```
+SourceFile {
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..1 "a",
+            },
+            value: QuotedString {
+                open_quote: DOUBLE_QUOTE@2..3 "\"",
+                string: STRING@3..8 "value",
+                close_quote: DOUBLE_QUOTE@2..3 "\"",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@16..17 "b",
+            },
+            value: QuotedString {
+                open_quote: DOUBLE_QUOTE@18..19 "\"",
+                string: STRING@19..21 "ok",
+                close_quote: DOUBLE_QUOTE@18..19 "\"",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

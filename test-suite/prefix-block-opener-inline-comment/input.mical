@@ -1,0 +1,2 @@
+server. # the web server
+  host localhost

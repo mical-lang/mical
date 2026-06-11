@@ -1,0 +1,47 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# value-quoted-hash-inside
+
+## Input
+
+```
+msg "before # after"
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..21
+  ENTRY@0..21
+    WORD_KEY@0..3
+      WORD@0..3 "msg"
+    SPACE@3..4 " "
+    QUOTED_STRING@4..20
+      DOUBLE_QUOTE@4..5 "\""
+      STRING@5..19 "before # after"
+      DOUBLE_QUOTE@19..20 "\""
+    NEWLINE@20..21 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..3 "msg",
+            },
+            value: QuotedString {
+                open_quote: DOUBLE_QUOTE@4..5 "\"",
+                string: STRING@5..19 "before # after",
+                close_quote: DOUBLE_QUOTE@4..5 "\"",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

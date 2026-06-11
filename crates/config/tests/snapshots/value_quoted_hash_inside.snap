@@ -1,0 +1,21 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# value-quoted-hash-inside
+
+## Input
+
+```mical
+msg "before # after"
+
+```
+
+## JSON
+
+```json
+{
+  "msg": "before # after"
+}
+```
+
+vim:ft=markdown

@@ -1,6 +1,0 @@
-{
-  "a": "hello \"world\" end",
-  "b": "start 'mid' end",
-  "c": "value \"foo\"",
-  "d": "value 'bar'"
-}

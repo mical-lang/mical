@@ -1,0 +1,29 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# block-string-blank-lines-within
+
+## Input
+
+```mical
+foo |
+  a
+
+  b
+bar |
+  a
+     
+  b
+
+```
+
+## JSON
+
+```json
+{
+  "foo": "a\n\nb\n",
+  "bar": "a\n\nb\n"
+}
+```
+
+vim:ft=markdown

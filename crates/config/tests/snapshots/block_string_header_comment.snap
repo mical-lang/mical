@@ -1,0 +1,22 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# block-string-header-comment
+
+## Input
+
+```mical
+f | # comment
+  content
+
+```
+
+## JSON
+
+```json
+{
+  "f": "content\n"
+}
+```
+
+vim:ft=markdown

@@ -1,0 +1,26 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# block-string-folded-indented-suppression
+
+## Input
+
+```mical
+key >
+  a
+  b
+    c
+  d
+  e
+
+```
+
+## JSON
+
+```json
+{
+  "key": "a b\n  c\nd e\n"
+}
+```
+
+vim:ft=markdown

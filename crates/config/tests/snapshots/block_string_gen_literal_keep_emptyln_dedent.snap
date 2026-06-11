@@ -1,0 +1,26 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# block-string-gen-literal-keep-emptyln-dedent
+
+## Input
+
+```mical
+key |+
+  a
+
+  b
+end marker
+
+```
+
+## JSON
+
+```json
+{
+  "key": "a\n\nb\n",
+  "end": "marker"
+}
+```
+
+vim:ft=markdown

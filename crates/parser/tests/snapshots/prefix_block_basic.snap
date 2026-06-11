@@ -1,0 +1,74 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# prefix-block-basic
+
+## Input
+
+```
+server.
+  host localhost
+  port 8080
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..37
+  PREFIX_BLOCK@0..37
+    WORD_KEY@0..7
+      WORD@0..7 "server."
+    NEWLINE@7..8 "\n"
+    SPACE@8..10 "  "
+    ENTRY@10..25
+      WORD_KEY@10..14
+        WORD@10..14 "host"
+      SPACE@14..15 " "
+      LINE_STRING@15..24
+        STRING@15..24 "localhost"
+      NEWLINE@24..25 "\n"
+    SPACE@25..27 "  "
+    ENTRY@27..37
+      WORD_KEY@27..31
+        WORD@27..31 "port"
+      SPACE@31..32 " "
+      INTEGER@32..36
+        NUMERAL@32..36 "8080"
+      NEWLINE@36..37 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    items: [
+        PrefixBlock {
+            key: WordKey {
+                word: WORD@0..7 "server.",
+            },
+            items: [
+                Entry {
+                    key: WordKey {
+                        word: WORD@10..14 "host",
+                    },
+                    value: LineString {
+                        string: STRING@15..24 "localhost",
+                    },
+                },
+                Entry {
+                    key: WordKey {
+                        word: WORD@27..31 "port",
+                    },
+                    value: Integer {
+                        sign: none,
+                        numeral: NUMERAL@32..36 "8080",
+                    },
+                },
+            ],
+        },
+    ],
+}
+```
+
+vim:ft=markdown

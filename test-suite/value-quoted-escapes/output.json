@@ -1,0 +1,8 @@
+{
+  "a": "h\"i",
+  "b": "sin'gle",
+  "c": "back\\slash",
+  "d": "tab\there",
+  "e": "line\nbreak",
+  "f": "cr\rreturn"
+}

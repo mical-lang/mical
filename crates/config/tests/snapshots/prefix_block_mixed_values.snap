@@ -1,0 +1,34 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# prefix-block-mixed-values
+
+## Input
+
+```mical
+block.
+  str hello world
+  num 42
+  flag true
+  neg -1
+  quoted "value"
+  text |
+    multi
+    line
+
+```
+
+## JSON
+
+```json
+{
+  "block.str": "hello world",
+  "block.num": 42,
+  "block.flag": true,
+  "block.neg": -1,
+  "block.quoted": "value",
+  "block.text": "multi\nline\n"
+}
+```
+
+vim:ft=markdown

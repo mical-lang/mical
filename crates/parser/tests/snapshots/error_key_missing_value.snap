@@ -1,0 +1,66 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# error-key-missing-value
+
+## Input
+
+```
+lonely
+next 1
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..14
+  ENTRY@0..7
+    WORD_KEY@0..6
+      WORD@0..6 "lonely"
+    NEWLINE@6..7 "\n"
+  ENTRY@7..14
+    WORD_KEY@7..11
+      WORD@7..11 "next"
+    SPACE@11..12 " "
+    INTEGER@12..13
+      NUMERAL@12..13 "1"
+    NEWLINE@13..14 "\n"
+```
+
+## Syntax Error
+
+```
+[
+    SyntaxError {
+        message: "missing value for the key",
+        range: 6..6,
+    },
+]
+```
+
+## AST
+
+```
+SourceFile {
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..6 "lonely",
+            },
+            value: none,
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@7..11 "next",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@12..13 "1",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

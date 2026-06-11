@@ -1,0 +1,3 @@
+#include path/to/file
+#schema https://example.com/schema.json
+key value

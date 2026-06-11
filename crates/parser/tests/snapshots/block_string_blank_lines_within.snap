@@ -1,0 +1,118 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# block-string-blank-lines-within
+
+## Input
+
+```
+foo |
+  a
+
+  b
+bar |
+  a
+     
+  b
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..35
+  ENTRY@0..15
+    WORD_KEY@0..3
+      WORD@0..3 "foo"
+    SPACE@3..4 " "
+    BLOCK_STRING@4..15
+      BLOCK_STRING_HEADER@4..6
+        PIPE@4..5 "|"
+        NEWLINE@5..6 "\n"
+      SPACE@6..8 "  "
+      LINE_STRING@8..9
+        STRING@8..9 "a"
+      NEWLINE@9..10 "\n"
+      LINE_STRING@10..10
+      NEWLINE@10..11 "\n"
+      SPACE@11..13 "  "
+      LINE_STRING@13..14
+        STRING@13..14 "b"
+      NEWLINE@14..15 "\n"
+  ENTRY@15..35
+    WORD_KEY@15..18
+      WORD@15..18 "bar"
+    SPACE@18..19 " "
+    BLOCK_STRING@19..35
+      BLOCK_STRING_HEADER@19..21
+        PIPE@19..20 "|"
+        NEWLINE@20..21 "\n"
+      SPACE@21..23 "  "
+      LINE_STRING@23..24
+        STRING@23..24 "a"
+      NEWLINE@24..25 "\n"
+      SPACE@25..30 "     "
+      LINE_STRING@30..30
+      NEWLINE@30..31 "\n"
+      SPACE@31..33 "  "
+      LINE_STRING@33..34
+        STRING@33..34 "b"
+      NEWLINE@34..35 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    items: [
+        Entry {
+            key: WordKey {
+                word: WORD@0..3 "foo",
+            },
+            value: BlockString {
+                header: BlockStringHeader {
+                    style: PIPE@4..5 "|",
+                    indent: none,
+                    chomp: none,
+                },
+                lines: [
+                    LineString {
+                        string: STRING@8..9 "a",
+                    },
+                    LineString {
+                        string: none,
+                    },
+                    LineString {
+                        string: STRING@13..14 "b",
+                    },
+                ],
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@15..18 "bar",
+            },
+            value: BlockString {
+                header: BlockStringHeader {
+                    style: PIPE@19..20 "|",
+                    indent: none,
+                    chomp: none,
+                },
+                lines: [
+                    LineString {
+                        string: STRING@23..24 "a",
+                    },
+                    LineString {
+                        string: none,
+                    },
+                    LineString {
+                        string: STRING@33..34 "b",
+                    },
+                ],
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

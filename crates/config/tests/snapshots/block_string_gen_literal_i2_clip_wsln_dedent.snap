@@ -1,0 +1,26 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# block-string-gen-literal-i2-clip-wsln-dedent
+
+## Input
+
+```mical
+key |2
+  a
+    
+  b
+end marker
+
+```
+
+## JSON
+
+```json
+{
+  "key": "a\n\nb\n",
+  "end": "marker"
+}
+```
+
+vim:ft=markdown

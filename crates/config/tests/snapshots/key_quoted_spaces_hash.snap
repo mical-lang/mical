@@ -1,0 +1,23 @@
+---
+source: crates/config/tests/snapshots.rs
+---
+# key-quoted-spaces-hash
+
+## Input
+
+```mical
+"key with spaces" v1
+'a # b'           v2
+
+```
+
+## JSON
+
+```json
+{
+  "key with spaces": "v1",
+  "a # b": "v2"
+}
+```
+
+vim:ft=markdown

@@ -1,0 +1,4 @@
+key |
+  line 1
+  # not a comment
+  line 2 # also not a comment

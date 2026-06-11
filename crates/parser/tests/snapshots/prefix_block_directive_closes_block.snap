@@ -1,0 +1,89 @@
+---
+source: crates/parser/tests/snapshots.rs
+---
+# prefix-block-directive-closes-block
+
+## Input
+
+```
+outer.
+  a 1
+#dir args
+b 2
+
+```
+
+## CST
+
+```
+SOURCE_FILE@0..27
+  PREFIX_BLOCK@0..13
+    WORD_KEY@0..6
+      WORD@0..6 "outer."
+    NEWLINE@6..7 "\n"
+    SPACE@7..9 "  "
+    ENTRY@9..13
+      WORD_KEY@9..10
+        WORD@9..10 "a"
+      SPACE@10..11 " "
+      INTEGER@11..12
+        NUMERAL@11..12 "1"
+      NEWLINE@12..13 "\n"
+  DIRECTIVE@13..23
+    SHARP@13..14 "#"
+    WORD@14..17 "dir"
+    SPACE@17..18 " "
+    LINE_STRING@18..22
+      STRING@18..22 "args"
+    NEWLINE@22..23 "\n"
+  ENTRY@23..27
+    WORD_KEY@23..24
+      WORD@23..24 "b"
+    SPACE@24..25 " "
+    INTEGER@25..26
+      NUMERAL@25..26 "2"
+    NEWLINE@26..27 "\n"
+```
+
+## AST
+
+```
+SourceFile {
+    items: [
+        PrefixBlock {
+            key: WordKey {
+                word: WORD@0..6 "outer.",
+            },
+            items: [
+                Entry {
+                    key: WordKey {
+                        word: WORD@9..10 "a",
+                    },
+                    value: Integer {
+                        sign: none,
+                        numeral: NUMERAL@11..12 "1",
+                    },
+                },
+            ],
+        },
+        Directive {
+            sharp: SHARP@13..14 "#",
+            name: WORD@14..17 "dir",
+            args: LineString {
+                string: STRING@18..22 "args",
+            },
+        },
+        Entry {
+            key: WordKey {
+                word: WORD@23..24 "b",
+            },
+            value: Integer {
+                sign: none,
+                numeral: NUMERAL@25..26 "2",
+            },
+        },
+    ],
+}
+```
+
+vim:ft=markdown

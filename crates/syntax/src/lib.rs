@@ -5,7 +5,6 @@ mod syntax_error;
 pub use syntax_error::*;
 
 pub mod ast;
-pub mod token;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum MicalLanguage {}

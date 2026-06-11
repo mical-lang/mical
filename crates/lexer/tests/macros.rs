@@ -1,36 +1,87 @@
 #[macro_export]
-macro_rules! assert_token {
-    // Entry point
-    ($src:literal, [$($tokens:tt)*]) => {
-        assert_token!(@normalize $src [] $($tokens)*)
+macro_rules! scanner_of {
+    ($src:expr) => {
+        ::mical_cli_lexer::scan_lines($src)
+            .next()
+            .map_or_else(::mical_cli_lexer::LineScanner::empty, |line| line.scan())
     };
+}
 
-    // Normalize: () -> {}
-    (@normalize $src:literal [$($normalized:tt)*] $kind:ident ( $len:literal ) $(, $($rest:tt)*)?) => {
-        assert_token!(@normalize $src [$($normalized)* $kind { $len },] $($($rest)*)?)
-    };
-    // Normalize: {} (pass through)
-    (@normalize $src:literal [$($normalized:tt)*] $kind:ident { $($fields:tt)* } $(, $($rest:tt)*)?) => {
-        assert_token!(@normalize $src [$($normalized)* $kind { $($fields)* },] $($($rest)*)?)
-    };
-    // Normalize done -> check
-    (@normalize $src:literal [$($normalized:tt)*]) => {
-        assert_token!(@check $src [$($normalized)*])
-    };
+#[macro_export]
+macro_rules! assert_lines {
+    ($src:expr, [$( ($text:literal, term: $term:literal, indent: $indent:literal, $head:ident) ),* $(,)?]) => {{
+        let actual = ::mical_cli_lexer::scan_lines($src)
+            .map(|line| (line.text(), line.terminator_len(), line.indent(), line.head()))
+            .collect::<Vec<_>>();
+        let expected = vec![$(
+            ($text, $term, $indent, ::mical_cli_lexer::LineHead::$head)
+        ),*];
+        ::pretty_assertions::assert_eq!(actual, expected);
+    }};
+}
 
-    // Check step: actual assertion
-    (@check $src:literal [$( $kind:ident { $len:literal $(, $($field_name:ident: $field_expr:expr),* $(,)? )?} ),* $(,)?]) => {
-        let tokens = ::mical_cli_lexer::tokenize($src).collect::<Vec<_>>();
-        let mut i = 0;
-        #[allow(unused_assignments)]
-        {$(
-            let token = &tokens[i];
-            ::pretty_assertions::assert_eq!(token, &::mical_cli_syntax::token::Token {
-                len: $len,
-                kind: ::mical_cli_syntax::token::TokenKind::$kind $({ $($field_name: $field_expr),* })?
-            });
-            i += 1;
-        )*}
-        ::pretty_assertions::assert_eq!(None, tokens.get(i));
+#[macro_export]
+macro_rules! assert_word {
+    ($src:literal, $len:literal) => {
+        ::pretty_assertions::assert_eq!($crate::scanner_of!($src).scan_word(), $len)
     };
+}
+
+#[macro_export]
+macro_rules! assert_quoted {
+    ($src:literal, None) => {
+        ::pretty_assertions::assert_eq!($crate::scanner_of!($src).scan_quoted(), None)
+    };
+    ($src:literal, { $($fields:tt)* }) => {
+        ::pretty_assertions::assert_eq!(
+            $crate::scanner_of!($src).scan_quoted(),
+            Some(::mical_cli_lexer::QuotedToken { $($fields)* })
+        )
+    };
+}
+
+#[macro_export]
+macro_rules! assert_separator {
+    ($src:literal, space: $space:literal, tab_run: $tab_run:literal) => {
+        ::pretty_assertions::assert_eq!(
+            $crate::scanner_of!($src).scan_separator(),
+            ::mical_cli_lexer::Separator { space_len: $space, tab_run_len: $tab_run }
+        )
+    };
+}
+
+#[macro_export]
+macro_rules! assert_split_comment {
+    ($src:literal, value: $value:literal, space: $space:literal, comment: $comment:literal) => {
+        ::pretty_assertions::assert_eq!(
+            $crate::scanner_of!($src).split_comment(),
+            ::mical_cli_lexer::SplitComment {
+                value_len: $value,
+                trailing_space_len: $space,
+                comment_len: $comment,
+            }
+        )
+    };
+}
+
+#[macro_export]
+macro_rules! assert_directive {
+    (not $src:literal) => {
+        assert!(!::mical_cli_lexer::scan_lines($src).next().is_some_and(|line| line.is_directive()))
+    };
+    ($src:literal) => {
+        assert!(::mical_cli_lexer::scan_lines($src).next().is_some_and(|line| line.is_directive()))
+    };
+}
+
+#[macro_export]
+macro_rules! assert_value {
+    ($src:literal, $variant:ident $({ $($fields:tt)* })?) => {{
+        let scanner = $crate::scanner_of!($src);
+        let value_len = scanner.split_comment().value_len;
+        ::pretty_assertions::assert_eq!(
+            scanner.classify_value(value_len),
+            ::mical_cli_lexer::ValueKind::$variant $({ $($fields)* })?
+        )
+    }};
 }

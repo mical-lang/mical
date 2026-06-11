@@ -4,7 +4,7 @@ use crate::{
 };
 use mical_cli_syntax::{
     SyntaxKind,
-    ast::{self, BooleanKind},
+    ast::{self, AstNode as _, BooleanKind},
 };
 
 mod joined_str;
@@ -93,9 +93,15 @@ impl Eval for ast::Entry {
                     ctx.prefix.joined(token.text())
                 }
                 ast::Key::Quoted(quoted_key) => {
-                    let Some(string) = quoted_key.string() else { return };
                     let espaced: &mut String = ctx.temporary_string.get();
-                    unescape(string.text(), espaced, string.text_range().start(), &mut ctx.errors);
+                    if let Some(string) = quoted_key.string() {
+                        unescape(
+                            string.text(),
+                            espaced,
+                            string.text_range().start(),
+                            &mut ctx.errors,
+                        );
+                    }
                     ctx.prefix.joined(espaced)
                 }
             };
@@ -121,10 +127,11 @@ impl Eval for ast::PrefixBlock {
                 ctx.prefix.push_str(token.text());
             }
             ast::Key::Quoted(quoted_key) => {
-                let Some(string) = quoted_key.string() else { return };
-                let espaced: &mut String = ctx.temporary_string.get();
-                unescape(string.text(), espaced, string.text_range().start(), &mut ctx.errors);
-                ctx.prefix.push_str(espaced);
+                if let Some(string) = quoted_key.string() {
+                    let espaced: &mut String = ctx.temporary_string.get();
+                    unescape(string.text(), espaced, string.text_range().start(), &mut ctx.errors);
+                    ctx.prefix.push_str(espaced);
+                }
             }
         };
 
@@ -186,12 +193,23 @@ impl Eval for ast::Integer {
     fn eval(&self, ctx: &mut Context) -> Self::Output {
         let numeral = self.numeral()?;
         let text = numeral.text();
+        fn digits_valid(digits: &str, is_radix_digit: impl Fn(u8) -> bool) -> bool {
+            let mut has_digits = false;
+            for b in digits.bytes() {
+                if b == b'_' {
+                    continue;
+                }
+                if !is_radix_digit(b) {
+                    return false;
+                }
+                has_digits = true;
+            }
+            has_digits
+        }
         let valid = match text.as_bytes() {
-            [b'0', b'b', ..] => text[2..].bytes().all(|b| matches!(b, b'0' | b'1' | b'_')),
-            [b'0', b'o', ..] => text[2..].bytes().all(|b| matches!(b, b'0'..=b'7' | b'_')),
-            [b'0', b'x', ..] => text[2..]
-                .bytes()
-                .all(|b| matches!(b, b'0'..=b'9' | b'a'..=b'f' | b'A'..=b'F' | b'_')),
+            [b'0', b'b', ..] => digits_valid(&text[2..], |b| matches!(b, b'0' | b'1')),
+            [b'0', b'o', ..] => digits_valid(&text[2..], |b| matches!(b, b'0'..=b'7')),
+            [b'0', b'x', ..] => digits_valid(&text[2..], |b| b.is_ascii_hexdigit()),
             _ => true,
         };
         if !valid {
@@ -214,9 +232,10 @@ impl Eval for ast::QuotedString {
     type Output = Option<TextId>;
 
     fn eval(&self, ctx: &mut Context) -> Self::Output {
-        let string = self.string()?;
         let buf = ctx.temporary_string.get();
-        unescape(string.text(), buf, string.text_range().start(), &mut ctx.errors);
+        if let Some(string) = self.string() {
+            unescape(string.text(), buf, string.text_range().start(), &mut ctx.errors);
+        }
         Some(ctx.arena.alloc(buf))
     }
 }
@@ -277,18 +296,26 @@ impl Eval for ast::BlockString {
             return Some(ctx.arena.alloc(""));
         }
 
-        buf.push('\n');
-
         match chomp {
             Some(SyntaxKind::MINUS) => {
                 let end = buf.trim_end_matches('\n').len();
                 buf.truncate(end);
             }
-            Some(SyntaxKind::PLUS) => {}
+            Some(SyntaxKind::PLUS) => {
+                let last_line_terminated = self
+                    .syntax()
+                    .last_child_or_token()
+                    .is_some_and(|element| element.kind() == SyntaxKind::NEWLINE);
+                if last_line_terminated {
+                    buf.push('\n');
+                }
+            }
             _ => {
                 let end = buf.trim_end_matches('\n').len();
                 buf.truncate(end);
-                buf.push('\n');
+                if !buf.is_empty() {
+                    buf.push('\n');
+                }
             }
         }
 

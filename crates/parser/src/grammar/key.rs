@@ -1,65 +1,28 @@
-use super::*;
+use super::emit_quoted;
+use crate::parser::Parser;
+use mical_cli_syntax::{SyntaxKind, T};
 
-pub(super) const KEY_FIRST: TokenSet = TokenSet::new([
-    T![word],
-    T![numeral],
-    T![true],
-    T![false],
-    T![-],
-    T![+],
-    T![|],
-    T![>],
-    T!['"'],
-    T!['\''],
-    T!['{'],
-    T!['}'],
-]);
-
-/// `T![' ']`, `T!['\n']`, `T!['\t']`, or EOF
-pub(super) const KEY_LAST: TokenSet = TokenSet::new([T![' '], T!['\n'], T!['\t']]);
-
-pub(super) fn key(p: &mut Parser) {
-    assert!(p.at_ts(KEY_FIRST));
-
-    match unsafe { p.current().unwrap_unchecked() } {
-        quote @ (T!['"'] | T!['\'']) => quoted_key(p, quote),
-        _ => word_key(p),
-    }
+pub(super) struct ParsedKey {
+    pub(super) unclosed_quote: bool,
 }
 
-fn word_key(p: &mut Parser) {
-    let m = p.start();
-
-    let mut count = 0;
-    while !(p.nth_at_ts(count, KEY_LAST) || p.nth_at_eof(count)) {
-        count += 1;
-    }
-    p.bump_remap(T![word], count);
-
-    m.complete(p, WORD_KEY);
-}
-
-fn quoted_key(p: &mut Parser, quote: SyntaxKind) {
-    assert!((p.at(T!['"']) || p.at(T!['\''])) && p.at(quote));
-
-    let m = p.start();
-
-    p.bump(quote);
-
-    p.bump(T![string]);
-
-    if !p.eat(quote) {
-        p.error("missing closing quote");
-    }
-
-    if !(p.at_ts(KEY_LAST) || p.at_eof()) {
-        p.error("unexpected token after quoted key");
+pub(super) fn parse_key(p: &mut Parser) -> ParsedKey {
+    let Some(quoted) = p.scan_quoted() else {
         let m = p.start();
-        while !(p.at_ts(KEY_LAST) || p.at_eof()) {
-            p.bump_any();
-        }
-        m.complete(p, ERROR);
-    }
+        p.token(T![word], p.scan_word());
+        m.complete(p, SyntaxKind::WORD_KEY);
+        return ParsedKey { unclosed_quote: false };
+    };
 
-    m.complete(p, QUOTED_KEY);
+    let m = p.start();
+    emit_quoted(p, quoted);
+    let junk_len = if quoted.closed { p.scan_word() } else { 0 };
+    if junk_len > 0 {
+        p.error("unexpected token after quoted key", junk_len);
+        let em = p.start();
+        p.token(T![string], junk_len);
+        em.complete(p, SyntaxKind::ERROR);
+    }
+    m.complete(p, SyntaxKind::QUOTED_KEY);
+    ParsedKey { unclosed_quote: !quoted.closed }
 }

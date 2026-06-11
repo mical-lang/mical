@@ -20,5 +20,4 @@ insta.workspace = true
 pretty_assertions.workspace = true
 proptest = { workspace = true, features = ["attr-macro"] }
 serde_json.workspace = true
-mical-cli-lexer.workspace = true
 mical-cli-parser.workspace = true

@@ -80,7 +80,7 @@ struct DevArgs {
     /// Path to the .mical file
     file: PathBuf,
 
-    /// Print the token stream
+    /// Print the line table (lexer layer 1)
     #[arg(long)]
     token: bool,
 
@@ -114,7 +114,7 @@ fn cmd_eval(args: EvalArgs) -> ExitCode {
         }
     };
 
-    let (green, syntax_errors) = mical_cli_parser::parse(mical_cli_lexer::tokenize(&source));
+    let (green, syntax_errors) = mical_cli_parser::parse(&source);
     let syntax_node = mical_cli_syntax::SyntaxNode::new_root(green);
     let source_file = match SourceFile::cast(syntax_node) {
         Some(sf) => sf,
@@ -186,16 +186,22 @@ fn cmd_dev(args: DevArgs) -> ExitCode {
     let print_default = !args.token && !args.cst && !args.ast;
 
     if args.token {
-        println!("=== Tokens ===");
-        let mut offset: u32 = 0;
-        for token in mical_cli_lexer::tokenize(&source) {
-            let text = &source[offset as usize..(offset + token.len) as usize];
-            println!("  {:?} {:?} @{}..{}", token.kind, text, offset, offset + token.len);
-            offset += token.len;
+        println!("=== Lines ===");
+        let mut pos = 0;
+        for (i, line) in mical_cli_lexer::scan_lines(&source).enumerate() {
+            let text_end = pos + line.text_len();
+            let end = text_end + line.terminator_len();
+            println!(
+                "  {i}: @{pos}..{end} (text_end={text_end}) indent={} head={:?} {:?}",
+                line.indent(),
+                line.head(),
+                line.text(),
+            );
+            pos = end;
         }
     }
 
-    let (green, syntax_errors) = mical_cli_parser::parse(mical_cli_lexer::tokenize(&source));
+    let (green, syntax_errors) = mical_cli_parser::parse(&source);
     let syntax_node = mical_cli_syntax::SyntaxNode::new_root(green);
 
     if args.cst || print_default {

@@ -1,5 +1,4 @@
 SourceFile =
-  '$shebang'?
   items:Item*
 
 Item =
@@ -11,14 +10,13 @@ Entry =
   Key Value
 
 PrefixBlock =
-  Key '{'
+  Key
     items:Item*
-  '}'
 
 Directive =
   '#'
   name:'$word'
-  args:LineString
+  args:LineString?
 
 Key =
   WordKey
@@ -61,4 +59,5 @@ BlockString =
 
 BlockStringHeader =
   style:('|' | '>')
+  indent:'$numeral'?
   chomp:('+' | '-')?

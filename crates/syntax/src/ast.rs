@@ -53,9 +53,6 @@ impl AstNode for SourceFile {
     }
 }
 impl SourceFile {
-    pub fn shebang(&self) -> Option<SyntaxToken> {
-        support::token(AstNode::syntax(self), SyntaxKind::SHEBANG)
-    }
     pub fn items(&self) -> AstChildren<Item> {
         support::children(AstNode::syntax(self))
     }
@@ -67,10 +64,7 @@ impl fmt::Display for SourceFile {
 }
 impl fmt::Debug for SourceFile {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.debug_struct("SourceFile")
-            .field("shebang", &support::DebugSyntaxToken(self.shebang()))
-            .field("items", &support::DebugAstChildren(self.items()))
-            .finish()
+        f.debug_struct("SourceFile").field("items", &support::DebugAstChildren(self.items())).finish()
     }
 }
 
@@ -188,14 +182,8 @@ impl PrefixBlock {
     pub fn key(&self) -> Option<Key> {
         support::child(AstNode::syntax(self))
     }
-    pub fn open_brace(&self) -> Option<SyntaxToken> {
-        support::token(AstNode::syntax(self), SyntaxKind::OPEN_BRACE)
-    }
     pub fn items(&self) -> AstChildren<Item> {
         support::children(AstNode::syntax(self))
-    }
-    pub fn close_brace(&self) -> Option<SyntaxToken> {
-        support::token(AstNode::syntax(self), SyntaxKind::CLOSE_BRACE)
     }
 }
 impl fmt::Display for PrefixBlock {
@@ -207,9 +195,7 @@ impl fmt::Debug for PrefixBlock {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("PrefixBlock")
             .field("key", &support::DebugAstNode(self.key()))
-            .field("open_brace", &support::DebugSyntaxToken(self.open_brace()))
             .field("items", &support::DebugAstChildren(self.items()))
-            .field("close_brace", &support::DebugSyntaxToken(self.close_brace()))
             .finish()
     }
 }
@@ -695,6 +681,9 @@ impl BlockStringHeader {
             .filter_map(|it| it.into_token())
             .find(|it| matches!(it.kind(), SyntaxKind::PIPE | SyntaxKind::GT))
     }
+    pub fn indent(&self) -> Option<SyntaxToken> {
+        support::token(AstNode::syntax(self), SyntaxKind::NUMERAL)
+    }
     pub fn chomp(&self) -> Option<SyntaxToken> {
         self.syntax()
             .children_with_tokens()
@@ -711,27 +700,9 @@ impl fmt::Debug for BlockStringHeader {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("BlockStringHeader")
             .field("style", &support::DebugSyntaxToken(self.style()))
+            .field("indent", &support::DebugSyntaxToken(self.indent()))
             .field("chomp", &support::DebugSyntaxToken(self.chomp()))
             .finish()
-    }
-}
-
-#[derive(Clone)]
-pub struct Comment(SyntaxNode);
-impl AstNode for Comment {
-    type Language = MicalLanguage;
-    fn can_cast(kind: <Self::Language as rowan::Language>::Kind) -> bool {
-        kind == SyntaxKind::COMMENT
-    }
-    fn cast(node: rowan::SyntaxNode<Self::Language>) -> Option<Self> {
-        if Self::can_cast(node.kind()) {
-            Some(Self(node))
-        } else {
-            None
-        }
-    }
-    fn syntax(&self) -> &rowan::SyntaxNode<Self::Language> {
-        &self.0
     }
 }
 

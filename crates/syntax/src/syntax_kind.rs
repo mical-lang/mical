@@ -5,19 +5,16 @@
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
 #[repr(u8)]
 pub enum SyntaxKind {
-    BACKSLASH,
-    CLOSE_BRACE,
+    COMMENT,
     DOUBLE_QUOTE,
     FALSE,
     GT,
     MINUS,
     NEWLINE,
     NUMERAL,
-    OPEN_BRACE,
     PIPE,
     PLUS,
     SHARP,
-    SHEBANG,
     SINGLE_QUOTE,
     SPACE,
     STRING,
@@ -27,7 +24,6 @@ pub enum SyntaxKind {
     BLOCK_STRING,
     BLOCK_STRING_HEADER,
     BOOLEAN,
-    COMMENT,
     DIRECTIVE,
     ENTRY,
     ERROR,
@@ -41,7 +37,7 @@ pub enum SyntaxKind {
 }
 
 impl SyntaxKind {
-    pub const COUNT: usize = 33usize;
+    pub const COUNT: usize = 29usize;
 }
 impl From<SyntaxKind> for ::rowan::SyntaxKind {
     fn from(kind: SyntaxKind) -> Self {
@@ -50,7 +46,7 @@ impl From<SyntaxKind> for ::rowan::SyntaxKind {
 }
 impl From<::rowan::SyntaxKind> for SyntaxKind {
     fn from(kind: ::rowan::SyntaxKind) -> Self {
-        assert!(kind.0 < (33usize as u16), "bad SyntaxKind: {:?}", kind);
+        assert!(kind.0 < (29usize as u16), "bad SyntaxKind: {:?}", kind);
         unsafe { ::core::mem::transmute(kind.0 as u8) }
     }
 }
@@ -67,17 +63,8 @@ macro_rules! __token_kind_fast_accsess {
     (' ') => {
         $crate::SyntaxKind::SPACE
     };
-    ('\\') => {
-        $crate::SyntaxKind::BACKSLASH
-    };
-    (shebang) => {
-        $crate::SyntaxKind::SHEBANG
-    };
-    ('{') => {
-        $crate::SyntaxKind::OPEN_BRACE
-    };
-    ('}') => {
-        $crate::SyntaxKind::CLOSE_BRACE
+    (comment) => {
+        $crate::SyntaxKind::COMMENT
     };
     (#) => {
         $crate::SyntaxKind::SHARP

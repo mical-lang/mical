@@ -37,14 +37,12 @@ static PUNCT_NAME_MAP: phf::Map<&str, &str> = phf::phf_map! {
     "-" => "minus",
     ">" => "gt",
     "\"" => "double_quote",
-    "{" => "open_brace",
     "|" => "pipe",
-    "}" => "close_brace",
 };
 
 fn syntax_kind_rs(grammar: &Grammar) -> String {
     let all_nodes_name = {
-        let iter1 = ["ERROR", "COMMENT"].into_iter().map(|s| format_ident!("{s}"));
+        let iter1 = ["ERROR"].into_iter().map(|s| format_ident!("{s}"));
         let iter2 = grammar.iter().filter_map(|node| {
             let generate = match &grammar[node].rule {
                 Rule::Alt(alts) => {
@@ -71,7 +69,7 @@ fn syntax_kind_rs(grammar: &Grammar) -> String {
     };
     let all_token_name = {
         let iter1 =
-            ["TAB", "NEWLINE", "SPACE", "BACKSLASH"].into_iter().map(|s| format_ident!("{s}"));
+            ["TAB", "NEWLINE", "SPACE", "COMMENT"].into_iter().map(|s| format_ident!("{s}"));
         let iter2 = grammar.tokens().map(|token| {
             let name = &grammar[token].name;
             if let Some(name) = name.strip_prefix('$') {
@@ -87,12 +85,18 @@ fn syntax_kind_rs(grammar: &Grammar) -> String {
         vec
     };
     let all_token_short_map_arm = {
-        let iter1 = [('\t', "TAB"), ('\n', "NEWLINE"), (' ', "SPACE"), ('\\', "BACKSLASH")]
-            .into_iter()
-            .map(|(p, name)| {
+        let iter1 = {
+            let pat_name = [
+                (quote!('\t'), "TAB"),
+                (quote!('\n'), "NEWLINE"),
+                (quote!(' '), "SPACE"),
+                (quote!(comment), "COMMENT"),
+            ];
+            pat_name.into_iter().map(|(pat, name)| {
                 let variant = format_ident!("{name}");
-                quote! { (#p) => { $crate::SyntaxKind::#variant } }
-            });
+                quote! { (#pat) => { $crate::SyntaxKind::#variant } }
+            })
+        };
         let iter2 = grammar.tokens().map(|token| {
             let name = &grammar[token].name;
             if let Some(name) = name.strip_prefix('$') {
@@ -103,7 +107,7 @@ fn syntax_kind_rs(grammar: &Grammar) -> String {
             if let Some(punct_name) = PUNCT_NAME_MAP.get(name) {
                 let variant = format_ident!("{}", punct_name.to_case(Case::UpperSnake));
                 let punct = match name.as_str() {
-                    "{" | "}" | "\"" | "'" => {
+                    "\"" | "'" => {
                         let c = name.chars().next().unwrap();
                         quote! { #c }
                     }
@@ -194,7 +198,7 @@ fn ast_rs(grammar: &Grammar) -> String {
         }
     };
     let special_nodes_code = {
-        let iter = ["Comment", "Error"].iter().map(|name| {
+        let iter = ["Error"].iter().map(|name| {
             let name_ident = format_ident!("{name}");
             let kind_ident = format_ident!("{}", name.to_case(Case::UpperSnake));
             quote! {
@@ -222,7 +226,9 @@ fn ast_rs(grammar: &Grammar) -> String {
         let iter = grammar.iter().map(|node| {
             let node = &grammar[node];
             match &node.rule {
-                Rule::Node(_) | Rule::Seq(_) => convert_node_to_struct(node, grammar),
+                Rule::Node(_) | Rule::Seq(_) | Rule::Labeled { .. } => {
+                    convert_node_to_struct(node, grammar)
+                }
                 Rule::Token(_) => convert_node_to_struct(node, grammar),
                 Rule::Alt(alts) => {
                     let has_token = alts.iter().any(|r| matches!(r, Rule::Token(_)));
@@ -242,11 +248,13 @@ fn ast_rs(grammar: &Grammar) -> String {
 }
 
 fn convert_node_to_struct(node: &NodeData, grammar: &Grammar) -> TokenStream {
-    assert!(matches!(node.rule, Rule::Seq(_) | Rule::Node(_) | Rule::Token(_)));
+    assert!(matches!(
+        node.rule,
+        Rule::Seq(_) | Rule::Node(_) | Rule::Token(_) | Rule::Labeled { .. }
+    ));
     let name = node.name.to_case(Case::Pascal);
     let fields = match &node.rule {
-        rule @ Rule::Node(_) => vec![rule],
-        rule @ Rule::Token(_) => vec![rule],
+        rule @ (Rule::Node(_) | Rule::Token(_) | Rule::Labeled { .. }) => vec![rule],
         Rule::Seq(vec) => vec.iter().collect(),
         _ => unreachable!(),
     };

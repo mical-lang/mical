@@ -5,7 +5,7 @@ use mical_cli_syntax::{
 use std::fmt::Write;
 
 pub fn make_snapshot(name: &str, source: &str) -> String {
-    let (green, err) = mical_cli_parser::parse(mical_cli_lexer::tokenize(source));
+    let (green, err) = mical_cli_parser::parse(source);
     let syntax_node = SyntaxNode::new_root(green);
     let ast = SourceFile::cast(syntax_node.clone()).unwrap();
 

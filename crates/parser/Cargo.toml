@@ -9,8 +9,8 @@ description = "Internal parser for mical-cli"
 
 [dependencies]
 rowan.workspace = true
+mical-cli-lexer.workspace = true
 mical-cli-syntax.workspace = true
 
 [dev-dependencies]
 insta.workspace = true
-mical-cli-lexer.workspace = true

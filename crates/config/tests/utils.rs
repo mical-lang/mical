@@ -6,7 +6,7 @@ use mical_cli_syntax::{
 use std::fmt::Write;
 
 pub fn make_snapshot(name: &str, source: &str) -> String {
-    let (green, parser_errors) = mical_cli_parser::parse(mical_cli_lexer::tokenize(source));
+    let (green, parser_errors) = mical_cli_parser::parse(source);
     let syntax = SyntaxNode::new_root(green);
     let source_file = SourceFile::cast(syntax).unwrap();
     let (config, config_errors) = Config::from_source_file(source_file);
@@ -51,7 +51,7 @@ pub fn make_snapshot(name: &str, source: &str) -> String {
 }
 
 pub fn assert_json_output(_name: &str, source: &str, expected_json: &str) {
-    let (green, _) = mical_cli_parser::parse(mical_cli_lexer::tokenize(source));
+    let (green, _) = mical_cli_parser::parse(source);
     let syntax = SyntaxNode::new_root(green);
     let source_file = SourceFile::cast(syntax).unwrap();
     let (config, _) = Config::from_source_file(source_file);

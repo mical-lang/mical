@@ -1,172 +1,70 @@
-use super::*;
+use super::{emit_trailing_trivia, key, value};
+use crate::parser::Parser;
+use mical_cli_lexer::LineHead;
+use mical_cli_syntax::{SyntaxKind, T};
 
 pub(super) fn item(p: &mut Parser) {
-    while p.eat(T!['\n']) {}
-    if p.at_eof() {
-        return;
+    // An item's indentation stays outside its node (CST shape rule).
+    if p.indent() > 0 {
+        p.token(T![' '], p.indent());
     }
+    match p.head() {
+        LineHead::Tab => tab_indent_error_line(p),
+        LineHead::Hash => directive(p),
+        LineHead::Other => entry_or_prefix_block(p),
+        LineHead::Blank => unreachable!("blank lines are trivia"),
+    }
+}
 
-    if p.at(T![#]) {
-        if p.nth_at(1, T![word]) {
-            directive(p);
-        } else {
-            comment(p);
-        }
-        return;
-    }
-
-    // leading spaces (indent)
-    let indent_level;
-    if p.at(T![' ']) {
-        indent_level = unsafe { p.current_len().unwrap_unchecked() };
-        p.bump(T![' ']);
-    } else {
-        indent_level = 0;
-    }
-    if p.at(T!['\t']) {
-        p.error("tab indent is not allowed, skipping this line");
-        let m = p.start();
-        eat_to_end_of_line(p);
-        m.complete(p, ERROR);
-        return;
-    }
-
-    if p.at(T![#]) {
-        comment(p);
-        return;
-    }
-
-    if p.at(T!['\n']) || p.at_eof() {
-        // whiltespace only line
-        return;
-    }
-
-    entry_or_prefix_block(p, indent_level);
+fn tab_indent_error_line(p: &mut Parser) {
+    p.error("tab is not allowed in indentation", 1);
+    let m = p.start();
+    p.token(T![string], p.rest_len());
+    p.finish_line();
+    m.complete(p, SyntaxKind::ERROR);
 }
 
 fn directive(p: &mut Parser) {
-    assert!(p.at(T![#]) && p.nth_at(1, T![word]));
-
+    debug_assert!(p.is_directive());
     let m = p.start();
-
-    p.bump(T![#]);
-    p.bump(T![word]);
-    value::line_string(p);
-
-    m.complete(p, DIRECTIVE);
+    p.token(T![#], 1);
+    p.token(T![word], p.scan_word());
+    let space_len = p.scan_separator().space_len;
+    if space_len > 0 {
+        p.token(T![' '], space_len);
+    }
+    let args_len = p.split_comment().value_len;
+    if args_len > 0 {
+        let args = p.start();
+        p.token(T![string], args_len);
+        args.complete(p, SyntaxKind::LINE_STRING);
+    }
+    emit_trailing_trivia(p);
+    p.finish_line();
+    m.complete(p, SyntaxKind::DIRECTIVE);
 }
 
-fn comment(p: &mut Parser) {
-    assert!(p.at(T![#]));
-
+fn entry_or_prefix_block(p: &mut Parser) {
     let m = p.start();
-
-    while let Some(current) = p.current() {
-        if current == T!['\n'] {
-            break;
-        }
-        p.bump_any();
+    let parsed_key = key::parse_key(p);
+    let separator = p.scan_separator();
+    if separator.space_len > 0 {
+        p.token(T![' '], separator.space_len);
     }
-
-    m.complete(p, COMMENT);
+    if separator.tab_run_len > 0 {
+        p.error("tab separating is not allowed", separator.tab_run_len);
+        let em = p.start();
+        emit_whitespace_runs(p, separator.tab_run_len);
+        em.complete(p, SyntaxKind::ERROR);
+    }
+    value::parse_value(p, m, parsed_key.unclosed_quote);
 }
 
-fn entry_or_prefix_block(p: &mut Parser, indent_level: u32) {
-    assert!(!(p.at(T!['\n']) || p.at_eof()));
-
-    // key
-    if !p.at_ts(key::KEY_FIRST) {
-        p.error("expected a key");
-        let m = p.start();
-        eat_to_end_of_line(p);
-        m.complete(p, ERROR);
-        return;
+fn emit_whitespace_runs(p: &mut Parser, mut len: u32) {
+    while len > 0 {
+        let run = p.scan_whitespace_run().expect("whitespace run within separator");
+        debug_assert!(run.len <= len);
+        p.token(if run.is_tab { T!['\t'] } else { T![' '] }, run.len);
+        len -= run.len;
     }
-    let m = p.start();
-    key::key(p);
-
-    // error (missing value)
-    assert!(p.at_ts(key::KEY_LAST) || p.at_eof());
-    if p.at(T!['\n']) || p.at_eof() {
-        p.error("missing value for the key");
-        m.complete(p, ENTRY);
-        return;
-    }
-    assert!(p.at(T![' ']) || p.at(T!['\t']));
-
-    // separator
-    p.eat(T![' ']);
-    if p.at(T!['\t']) {
-        p.error("tab separating is not allowed");
-        let m = p.start();
-        p.bump(T!['\t']);
-        m.complete(p, ERROR);
-    }
-
-    if p.at(T!['\n']) || p.at_eof() {
-        p.error("missing value for the key");
-        m.complete(p, ENTRY);
-        return;
-    }
-
-    if p.at(T!['{']) && is_rest_of_line_blank(p, 1) {
-        prefix_block(p, m);
-    } else {
-        entry(p, m, indent_level);
-    }
-}
-
-fn prefix_block(p: &mut Parser, m: Marker) {
-    assert!(p.at(T!['{']) && is_rest_of_line_blank(p, 1));
-
-    p.bump(T!['{']);
-    p.eat(T![' ']);
-
-    loop {
-        while p.eat(T!['\n']) {}
-
-        if p.at_eof() {
-            p.error("missing closing '}' for prefix block");
-            break;
-        }
-
-        if is_close_brace_line(p) {
-            p.eat(T![' ']);
-            p.bump(T!['}']);
-            p.eat(T![' ']);
-            p.eat(T!['\n']);
-            break;
-        }
-
-        item(p);
-    }
-
-    m.complete(p, PREFIX_BLOCK);
-}
-
-fn is_close_brace_line(p: &Parser) -> bool {
-    let mut n = 0;
-    if p.nth_at(n, T![' ']) {
-        n += 1;
-    }
-    if !p.nth_at(n, T!['}']) {
-        return false;
-    }
-    n += 1;
-    is_rest_of_line_blank(p, n)
-}
-
-fn entry(p: &mut Parser, m: Marker, indent_level: u32) {
-    assert!(!(p.at(T!['\n']) || p.at_eof()));
-
-    // value
-    if p.at_ts(value::VALUE_FIRST) {
-        value::value(p, indent_level);
-    }
-
-    // trailing whitespaces
-    p.eat(T![' ']);
-    p.eat(T!['\n']);
-
-    m.complete(p, ENTRY);
 }

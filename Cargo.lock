@@ -387,7 +387,6 @@ version = "0.0.3-dev"
 dependencies = [
  "compact_str",
  "insta",
- "mical-cli-lexer",
  "mical-cli-parser",
  "mical-cli-syntax",
  "num-bigint",
@@ -406,7 +405,6 @@ version = "0.0.3-dev"
 name = "mical-cli-lexer"
 version = "0.0.3-dev"
 dependencies = [
- "mical-cli-syntax",
  "pretty_assertions",
 ]
 

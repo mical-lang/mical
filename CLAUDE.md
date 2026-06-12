@@ -21,17 +21,17 @@ CI sets `RUSTFLAGS="-D warnings"` — all warnings are errors.
 
 ## Crate Structure
 
-Processing pipeline: source text → lexer → parser (CST) → AST → config evaluation → JSON
-
-All crates depend on `mical-cli-syntax` (prod). Crates do **not** depend on each other in prod — the CLI binary (`main.rs` at root) wires the pipeline. Test code uses dev-dependencies to construct the full pipeline.
+Processing pipeline: source text → lexer (line table) → parser (CST) → AST → config evaluation → JSON
 
 ```
-mical-cli-syntax    SyntaxKind, TokenKind, AST node types (rowan-based)
-mical-cli-lexer     source text → token stream
-mical-cli-parser    tokens → rowan GreenNode CST + SyntaxErrors
+mical-cli-syntax    SyntaxKind, AST node types (rowan-based)
+mical-cli-lexer     source text → line table (layer 1) + per-line scanners (layer 2); no syntax dep
+mical-cli-parser    mical_cli_parser::parse(&str) → rowan GreenNode CST + SyntaxErrors
 mical-cli-config    AST → flat key-value Config, JSON output
-mical-cli-formatter .mical file formatter via CST visitor
+mical-cli-formatter .mical file formatter (currently an empty shell, to be re-implemented)
 ```
+
+`mical-cli-parser` depends on `mical-cli-lexer` and `mical-cli-syntax` in prod; the CLI binary (`main.rs` at root) calls `parse(&source)` directly.
 
 ## Code Generation
 
@@ -40,7 +40,6 @@ mical-cli-formatter .mical file formatter via CST visitor
 - `crates/syntax/src/` — `SyntaxKind` enum, AST node types
 - `crates/parser/tests/snapshots.rs` — parser snapshot test entries
 - `crates/config/tests/snapshots.rs` — config snapshot test entries
-- `crates/formatter/src/visitor.rs` — `FormatVisitor` trait
 
 After modifying syntax definitions or adding test cases to `test-suite/`, run `cargo codegen` and commit the output.
 

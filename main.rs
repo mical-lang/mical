@@ -187,13 +187,14 @@ fn cmd_dev(args: DevArgs) -> ExitCode {
 
     if args.token {
         println!("=== Lines ===");
+        let mut scanner = mical_cli_lexer::Scanner::new(&source);
         let mut pos = 0;
-        for (i, line) in mical_cli_lexer::scan_lines(&source).enumerate() {
-            let text_end = pos + line.text_len();
-            let end = text_end + line.terminator_len();
+        for (i, line) in std::iter::from_fn(|| scanner.next_line()).enumerate() {
+            let text_end = pos + line.text().len();
+            let end = text_end + line.terminator().len();
             println!(
                 "  {i}: @{pos}..{end} (text_end={text_end}) indent={} head={:?} {:?}",
-                line.indent(),
+                line.indent().len(),
                 line.head(),
                 line.text(),
             );

@@ -9,6 +9,7 @@ use event::Event;
 use parser::Parser;
 
 pub fn parse(source: &str) -> (GreenNode, Vec<SyntaxError>) {
+    assert!(source.len() <= u32::MAX as usize, "source code is too large");
     let events = {
         let mut parser = Parser::new(source);
         grammar::source_file(&mut parser);

@@ -1,167 +1,201 @@
-mod macros;
+use mical_cli_lexer::{
+    LineHead::{self, *},
+    Scanner,
+};
+use pretty_assertions::assert_eq;
 
-use mical_cli_lexer::{Chomp::*, Quote::*, Sign::*, Style::*, scan_lines};
-
-#[test]
-fn scan_word_runs_until_whitespace_or_end() {
-    assert_word!("hello world", 5);
-    assert_word!("server.port 8080", 11);
-    assert_word!("a#b value", 3);
-    assert_word!("can't value", 5);
-    assert_word!("42 value", 2);
-    assert_word!("true value", 4);
-    assert_word!("key\tvalue", 3);
-    assert_word!("alone", 5);
-    assert_word!("", 0);
+macro_rules! assert_lines {
+    ($src:expr, [$( ($text:literal, term: $term:literal, indent: $indent:literal, $head:ident) ),* $(,)?]) => {{
+        let mut scanner = Scanner::new($src);
+        $(
+            let line = scanner.next_line().expect("expected more lines");
+            let actual = (line.text(), line.terminator(), line.indent(), line.head());
+            assert_eq!(actual, ($text, $term, $indent, $head));
+        )*
+        let extra_line = scanner.next_line();
+        assert_eq!(extra_line, None);
+    }};
 }
 
 #[test]
-fn scan_quoted_terminated() {
-    assert_quoted!("\"double\" v", { quote: Double, content_len: 6, closed: true });
-    assert_quoted!("'single' v", { quote: Single, content_len: 6, closed: true });
-    assert_quoted!("\"with space\" v", { quote: Double, content_len: 10, closed: true });
-    assert_quoted!("\"\" v", { quote: Double, content_len: 0, closed: true });
-    assert_quoted!("'' v", { quote: Single, content_len: 0, closed: true });
-    assert_quoted!("\"quoted\"ppp value", { quote: Double, content_len: 6, closed: true });
+fn empty_source() {
+    assert_lines!("", []);
 }
 
 #[test]
-fn scan_quoted_unterminated() {
-    assert_quoted!("\"unterminated value", { quote: Double, content_len: 18, closed: false });
-    assert_quoted!("\"", { quote: Double, content_len: 0, closed: false });
+fn only_one_newline() {
+    assert_lines!("\n", [("", term: "\n", indent: "", Blank)]);
+    assert_lines!("\r", [("", term: "\r", indent: "", Blank)]);
+    assert_lines!("\r\n", [("", term: "\r\n", indent: "", Blank)]);
 }
 
 #[test]
-fn scan_quoted_non_quote_start_is_none() {
-    assert_quoted!("plain", None);
-    assert_quoted!("", None);
+fn only_many_newlines() {
+    assert_lines!("\n\n", [
+        ("", term: "\n", indent: "", Blank),
+        ("", term: "\n", indent: "", Blank),
+    ]);
+    assert_lines!("\r\r", [
+        ("", term: "\r", indent: "", Blank),
+        ("", term: "\r", indent: "", Blank),
+    ]);
+    assert_lines!("\r\n\r\n", [
+        ("", term: "\r\n", indent: "", Blank),
+        ("", term: "\r\n", indent: "", Blank),
+    ]);
+    assert_lines!("\n\r\n\r", [
+        ("", term: "\n", indent: "", Blank),
+        ("", term: "\r\n", indent: "", Blank),
+        ("", term: "\r", indent: "", Blank),
+    ]);
 }
 
 #[test]
-fn scan_quoted_escapes_protect_matching_quote_only() {
-    assert_quoted!("\"a\\\"b\" v", { quote: Double, content_len: 4, closed: true });
-    assert_quoted!("'a\\'b' v", { quote: Single, content_len: 4, closed: true });
-    assert_quoted!("\"a\\\\\" v", { quote: Double, content_len: 3, closed: true });
-    // `\"` inside single quotes is not an escape that matters for closing.
-    assert_quoted!("'a\\\"b'", { quote: Single, content_len: 4, closed: true });
-    // A trailing lone backslash cannot escape past the end.
-    assert_quoted!("\"a\\", { quote: Double, content_len: 2, closed: false });
+fn lf_terminated_lines() {
+    assert_lines!("a 1\nb 2\n", [
+        ("a 1", term: "\n", indent: "", Text),
+        ("b 2", term: "\n", indent: "", Text),
+    ]);
 }
 
 #[test]
-fn scan_separator_spaces_and_tab_runs() {
-    assert_separator!(" value", space: 1, tab_run: 0);
-    assert_separator!("   value", space: 3, tab_run: 0);
-    assert_separator!("\tvalue", space: 0, tab_run: 1);
-    assert_separator!(" \t value", space: 1, tab_run: 2);
-    assert_separator!("\t\t value", space: 0, tab_run: 3);
-    assert_separator!("value", space: 0, tab_run: 0);
-    assert_separator!("", space: 0, tab_run: 0);
+fn last_line_without_trailing_newline() {
+    assert_lines!("a 1\nb 2", [
+        ("a 1", term: "\n", indent: "", Text),
+        ("b 2", term: "", indent: "", Text),
+    ]);
 }
 
 #[test]
-fn split_comment_positional_hash() {
-    assert_split_comment!("value", value: 5, space: 0, comment: 0);
-    assert_split_comment!("value   ", value: 5, space: 3, comment: 0);
-    assert_split_comment!("value # c", value: 5, space: 0, comment: 4);
-    assert_split_comment!("value   # c", value: 5, space: 0, comment: 6);
-    assert_split_comment!("# full line", value: 0, space: 0, comment: 11);
-    assert_split_comment!("hello#world", value: 11, space: 0, comment: 0);
-    assert_split_comment!("hello #world", value: 5, space: 0, comment: 7);
-    // A tab does not start a comment.
-    assert_split_comment!("x\t#y", value: 4, space: 0, comment: 0);
-    // Mid-line quotes do not protect '#'.
-    assert_split_comment!("a \"x # y\" tail", value: 4, space: 0, comment: 10);
-    assert_split_comment!("", value: 0, space: 0, comment: 0);
+fn crlf_terminator_is_two_bytes() {
+    assert_lines!("a 1\r\nb 2\r\n", [
+        ("a 1", term: "\r\n", indent: "", Text),
+        ("b 2", term: "\r\n", indent: "", Text),
+    ]);
 }
 
 #[test]
-fn classify_value_block_headers() {
-    assert_value!("|", BlockHeader { style: Literal, indent: None, chomp: None });
-    assert_value!(">", BlockHeader { style: Folded, indent: None, chomp: None });
-    assert_value!("|2", BlockHeader { style: Literal, indent: Some(2), chomp: None });
-    assert_value!("|+", BlockHeader { style: Literal, indent: None, chomp: Some(Keep) });
-    assert_value!("|-", BlockHeader { style: Literal, indent: None, chomp: Some(Strip) });
-    assert_value!("|9-", BlockHeader { style: Literal, indent: Some(9), chomp: Some(Strip) });
-    assert_value!(">1+", BlockHeader { style: Folded, indent: Some(1), chomp: Some(Keep) });
-    // Out-of-order or trailing junk falls through to Line String.
-    assert_value!("|-2", LineString);
-    assert_value!("|abc", LineString);
-    assert_value!("|not block", LineString);
-    assert_value!("|+not block", LineString);
-    assert_value!("|0", LineString);
+fn lone_cr_is_a_terminator() {
+    assert_lines!("a 1\rb 2", [
+        ("a 1", term: "\r", indent: "", Text),
+        ("b 2", term: "", indent: "", Text),
+    ]);
+    assert_lines!("a\r", [("a", term: "\r", indent: "", Text)]);
+    assert_lines!("a\r\rb", [
+        ("a", term: "\r", indent: "", Text),
+        ("", term: "\r", indent: "", Blank),
+        ("b", term: "", indent: "", Text),
+    ]);
 }
 
 #[test]
-fn classify_value_booleans() {
-    assert_value!("true", Boolean { value: true });
-    assert_value!("false", Boolean { value: false });
-    assert_value!("trueish", LineString);
-    assert_value!("falsehood", LineString);
-    assert_value!("true value", LineString);
+fn mixed_terminators_in_one_source() {
+    assert_lines!("a\nb\r\nc\rd", [
+        ("a", term: "\n", indent: "", Text),
+        ("b", term: "\r\n", indent: "", Text),
+        ("c", term: "\r", indent: "", Text),
+        ("d", term: "", indent: "", Text),
+    ]);
 }
 
 #[test]
-fn classify_value_integers() {
-    assert_value!("0", Integer { sign: None });
-    assert_value!("42", Integer { sign: None });
-    assert_value!("1_000", Integer { sign: None });
-    assert_value!("0b1010", Integer { sign: None });
-    assert_value!("0o777", Integer { sign: None });
-    assert_value!("0xFF", Integer { sign: None });
-    assert_value!("0xDEAD_BEEF", Integer { sign: None });
-    assert_value!("+1", Integer { sign: Some(Plus) });
-    assert_value!("-1", Integer { sign: Some(Minus) });
-    // Lexically lenient: digit validity is an eval concern.
-    assert_value!("0b9", Integer { sign: None });
-    assert_value!("0x", Integer { sign: None });
-    // Fallbacks.
-    assert_value!("42 items", LineString);
-    assert_value!("-10 trailing", LineString);
-    assert_value!("+ 1", LineString);
-    assert_value!("+", LineString);
-    assert_value!("0xG", LineString);
-    assert_value!("123abc", LineString);
-    assert_value!("1.5", LineString);
+fn empty_and_space_only_lines_are_blank() {
+    assert_lines!("\n   \na 1\n  ", [
+        ("", term: "\n", indent: "", Blank),
+        ("   ", term: "\n", indent: "   ", Blank),
+        ("a 1", term: "\n", indent: "", Text),
+        ("  ", term: "", indent: "  ", Blank),
+    ]);
 }
 
 #[test]
-fn classify_value_line_string_fallback() {
-    assert_value!("hello world", LineString);
-    assert_value!("[1, 2, 3]", LineString);
-    assert_value!("/usr/local/bin", LineString);
+fn indent_is_the_run_of_leading_spaces_only() {
+    assert_lines!("  key value\n    deep\n\tx\n  \ty\n", [
+        ("  key value", term: "\n", indent: "  ", Text),
+        ("    deep", term: "\n", indent: "    ", Text),
+        ("\tx", term: "\n", indent: "", Tab),
+        ("  \ty", term: "\n", indent: "  ", Tab),
+    ]);
+}
+
+#[track_caller]
+fn assert_head(src: &str, expected: LineHead) {
+    let head = Scanner::new(src).next_line().expect("expected a line").head();
+    assert_eq!(head, expected);
 }
 
 #[test]
-fn advance_moves_the_cursor_through_the_line() {
-    let mut scanner = scan_lines("key value\n").next().unwrap().scan();
-    assert_eq!(scanner.scan_word(), 3);
-    scanner.advance(3);
-    assert_eq!(scanner.scan_separator().space_len, 1);
-    scanner.advance(1);
-    assert_eq!(scanner.scan_word(), 5);
-    scanner.advance(5);
-    assert_eq!(scanner.rest_len(), 0);
+fn blank_head_is_empty_or_spaces_only() {
+    assert_head("\n", Blank);
+    assert_head("   \n", Blank);
+    assert_head("   ", Blank);
 }
 
 #[test]
-fn take_terminator_consumes_the_scanner() {
-    let mut scanner = scan_lines("ab\r\n").next().unwrap().scan();
-    scanner.advance(2);
-    assert_eq!(scanner.take_terminator(), 2);
+fn tab_head_is_a_tab_right_after_the_indent() {
+    assert_head("\tx", Tab);
+    assert_head("  \tx", Tab);
+    assert_head("\t", Tab);
+    assert_head("  \t", Tab);
 }
 
 #[test]
-#[should_panic(expected = "advance past the end of the line")]
-fn advance_cannot_step_over_the_line_end() {
-    let mut scanner = scan_lines("ab\ncd\n").next().unwrap().scan();
-    scanner.advance(3);
+fn hash_head_is_a_hash_right_after_the_indent() {
+    assert_head("# comment", Hash);
+    assert_head("  #indented", Hash);
+    assert_head("#dir x", Hash);
+    assert_head("#", Hash);
 }
 
 #[test]
-#[should_panic(expected = "line text is not fully consumed")]
-fn take_terminator_requires_a_consumed_line() {
-    let mut scanner = scan_lines("ab\n").next().unwrap().scan();
-    scanner.advance(1);
-    scanner.take_terminator();
+fn text_head_is_anything_else() {
+    assert_head("a 1", Text);
+    assert_head("  a", Text);
+    assert_head("\"k\" v", Text);
+    assert_head("|", Text);
+    assert_head("42", Text);
+    assert_head("こんにちは", Text);
+    assert_head("a #x", Text);
+    assert_head("a\tx", Text);
+}
+
+#[test]
+fn a_line_partitions_into_indent_content_and_terminator() {
+    let line = Scanner::new("  a b\r\n").next_line().unwrap();
+    assert_eq!(line.indent(), "  ");
+    assert_eq!(line.content(), "a b");
+    assert_eq!(line.terminator(), "\r\n");
+    assert_eq!(line.text(), "  a b");
+}
+
+#[test]
+fn trailing_spaces_stay_in_the_content() {
+    // Splitting off trailing spaces is layer 2's job (`Trailing::split`).
+    let line = Scanner::new("a  \n").next_line().unwrap();
+    assert_eq!(line.content(), "a  ");
+    assert_eq!(line.terminator(), "\n");
+}
+
+#[track_caller]
+fn assert_directive(src: &str, expected: bool) {
+    let actual = Scanner::new(src).next_line().is_some_and(|line| line.is_directive());
+    assert_eq!(actual, expected);
+}
+
+#[test]
+fn directive_is_a_column_zero_hash_glued_to_a_word() {
+    assert_directive("#include path", true);
+    assert_directive("#!shebang", true);
+    assert_directive("##", true);
+    assert_directive("#1", true);
+}
+
+#[test]
+fn directive_is_not_a_comment_or_an_indented_hash() {
+    assert_directive("# comment", false);
+    assert_directive("#", false);
+    assert_directive("#\tx", false);
+    assert_directive("word", false);
+    assert_directive(" #x", false);
+    assert_directive("  #indented x", false);
 }

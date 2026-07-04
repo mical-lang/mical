@@ -193,6 +193,9 @@ impl Eval for ast::Integer {
     fn eval(&self, ctx: &mut Context) -> Self::Output {
         let numeral = self.numeral()?;
         let text = numeral.text();
+        // TODO: redundant since the lexer now rejects out-of-radix digits, so a
+        // malformed literal becomes a Line String and never reaches here. Remove
+        // this validation (and `Error::InvalidRadixDigits`) in a dedicated pass.
         fn digits_valid(digits: &str, is_radix_digit: impl Fn(u8) -> bool) -> bool {
             let mut has_digits = false;
             for b in digits.bytes() {

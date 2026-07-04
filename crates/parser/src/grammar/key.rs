@@ -7,16 +7,17 @@ pub(super) struct ParsedKey {
 }
 
 pub(super) fn parse_key(p: &mut Parser) -> ParsedKey {
-    let Some(quoted) = p.scan_quoted() else {
+    let Some(quoted) = p.quoted() else {
         let m = p.start();
-        p.token(T![word], p.scan_word());
+        let word = p.word().expect("an item line guarantees a key word");
+        p.token(T![word], word.text().len());
         m.complete(p, SyntaxKind::WORD_KEY);
         return ParsedKey { unclosed_quote: false };
     };
 
     let m = p.start();
     emit_quoted(p, quoted);
-    let junk_len = if quoted.closed { p.scan_word() } else { 0 };
+    let junk_len = if quoted.is_closed() { p.word().map_or(0, |w| w.text().len()) } else { 0 };
     if junk_len > 0 {
         p.error("unexpected token after quoted key", junk_len);
         let em = p.start();
@@ -24,5 +25,5 @@ pub(super) fn parse_key(p: &mut Parser) -> ParsedKey {
         em.complete(p, SyntaxKind::ERROR);
     }
     m.complete(p, SyntaxKind::QUOTED_KEY);
-    ParsedKey { unclosed_quote: !quoted.closed }
+    ParsedKey { unclosed_quote: !quoted.is_closed() }
 }

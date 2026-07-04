@@ -1,29 +1,24 @@
 use crate::event::{Event, EventContainer};
+use core::{iter, mem};
 use mical_cli_lexer::{
-    Line, LineHead, LineScanner, QuotedToken, Separator, SplitComment, ValueKind, WhitespaceRun,
+    Lexeme as _, Line, LineHead, Quoted, Scanner, Separator, Trailing, ValueKind, Word,
 };
 use mical_cli_syntax::{SyntaxKind, T};
-use std::mem;
 
 pub(crate) struct Parser<'s> {
     lines: Vec<Line<'s>>,
     line_cursor: usize,
-    scanner: LineScanner<'s>,
-    pub(crate) last_item_indent: u32,
+    rest: &'s str,
+    pub(crate) last_item_indent: usize,
     events: EventContainer,
 }
 
 impl<'s> Parser<'s> {
     pub(crate) fn new(source: &'s str) -> Self {
-        let lines: Vec<Line<'s>> = mical_cli_lexer::scan_lines(source).collect();
-        let scanner = lines.first().map_or_else(LineScanner::empty, |line| line.scan());
-        Parser {
-            lines,
-            line_cursor: 0,
-            scanner,
-            last_item_indent: 0,
-            events: EventContainer::new(),
-        }
+        let mut scanner = Scanner::new(source);
+        let lines = iter::from_fn(|| scanner.next_line()).collect::<Vec<_>>();
+        let rest = lines.first().map_or("", |line| line.text());
+        Parser { lines, line_cursor: 0, rest, last_item_indent: 0, events: EventContainer::new() }
     }
 
     pub(crate) fn at_eof(&self) -> bool {
@@ -42,72 +37,62 @@ impl<'s> Parser<'s> {
         self.current_line().head()
     }
 
-    pub(crate) fn indent(&self) -> u32 {
-        self.current_line().indent()
+    pub(crate) fn indent(&self) -> usize {
+        self.current_line().indent().len()
     }
 
     pub(crate) fn is_directive(&self) -> bool {
         self.current_line().is_directive()
     }
 
-    // Scanning never consumes; the only ways to consume text are `token` and
-    // `finish_line`, which keep the emitted events and the consumed text in
-    // lockstep.
-    pub(crate) fn rest_len(&self) -> u32 {
-        self.scanner.rest_len()
+    pub(crate) fn rest_len(&self) -> usize {
+        self.rest.len()
     }
 
-    pub(crate) fn scan_word(&self) -> u32 {
-        self.scanner.scan_word()
+    pub(crate) fn word(&self) -> Option<Word<'s>> {
+        Word::at(self.rest)
     }
 
-    pub(crate) fn scan_quoted(&self) -> Option<QuotedToken> {
-        self.scanner.scan_quoted()
+    pub(crate) fn quoted(&self) -> Option<Quoted<'s>> {
+        Quoted::at(self.rest)
     }
 
-    pub(crate) fn scan_separator(&self) -> Separator {
-        self.scanner.scan_separator()
+    pub(crate) fn separator(&self) -> Option<Separator<'s>> {
+        Separator::at(self.rest)
     }
 
-    pub(crate) fn scan_whitespace_run(&self) -> Option<WhitespaceRun> {
-        self.scanner.scan_whitespace_run()
+    pub(crate) fn trailing(&self) -> (&'s str, Option<Trailing<'s>>) {
+        Trailing::split(self.rest)
     }
 
-    pub(crate) fn split_comment(&self) -> SplitComment {
-        self.scanner.split_comment()
+    pub(crate) fn classify_value(&self, content: &str) -> ValueKind {
+        ValueKind::classify(content)
     }
 
-    pub(crate) fn classify_value(&self, value_len: u32) -> ValueKind {
-        self.scanner.classify_value(value_len)
-    }
-
-    pub(crate) fn token(&mut self, kind: SyntaxKind, len: u32) {
+    pub(crate) fn token(&mut self, kind: SyntaxKind, len: usize) {
         debug_assert!(len > 0, "zero-length token");
-        self.scanner.advance(len);
-        self.events.push(Event::Token { kind, len });
+        assert!(len <= self.rest.len(), "token exceeds the end of the line");
+        self.rest = &self.rest[len..];
+        self.events.push(Event::Token { kind, len: len as u32 });
     }
 
     pub(crate) fn finish_line(&mut self) {
-        self.line_cursor += 1;
-        let next =
-            self.lines.get(self.line_cursor).map_or_else(LineScanner::empty, |line| line.scan());
-        let finished = mem::replace(&mut self.scanner, next);
-        let terminator_len = finished.take_terminator();
-        if terminator_len > 0 {
-            self.events.push(Event::Token { kind: T!['\n'], len: terminator_len });
+        assert!(self.rest.is_empty(), "cannot finish line with unconsumed text");
+        let terminator = self.current_line().terminator();
+        if !terminator.is_empty() {
+            self.events.push(Event::Token { kind: T!['\n'], len: terminator.len() as u32 });
         }
+        self.line_cursor += 1;
+        self.rest = self.lines.get(self.line_cursor).map_or("", |line| line.text());
     }
 
-    // The error's range is the next `len` bytes; it is resolved to absolute
-    // positions when the events are replayed, so the parser itself never
-    // deals with source offsets.
-    pub(crate) fn error(&mut self, message: &'static str, len: u32) {
-        debug_assert!(len <= self.scanner.rest_len(), "error range exceeds the current line");
-        self.events.push(Event::Error { message, len });
+    pub(crate) fn error(&mut self, message: &'static str, len: usize) {
+        debug_assert!(len <= self.rest.len(), "error range exceeds the current line");
+        self.events.push(Event::Error { message, len: len as u32 });
     }
 
     pub(crate) fn start(&mut self) -> Marker {
-        let pos = self.events.len() as u32;
+        let pos = self.events.len();
         self.events.push_tombstone();
         Marker { pos }
     }
@@ -119,14 +104,14 @@ impl<'s> Parser<'s> {
 
 #[must_use]
 pub(crate) struct Marker {
-    pos: u32,
+    pos: usize,
 }
 
 impl Marker {
     pub(crate) fn complete(self, p: &mut Parser, kind: SyntaxKind) {
         let pos = self.pos;
         mem::forget(self);
-        p.events.replace_tombstone(pos as usize, Event::StartNode { kind });
+        p.events.replace_tombstone(pos, Event::StartNode { kind });
         p.events.push(Event::FinishNode);
     }
 }

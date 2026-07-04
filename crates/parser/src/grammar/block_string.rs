@@ -17,7 +17,7 @@ pub(super) fn block_string(
     header(p, style, indent_indicator.is_some(), chomp);
 
     let i_base = match indent_indicator {
-        Some(n) => Some(i_parent + n as u32),
+        Some(n) => Some(i_parent + n as usize),
         None => infer_base_indent(p),
     };
     // A base indent at or above the parent level means the line after the
@@ -52,7 +52,7 @@ fn header(p: &mut Parser, style: Style, has_indent_indicator: bool, chomp: Optio
     m.complete(p, SyntaxKind::BLOCK_STRING_HEADER);
 }
 
-fn infer_base_indent(p: &mut Parser) -> Option<u32> {
+fn infer_base_indent(p: &mut Parser) -> Option<usize> {
     if p.at_eof() {
         return None;
     }
@@ -64,7 +64,7 @@ fn infer_base_indent(p: &mut Parser) -> Option<u32> {
     Some(p.indent())
 }
 
-fn body_lines(p: &mut Parser, i_parent: u32, i_base: u32) {
+fn body_lines(p: &mut Parser, i_parent: usize, i_base: usize) {
     while !p.at_eof() {
         // `indent` counts leading spaces only, so a tab is literal content on
         // a content line and ends the indentation otherwise — exactly the

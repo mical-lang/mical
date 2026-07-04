@@ -11,7 +11,7 @@ pub(super) fn item(p: &mut Parser) {
     match p.head() {
         LineHead::Tab => tab_indent_error_line(p),
         LineHead::Hash => directive(p),
-        LineHead::Other => entry_or_prefix_block(p),
+        LineHead::Text => entry_or_prefix_block(p),
         LineHead::Blank => unreachable!("blank lines are trivia"),
     }
 }
@@ -28,16 +28,17 @@ fn directive(p: &mut Parser) {
     debug_assert!(p.is_directive());
     let m = p.start();
     p.token(T![#], 1);
-    p.token(T![word], p.scan_word());
-    let space_len = p.scan_separator().space_len;
-    if space_len > 0 {
-        p.token(T![' '], space_len);
+    let name = p.word().expect("a directive head guarantees a name word");
+    p.token(T![word], name.text().len());
+    let spaces_len = p.separator().map_or(0, |s| s.spaces().len());
+    if spaces_len > 0 {
+        p.token(T![' '], spaces_len);
     }
-    let args_len = p.split_comment().value_len;
-    if args_len > 0 {
-        let args = p.start();
-        p.token(T![string], args_len);
-        args.complete(p, SyntaxKind::LINE_STRING);
+    let args = p.trailing().0;
+    if !args.is_empty() {
+        let a = p.start();
+        p.token(T![string], args.len());
+        a.complete(p, SyntaxKind::LINE_STRING);
     }
     emit_trailing_trivia(p);
     p.finish_line();
@@ -47,24 +48,27 @@ fn directive(p: &mut Parser) {
 fn entry_or_prefix_block(p: &mut Parser) {
     let m = p.start();
     let parsed_key = key::parse_key(p);
-    let separator = p.scan_separator();
-    if separator.space_len > 0 {
-        p.token(T![' '], separator.space_len);
-    }
-    if separator.tab_run_len > 0 {
-        p.error("tab separating is not allowed", separator.tab_run_len);
-        let em = p.start();
-        emit_whitespace_runs(p, separator.tab_run_len);
-        em.complete(p, SyntaxKind::ERROR);
+    if let Some(separator) = p.separator() {
+        if !separator.spaces().is_empty() {
+            p.token(T![' '], separator.spaces().len());
+        }
+        if let Some(tab_run) = separator.tab_run() {
+            p.error("tab separating is not allowed", tab_run.len());
+            let em = p.start();
+            emit_whitespace_runs(p, tab_run);
+            em.complete(p, SyntaxKind::ERROR);
+        }
     }
     value::parse_value(p, m, parsed_key.unclosed_quote);
 }
 
-fn emit_whitespace_runs(p: &mut Parser, mut len: u32) {
-    while len > 0 {
-        let run = p.scan_whitespace_run().expect("whitespace run within separator");
-        debug_assert!(run.len <= len);
-        p.token(if run.is_tab { T!['\t'] } else { T![' '] }, run.len);
-        len -= run.len;
+// A disallowed tab-run is preserved byte-for-byte by splitting it into
+// homogeneous space/tab tokens, since the CST has no mixed-whitespace kind.
+fn emit_whitespace_runs(p: &mut Parser, whitespace: &str) {
+    let mut rest = whitespace;
+    while let Some(&first) = rest.as_bytes().first() {
+        let run_len = rest.bytes().take_while(|&b| b == first).count();
+        p.token(if first == b'\t' { T!['\t'] } else { T![' '] }, run_len);
+        rest = &rest[run_len..];
     }
 }

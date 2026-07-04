@@ -1,4 +1,4 @@
-use core::fmt;
+use core::{error, fmt};
 use mical_cli_syntax::TextRange;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -23,3 +23,5 @@ impl fmt::Display for Error {
         }
     }
 }
+
+impl error::Error for Error {}

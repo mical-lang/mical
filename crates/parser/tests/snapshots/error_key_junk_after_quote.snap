@@ -47,7 +47,7 @@ SourceFile {
             key: QuotedKey {
                 open_quote: DOUBLE_QUOTE@0..1 "\"",
                 string: STRING@1..7 "quoted",
-                close_quote: DOUBLE_QUOTE@0..1 "\"",
+                close_quote: DOUBLE_QUOTE@7..8 "\"",
             },
             value: LineString {
                 string: STRING@12..17 "value",

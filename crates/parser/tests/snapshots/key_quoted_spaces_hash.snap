@@ -44,7 +44,7 @@ SourceFile {
             key: QuotedKey {
                 open_quote: DOUBLE_QUOTE@0..1 "\"",
                 string: STRING@1..16 "key with spaces",
-                close_quote: DOUBLE_QUOTE@0..1 "\"",
+                close_quote: DOUBLE_QUOTE@16..17 "\"",
             },
             value: LineString {
                 string: STRING@18..20 "v1",
@@ -54,7 +54,7 @@ SourceFile {
             key: QuotedKey {
                 open_quote: SINGLE_QUOTE@21..22 "'",
                 string: STRING@22..27 "a # b",
-                close_quote: SINGLE_QUOTE@21..22 "'",
+                close_quote: SINGLE_QUOTE@27..28 "'",
             },
             value: LineString {
                 string: STRING@39..41 "v2",

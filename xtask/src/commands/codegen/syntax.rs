@@ -263,6 +263,7 @@ fn convert_node_to_struct(node: &NodeData, grammar: &Grammar) -> TokenStream {
         field_token_stream: Vec<TokenStream>,
         debug_token_stream: Vec<TokenStream>,
         child_count: HashMap<String, usize>,
+        token_alt_count: HashMap<String, usize>,
     }
     impl TokenStreamBuildHelper {
         fn push_child(&mut self, field_name_str: &str, field_ty: &str) {
@@ -311,12 +312,20 @@ fn convert_node_to_struct(node: &NodeData, grammar: &Grammar) -> TokenStream {
             let field_name = format_ident!("{field_name_str}");
             let syntax_kinds_ident: Vec<_> =
                 syntax_kinds.iter().map(|s| format_ident!("{s}")).collect();
+            let key = syntax_kinds.join("|");
+            self.token_alt_count.entry(key.clone()).and_modify(|c| *c += 1).or_insert(0);
+            let count = self.token_alt_count[&key];
+            let selector = if count == 0 {
+                quote! { .find(|it| matches!(it.kind(), #(SyntaxKind::#syntax_kinds_ident)|*)) }
+            } else {
+                quote! { .filter(|it| matches!(it.kind(), #(SyntaxKind::#syntax_kinds_ident)|*)).nth(#count) }
+            };
             self.field_token_stream.push(quote! {
                 pub fn #field_name(&self) -> Option<SyntaxToken> {
                     self.syntax()
                         .children_with_tokens()
                         .filter_map(|it| it.into_token())
-                        .find(|it| matches!(it.kind(), #(SyntaxKind::#syntax_kinds_ident)|*))
+                        #selector
                 }
             });
             self.debug_token_stream.push(quote! {

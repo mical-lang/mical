@@ -54,7 +54,7 @@ SourceFile {
             key: QuotedKey {
                 open_quote: DOUBLE_QUOTE@0..1 "\"",
                 string: STRING@1..5 "a\\\"b",
-                close_quote: DOUBLE_QUOTE@0..1 "\"",
+                close_quote: DOUBLE_QUOTE@5..6 "\"",
             },
             value: LineString {
                 string: STRING@7..9 "v1",
@@ -64,7 +64,7 @@ SourceFile {
             key: QuotedKey {
                 open_quote: SINGLE_QUOTE@10..11 "'",
                 string: STRING@11..15 "c\\'d",
-                close_quote: SINGLE_QUOTE@10..11 "'",
+                close_quote: SINGLE_QUOTE@15..16 "'",
             },
             value: LineString {
                 string: STRING@17..19 "v2",
@@ -74,7 +74,7 @@ SourceFile {
             key: QuotedKey {
                 open_quote: DOUBLE_QUOTE@20..21 "\"",
                 string: STRING@21..25 "e\\\\f",
-                close_quote: DOUBLE_QUOTE@20..21 "\"",
+                close_quote: DOUBLE_QUOTE@25..26 "\"",
             },
             value: LineString {
                 string: STRING@27..29 "v3",

@@ -455,7 +455,8 @@ impl QuotedKey {
         self.syntax()
             .children_with_tokens()
             .filter_map(|it| it.into_token())
-            .find(|it| matches!(it.kind(), SyntaxKind::DOUBLE_QUOTE | SyntaxKind::SINGLE_QUOTE))
+            .filter(|it| matches!(it.kind(), SyntaxKind::DOUBLE_QUOTE | SyntaxKind::SINGLE_QUOTE))
+            .nth(1usize)
     }
 }
 impl fmt::Display for QuotedKey {
@@ -598,7 +599,8 @@ impl QuotedString {
         self.syntax()
             .children_with_tokens()
             .filter_map(|it| it.into_token())
-            .find(|it| matches!(it.kind(), SyntaxKind::DOUBLE_QUOTE | SyntaxKind::SINGLE_QUOTE))
+            .filter(|it| matches!(it.kind(), SyntaxKind::DOUBLE_QUOTE | SyntaxKind::SINGLE_QUOTE))
+            .nth(1usize)
     }
 }
 impl fmt::Display for QuotedString {

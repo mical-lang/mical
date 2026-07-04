@@ -40,7 +40,7 @@ SourceFile {
             key: QuotedKey {
                 open_quote: SINGLE_QUOTE@0..1 "'",
                 string: STRING@1..5 "a b.",
-                close_quote: SINGLE_QUOTE@0..1 "'",
+                close_quote: SINGLE_QUOTE@5..6 "'",
             },
             items: [
                 Entry {

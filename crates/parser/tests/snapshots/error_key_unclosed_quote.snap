@@ -41,7 +41,7 @@ SourceFile {
             key: QuotedKey {
                 open_quote: DOUBLE_QUOTE@0..1 "\"",
                 string: STRING@1..19 "unterminated value",
-                close_quote: DOUBLE_QUOTE@0..1 "\"",
+                close_quote: none,
             },
             value: none,
         },

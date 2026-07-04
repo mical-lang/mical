@@ -55,7 +55,7 @@ SourceFile {
             value: QuotedString {
                 open_quote: DOUBLE_QUOTE@2..3 "\"",
                 string: STRING@3..8 "value",
-                close_quote: DOUBLE_QUOTE@2..3 "\"",
+                close_quote: none,
             },
         },
         Entry {

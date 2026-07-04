@@ -139,7 +139,7 @@ SourceFile {
                     value: QuotedString {
                         open_quote: DOUBLE_QUOTE@64..65 "\"",
                         string: STRING@65..70 "value",
-                        close_quote: DOUBLE_QUOTE@64..65 "\"",
+                        close_quote: DOUBLE_QUOTE@70..71 "\"",
                     },
                 },
                 Entry {

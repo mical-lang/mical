@@ -87,7 +87,7 @@ SourceFile {
             value: QuotedString {
                 open_quote: DOUBLE_QUOTE@2..3 "\"",
                 string: STRING@3..7 "h\\\"i",
-                close_quote: DOUBLE_QUOTE@2..3 "\"",
+                close_quote: DOUBLE_QUOTE@7..8 "\"",
             },
         },
         Entry {
@@ -97,7 +97,7 @@ SourceFile {
             value: QuotedString {
                 open_quote: SINGLE_QUOTE@11..12 "'",
                 string: STRING@12..20 "sin\\'gle",
-                close_quote: SINGLE_QUOTE@11..12 "'",
+                close_quote: SINGLE_QUOTE@20..21 "'",
             },
         },
         Entry {
@@ -107,7 +107,7 @@ SourceFile {
             value: QuotedString {
                 open_quote: DOUBLE_QUOTE@24..25 "\"",
                 string: STRING@25..36 "back\\\\slash",
-                close_quote: DOUBLE_QUOTE@24..25 "\"",
+                close_quote: DOUBLE_QUOTE@36..37 "\"",
             },
         },
         Entry {
@@ -117,7 +117,7 @@ SourceFile {
             value: QuotedString {
                 open_quote: DOUBLE_QUOTE@40..41 "\"",
                 string: STRING@41..50 "tab\\there",
-                close_quote: DOUBLE_QUOTE@40..41 "\"",
+                close_quote: DOUBLE_QUOTE@50..51 "\"",
             },
         },
         Entry {
@@ -127,7 +127,7 @@ SourceFile {
             value: QuotedString {
                 open_quote: DOUBLE_QUOTE@54..55 "\"",
                 string: STRING@55..66 "line\\nbreak",
-                close_quote: DOUBLE_QUOTE@54..55 "\"",
+                close_quote: DOUBLE_QUOTE@66..67 "\"",
             },
         },
         Entry {
@@ -137,7 +137,7 @@ SourceFile {
             value: QuotedString {
                 open_quote: DOUBLE_QUOTE@70..71 "\"",
                 string: STRING@71..81 "cr\\rreturn",
-                close_quote: DOUBLE_QUOTE@70..71 "\"",
+                close_quote: DOUBLE_QUOTE@81..82 "\"",
             },
         },
     ],

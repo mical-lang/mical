@@ -62,7 +62,7 @@ SourceFile {
             value: QuotedString {
                 open_quote: DOUBLE_QUOTE@2..3 "\"",
                 string: STRING@3..8 "value",
-                close_quote: DOUBLE_QUOTE@2..3 "\"",
+                close_quote: DOUBLE_QUOTE@8..9 "\"",
             },
         },
         Entry {
@@ -72,7 +72,7 @@ SourceFile {
             value: QuotedString {
                 open_quote: DOUBLE_QUOTE@18..19 "\"",
                 string: STRING@19..21 "ok",
-                close_quote: DOUBLE_QUOTE@18..19 "\"",
+                close_quote: DOUBLE_QUOTE@21..22 "\"",
             },
         },
     ],

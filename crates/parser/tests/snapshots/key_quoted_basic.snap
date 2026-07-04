@@ -53,7 +53,7 @@ SourceFile {
             key: QuotedKey {
                 open_quote: DOUBLE_QUOTE@0..1 "\"",
                 string: STRING@1..7 "double",
-                close_quote: DOUBLE_QUOTE@0..1 "\"",
+                close_quote: DOUBLE_QUOTE@7..8 "\"",
             },
             value: LineString {
                 string: STRING@18..23 "value",
@@ -63,7 +63,7 @@ SourceFile {
             key: QuotedKey {
                 open_quote: SINGLE_QUOTE@24..25 "'",
                 string: STRING@25..31 "single",
-                close_quote: SINGLE_QUOTE@24..25 "'",
+                close_quote: SINGLE_QUOTE@31..32 "'",
             },
             value: LineString {
                 string: STRING@42..47 "value",
@@ -73,7 +73,7 @@ SourceFile {
             key: QuotedKey {
                 open_quote: DOUBLE_QUOTE@48..49 "\"",
                 string: none,
-                close_quote: DOUBLE_QUOTE@48..49 "\"",
+                close_quote: DOUBLE_QUOTE@49..50 "\"",
             },
             value: LineString {
                 string: STRING@66..71 "empty",

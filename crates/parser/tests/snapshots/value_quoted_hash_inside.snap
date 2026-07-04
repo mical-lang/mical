@@ -37,7 +37,7 @@ SourceFile {
             value: QuotedString {
                 open_quote: DOUBLE_QUOTE@4..5 "\"",
                 string: STRING@5..19 "before # after",
-                close_quote: DOUBLE_QUOTE@4..5 "\"",
+                close_quote: DOUBLE_QUOTE@19..20 "\"",
             },
         },
     ],
